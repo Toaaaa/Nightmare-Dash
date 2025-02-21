@@ -1,18 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static SceneBase Current { get; private set; } = null;
+
+    private static object m_SceneBridgeData;
+
+    public static string SceneName;
+
+    private void Awake()
     {
-        
+        Current = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        OnStart(m_SceneBridgeData);
+    }
+
+    protected virtual void OnStart(object data)
+    {
+        SceneName = SceneManager.GetActiveScene().name;
+    }
+
+    public static void LoadScene(string sceneName, object data = null)
+    {
+        m_SceneBridgeData = data;
+        SceneManager.LoadSceneAsync(sceneName);
     }
 }
