@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 public class BGScroller : MonoBehaviour
 {
     [SerializeField] private GameObject[] backGround;
-    public int numBgCount = 2;
     public float Speed = 1;
     public float maxSpeed = 100;
     public float Acceleration = 1.1f;
@@ -22,16 +21,16 @@ public class BGScroller : MonoBehaviour
 
     public void Update()
     {
-        if (Speed < maxSpeed)
+        if (currentSpeed < maxSpeed)
         {
-            Speed += Acceleration * Time.deltaTime;
-            Speed = Mathf.Min(Speed, maxSpeed);
+            currentSpeed += Acceleration * Time.deltaTime;
+            currentSpeed = Mathf.Min(currentSpeed, maxSpeed);
         }
 
         // 모든 배경을 왼쪽으로 이동
         foreach (GameObject bg in backGround)
         {
-            bg.transform.position += Vector3.left * Speed * Time.deltaTime;
+            bg.transform.position += Vector3.left * currentSpeed * Time.deltaTime;
         }
         // 배경 재배치 확인
         foreach (GameObject bg in backGround)
