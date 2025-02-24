@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class StartUI : BaseUI
 {
@@ -15,6 +16,7 @@ public class StartUI : BaseUI
     private void OnStartClick()
     {
         uiManager.SetUIState(UIState.Game);
+        SceneManager.LoadScene("Game");
 
     }
 
