@@ -50,8 +50,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d70db91b4baec847abbb5b8168abc05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HPBar: {fileID: 1539480528927041794}
-  ScoreText: {fileID: 5969434525515569556}
+  hpBar: {fileID: 1539480528927041794}
+  scoreText: {fileID: 5969434525515569556}
+  resultPopup: {fileID: 2408100833327618419, guid: 8d22cd0f82586ff42921e8be303c524e, type: 3}
 --- !u!1001 &3988806700125657746
 PrefabInstance:
   m_ObjectHideFlags: 0
