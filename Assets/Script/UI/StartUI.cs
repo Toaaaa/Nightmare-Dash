@@ -15,6 +15,7 @@ public class StartUI : BaseUI
     private void OnStartClick()
     {
         uiManager.SetUIState(UIState.Game);
+
     }
 
     protected override UIState GetUIState()

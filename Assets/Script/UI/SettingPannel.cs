@@ -26,7 +26,6 @@ public class SettingPannel : MonoBehaviour
         closeButton.onClick.AddListener(CloseSettings);
         quitButton.onClick.AddListener(QuitGame);
 
-        gameObject.SetActive(false);
 
     }
 
