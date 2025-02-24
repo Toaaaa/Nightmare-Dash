@@ -3,52 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingUI : MonoBehaviour
+public class SettingUI : BaseUI
 {
-    //[SerializeField] private Toggle jumpscareToggle;
-    [SerializeField] private Slider volumeSlider;
-    [SerializeField] private Toggle muteToggle;
-    [SerializeField] private Button closeButton;
-    [SerializeField] private Button quitButton;
+    [SerializeField] private GameObject settingPanel; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private Button settingButton;    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
+    [SerializeField] private GameObject lobbyUI; // ï¿½Îºï¿½ UI
+
 
     private void Start()
     {
-        // ±âÁ¸ ¼³Á¤ ºÒ·¯¿À±â
-        //jumpscareToggle.isOn = PlayerPrefs.GetInt("JumpscareEnabled", 1) == 1;
-        volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1f);
-        muteToggle.isOn = PlayerPrefs.GetInt("Muted", 0) == 1;
-
-        // ÀÌº¥Æ® ¿¬°á
-        //jumpscareToggle.onValueChanged.AddListener(SetJumpscare);
-        volumeSlider.onValueChanged.AddListener(SetVolume);
-        muteToggle.onValueChanged.AddListener(SetMute);
-        closeButton.onClick.AddListener(CloseSettings);
-        quitButton.onClick.AddListener(QuitGame);
+        settingButton.onClick.AddListener(OpenSettingPanel);
+        settingPanel.SetActive(false);
     }
 
-    private void SetVolume(float volume)
+    private void OpenSettingPanel()
     {
-        AudioListener.volume = muteToggle.isOn ? 0 : volume;
-        PlayerPrefs.SetFloat("Volume", volume);
+        // ï¿½ï¿½ï¿½ï¿½ UI È°ï¿½ï¿½È­, ï¿½Îºï¿½ UI ï¿½ï¿½È°ï¿½ï¿½È­
+        settingPanel.SetActive(true);
+        lobbyUI.SetActive(false);
     }
-
-    private void SetMute(bool isMuted)
+    protected override UIState GetUIState()
     {
-        AudioListener.volume = isMuted ? 0 : volumeSlider.value;
-        PlayerPrefs.SetInt("Muted", isMuted ? 1 : 0);
+        return UIState.Lobby;
+
     }
 
     private void CloseSettings()
     {
-        gameObject.SetActive(false);  // ¼³Á¤ Ã¢ ´Ý±â
+        gameObject.SetActive(false);  // ï¿½ï¿½ï¿½ï¿½ Ã¢ ï¿½Ý±ï¿½
     }
 
     private void QuitGame()
     {
     #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;  // ¿¡µðÅÍ¿¡¼­ ½ÇÇà ÁßÁö
+            UnityEditor.EditorApplication.isPlaying = false;  // ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     #else
-        Application.Quit();  // ºôµåµÈ °ÔÀÓ Á¾·á
+        Application.Quit();  // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     #endif
     }
+
 }
