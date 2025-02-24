@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class BackgroundFlicker : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
+    private Light2D light2D;
     private Image panelImage;
     private Color originalColor;
 
@@ -19,6 +21,7 @@ public class BackgroundFlicker : MonoBehaviour
         // 스프라이트 렌더러 또는 UI 이미지 찾기
         spriteRenderer = GetComponent<SpriteRenderer>();
         panelImage = GetComponent<Image>();
+        light2D = GetComponent<Light2D>();
 
         if (spriteRenderer != null)
             originalColor = spriteRenderer.color;
@@ -55,6 +58,7 @@ public class BackgroundFlicker : MonoBehaviour
                 spriteRenderer.color = originalColor;
             else if (panelImage != null)
                 panelImage.color = originalColor;
+           
         }
     }
 }
