@@ -33,12 +33,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetActive(bool isActive)
-    {
-        this.gameObject.SetActive(isActive);
-    }
-
-
     public UIState GetCurrentState()
     {
         return currentState;
