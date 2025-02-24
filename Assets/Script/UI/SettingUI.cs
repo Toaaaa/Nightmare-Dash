@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class SettingUI : BaseUI
 {
-    [SerializeField] private GameObject settingPanel; // ���� �г� ����
-    [SerializeField] private Button settingButton;    // ���� ��ư
-    [SerializeField] private GameObject lobbyUI; // �κ� UI
+    [SerializeField] private GameObject settingPanel; // 설정 패널
+    [SerializeField] private Button settingButton;    //설정 버튼
+    [SerializeField] private GameObject lobbyUI; // 로비 UI
 
 
     private void Start()
@@ -18,7 +18,7 @@ public class SettingUI : BaseUI
 
     private void OpenSettingPanel()
     {
-        // ���� UI Ȱ��ȭ, �κ� UI ��Ȱ��ȭ
+        // 설정 UI 활성화, 로비 UI 비활성화
         settingPanel.SetActive(true);
         lobbyUI.SetActive(false);
     }
@@ -28,17 +28,12 @@ public class SettingUI : BaseUI
 
     }
 
-    private void CloseSettings()
-    {
-        gameObject.SetActive(false);  // ���� â �ݱ�
-    }
-
     private void QuitGame()
     {
     #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;  // �����Ϳ��� ���� ����
+        UnityEditor.EditorApplication.isPlaying = false;  // 
     #else
-        Application.Quit();  // ����� ���� ����
+        Application.Quit();  // 종료
     #endif
     }
 
