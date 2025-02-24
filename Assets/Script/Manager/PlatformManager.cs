@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlatformManager : MonoBehaviour
 {
+    GameSceneController sceneController;
     // 변수
     [SerializeField] float speed = 8f; // 이동 속도 8에서 최대 12까지.
     [SerializeField] bool isGameStart = false; // 게임 시작 여부
@@ -12,10 +13,15 @@ public class PlatformManager : MonoBehaviour
 
     // 맵 그리드
     [SerializeField] Transform mapGrid; // 맵 타일
+    [SerializeField] List<Point> points;  // 코인
 
     // 데이터 베이스
     [SerializeField] List<RunningItem> runningItems; // 피격시 사용되는 아이템 리스트
 
+    private void Awake()
+    {
+        sceneController = SceneBase.Current as GameSceneController;
+    }
 
     void Start()
     {
