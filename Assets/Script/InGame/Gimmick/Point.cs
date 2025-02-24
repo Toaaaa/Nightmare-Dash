@@ -18,7 +18,7 @@ public class Point : MonoBehaviour //타일을 달리면서 획득하는 점수
         }
     }
 
-    public void CoinAnimReset()
+    public void PointAnimReset()
     {
         // 획득시 재생되었던 애니메이션 리셋
     }
