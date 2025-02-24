@@ -515,6 +515,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1026337352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1026337354}
+  - component: {fileID: 1026337353}
+  m_Layer: 0
+  m_Name: GameSceneController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1026337353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026337352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc7d9d4eb273c574db9bf47032975895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiController: {fileID: 1886965782}
+--- !u!4 &1026337354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026337352}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1203638445
 GameObject:
   m_ObjectHideFlags: 0
@@ -790,6 +835,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3708147774321482724, guid: 063e33bde0f637748b895b08f1b08039, type: 3}
   m_PrefabInstance: {fileID: 6916448876902630949}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1886965782 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3779212626752005322, guid: 063e33bde0f637748b895b08f1b08039, type: 3}
+  m_PrefabInstance: {fileID: 6916448876902630949}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d70db91b4baec847abbb5b8168abc05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6916448876902630949
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -907,3 +963,4 @@ SceneRoots:
   - {fileID: 1203638447}
   - {fileID: 1724042028}
   - {fileID: 632410761}
+  - {fileID: 1026337354}

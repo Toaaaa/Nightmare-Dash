@@ -19,6 +19,7 @@ public class InGameUIController : MonoBehaviour
     {
         // 일단 설정
         HPBar.SetHpBar(100);
+        UpdateScoreText(0);
     }
 
     private void OnDestroy()

@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 public class HpBar : MonoBehaviour
 {
+    [SerializeField]
     private Slider hpBar;
 
     private Hp hp = new();
 
     private void Start()
     {
-        hpBar = GetComponent<Slider>();
         hp.OnChangedHpAmountEvent += UpdateHpBar;
     }
 
