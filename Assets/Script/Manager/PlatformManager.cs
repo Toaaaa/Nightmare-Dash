@@ -58,7 +58,7 @@ public class PlatformManager : MonoBehaviour
         // 속도를 점점 빨라지게 하는 함수
         if(time < 60)
         {
-            speed += Mathf.Min(12f, speed + (4f / 60f) * Time.deltaTime);
+            speed = Mathf.Min(12f, speed + (4f / 60f) * Time.deltaTime);
             time += Time.deltaTime;
         }
     }
