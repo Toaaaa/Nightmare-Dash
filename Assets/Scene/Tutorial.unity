@@ -278,6 +278,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpForce: 1
   runSpeed: 3
+  slideSpeed: 3
+  slideDuration: 1
+  slideCooldownTime: 0
   isDead: 0
 --- !u!61 &1281474246
 BoxCollider2D:
