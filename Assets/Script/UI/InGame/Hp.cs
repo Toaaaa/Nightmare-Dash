@@ -8,7 +8,7 @@ public class Hp
         set
         {
             current = value;
-            OnChangedHpAmountEvent(current);
+            OnChangedHpAmountEvent?.Invoke(current);
         }
     }
 
