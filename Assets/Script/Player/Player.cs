@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -9,11 +10,17 @@ public class Player : MonoBehaviour
 
     public float jumpForce = 5f;
     public float runSpeed = 3f;
+    public float slideSpeed = 6f;
+    public float slideDuration = 0.5f;
+    public float slideCooldownTime = 0.2f;
     public bool isDead = false;
     float deathCooldown = 0f;
+    float slideCooldown = 0f;
+    float slideTimer = 0f;
 
     bool isJump = false;
     bool isGrounded = false;
+    bool isSliding = false;
     
     void Start()
     {
@@ -40,10 +47,16 @@ public class Player : MonoBehaviour
             {
                 isJump = true;
             }
+
+            if(Input.GetKeyDown(KeyCode.LeftShift) && isGrounded && slideCooldown <= 0)
+            {
+                StartSlide();
+            }
         }
 
         animator.SetBool("isJumping", !isGrounded);
-        animator.SetBool("isRunning", runSpeed > 0);
+        animator.SetBool("isRunning", !isSliding && runSpeed > 0);
+        animator.SetBool("isSliding", isSliding);
     }
 
     private void FixedUpdate()
@@ -51,7 +64,16 @@ public class Player : MonoBehaviour
         if (isDead) return;
 
         Vector3 velocity = _rigidbody.velocity;
-        velocity.x = runSpeed;
+
+        if (isSliding)
+        {
+            velocity.x = slideSpeed;
+        }
+
+        else
+        {
+            velocity.x = runSpeed;
+        }
 
         if (isJump)
         {
@@ -61,6 +83,20 @@ public class Player : MonoBehaviour
         }
 
         _rigidbody.velocity = velocity;
+
+        if (isSliding)
+        {
+            slideTimer -= Time.fixedDeltaTime;
+            if(slideTimer <= 0)
+            {
+                Endslide();
+            }
+        }
+
+        if(slideCooldown > 0)
+        {
+            slideCooldown -= Time.fixedDeltaTime;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -73,5 +109,22 @@ public class Player : MonoBehaviour
         }
         
         deathCooldown = 1f;
+    }
+
+    void StartSlide()
+    {
+        isSliding = true;
+        slideTimer = slideDuration;
+        slideCooldown = slideCooldownTime + slideDuration;
+    }
+
+    void Endslide()
+    {
+        isSliding = false;
+    }
+
+    public void OnSlideAnimationEnd()
+    {
+        Endslide();
     }
 }

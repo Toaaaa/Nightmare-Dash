@@ -13,13 +13,15 @@ public class Point : MonoBehaviour //타일을 달리면서 획득하는 점수
             {
                 gameScene.Score += 1;// 점수 올리고
                 //코인 획득 애니메이션 재생
+                GetComponent<Animator>().SetTrigger("GetCoin");
                 Debug.Log("코인 획득");
             }
         }
     }
 
-    public void CoinAnimReset()
+    public void PointAnimReset()
     {
         // 획득시 재생되었던 애니메이션 리셋
+        GetComponent<Animator>().SetTrigger("ResetCoin");
     }
 }
