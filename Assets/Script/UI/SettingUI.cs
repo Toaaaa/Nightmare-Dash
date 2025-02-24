@@ -3,52 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingUI : MonoBehaviour
+public class SettingUI : BaseUI
 {
-    //[SerializeField] private Toggle jumpscareToggle;
-    [SerializeField] private Slider volumeSlider;
-    [SerializeField] private Toggle muteToggle;
-    [SerializeField] private Button closeButton;
-    [SerializeField] private Button quitButton;
+    [SerializeField] private GameObject settingPanel; // 설정 패널 열기
+    [SerializeField] private Button settingButton;    // 설정 버튼
+    [SerializeField] private GameObject lobbyUI; // 로비 UI
+
 
     private void Start()
     {
-        // 기존 설정 불러오기
-        //jumpscareToggle.isOn = PlayerPrefs.GetInt("JumpscareEnabled", 1) == 1;
-        volumeSlider.value = PlayerPrefs.GetFloat("Volume", 1f);
-        muteToggle.isOn = PlayerPrefs.GetInt("Muted", 0) == 1;
-
-        // 이벤트 연결
-        //jumpscareToggle.onValueChanged.AddListener(SetJumpscare);
-        volumeSlider.onValueChanged.AddListener(SetVolume);
-        muteToggle.onValueChanged.AddListener(SetMute);
-        closeButton.onClick.AddListener(CloseSettings);
-        quitButton.onClick.AddListener(QuitGame);
+        settingButton.onClick.AddListener(OpenSettingPanel);
+        settingPanel.SetActive(false);
     }
 
-    private void SetVolume(float volume)
+    private void OpenSettingPanel()
     {
-        AudioListener.volume = muteToggle.isOn ? 0 : volume;
-        PlayerPrefs.SetFloat("Volume", volume);
+        // 설정 UI 활성화, 로비 UI 비활성화
+        settingPanel.SetActive(true);
+        lobbyUI.SetActive(false);
     }
-
-    private void SetMute(bool isMuted)
+    protected override UIState GetUIState()
     {
-        AudioListener.volume = isMuted ? 0 : volumeSlider.value;
-        PlayerPrefs.SetInt("Muted", isMuted ? 1 : 0);
-    }
-
-    private void CloseSettings()
-    {
-        gameObject.SetActive(false);  // 설정 창 닫기
-    }
-
-    private void QuitGame()
-    {
-    #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;  // 에디터에서 실행 중지
-    #else
-        Application.Quit();  // 빌드된 게임 종료
-    #endif
+        return UIState.Lobby;
     }
 }
