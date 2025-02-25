@@ -1,0 +1,124 @@
+{
+  "artifacts": [
+    {
+      "id": "artifact_001",
+      "name": "체력의 돌 C",
+      "rarity": "C",
+      "effect": {
+        "hp": 0.5,
+        "currency": 0.0,
+        "invincibility": 0.2
+      }
+    },
+    {
+      "id": "artifact_002",
+      "name": "재화의 부적 C",
+      "rarity": "C",
+      "effect": {
+        "hp": 0.0,
+        "currency": 1.0,
+        "invincibility": 0.0
+      }
+    },
+    {
+      "id": "artifact_003",
+      "name": "무적의 부적 C",
+      "rarity": "C",
+      "effect": {
+        "hp": 0.0,
+        "currency": 0.0,
+        "invincibility": 0.2
+      }
+    },
+    {
+      "id": "artifact_004",
+      "name": "체력의 돌 B",
+      "rarity": "B",
+      "effect": {
+        "hp": 1.0,
+        "currency": 0.0,
+        "invincibility": 0.5
+      }
+    },
+    {
+      "id": "artifact_005",
+      "name": "재화의 부적 B",
+      "rarity": "B",
+      "effect": {
+        "hp": 0.0,
+        "currency": 2.0,
+        "invincibility": 0.0
+      }
+    },
+    {
+      "id": "artifact_006",
+      "name": "무적의 부적 B",
+      "rarity": "B",
+      "effect": {
+        "hp": 0.0,
+        "currency": 0.0,
+        "invincibility": 0.5
+      }
+    },
+    {
+      "id": "artifact_007",
+      "name": "체력의 돌 A",
+      "rarity": "A",
+      "effect": {
+        "hp": 2.5,
+        "currency": 0.0,
+        "invincibility": 1.0
+      }
+    },
+    {
+      "id": "artifact_008",
+      "name": "재화의 부적 A",
+      "rarity": "A",
+      "effect": {
+        "hp": 0.0,
+        "currency": 4.0,
+        "invincibility": 0.0
+      }
+    },
+    {
+      "id": "artifact_009",
+      "name": "무적의 부적 A",
+      "rarity": "A",
+      "effect": {
+        "hp": 0.0,
+        "currency": 0.0,
+        "invincibility": 1.0
+      }
+    },
+    {
+      "id": "artifact_010",
+      "name": "체력의 돌 S",
+      "rarity": "S",
+      "effect": {
+        "hp": 5.0,
+        "currency": 0.0,
+        "invincibility": 2.0
+      }
+    },
+    {
+      "id": "artifact_011",
+      "name": "재화의 부적 S",
+      "rarity": "S",
+      "effect": {
+        "hp": 0.0,
+        "currency": 8.0,
+        "invincibility": 0.0
+      }
+    },
+    {
+      "id": "artifact_012",
+      "name": "무적의 부적 S",
+      "rarity": "S",
+      "effect": {
+        "hp": 0.0,
+        "currency": 0.0,
+        "invincibility": 2.0
+      }
+    }
+  ]
+}
