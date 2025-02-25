@@ -1,0 +1,19 @@
+{
+  "pets": [
+    {
+      "id": "pet_001",
+      "petName": "부끄러운 고양이",
+      "petDescription": "조용하고 부끄러움을 타는 고양이입니다."
+    },
+    {
+      "id": "pet_002",
+      "petName": "용감한 개",
+      "petDescription": "모든 상황에서 용감하고 충성스러운 개입니다."
+    },
+    {
+      "id": "pet_003",
+      "petName": "귀여운 토끼",
+      "petDescription": "활발하고 사랑스러운 토끼입니다."
+    }
+  ]
+}
