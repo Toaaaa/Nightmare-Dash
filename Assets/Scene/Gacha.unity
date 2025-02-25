@@ -1236,7 +1236,7 @@ MonoBehaviour:
   ExitBtn: {fileID: 1269662881}
   GachaFadeBlack: {fileID: 1368134395}
   fadeDuration: 0.5
-  card: {fileID: 1040654792660737014}
+  card: {fileID: 5722967122080438583}
 --- !u!1 &1971097023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,7 +1323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &1690255074244097806
 Animator:
   serializedVersion: 5
@@ -1428,7 +1428,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5788285305522745615
 RectTransform:
   m_ObjectHideFlags: 0

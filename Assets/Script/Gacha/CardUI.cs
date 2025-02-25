@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -15,6 +15,11 @@ public class CardUI : MonoBehaviour, IPointerDownHandler
     private void Start()
     {
         animator = GetComponent<Animator>();
+    }
+
+    private void OnEnable()
+    {
+        isFlipped = false;
     }
 
     // 카드 UI 설정 메서드
@@ -37,8 +42,8 @@ public class CardUI : MonoBehaviour, IPointerDownHandler
     {
         if (!isFlipped)
         {
-            animator.SetTrigger("Flip");
             isFlipped = true;
+            animator.SetTrigger("Flip");
         }
         else
         {
