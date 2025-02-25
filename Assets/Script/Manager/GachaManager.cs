@@ -12,11 +12,14 @@ public class GachaManager : MonoBehaviour
     private float maxAlpha = 0.5f; // 최대 투명도
     public GameObject card;  // 씬에서 직접 존재하는 카드 오브젝트 (Inspector에서 할당 필요)
 
+    [SerializeField]
+    private CardUI[] cards;
+
     void Start()
     {
         // 버튼 클릭 이벤트 연결
         DrawOneBtn.onClick.AddListener(() => DrawOneBtnClick(1));
-        DrawTenBtn.onClick.AddListener(() => DrawOneBtnClick(10));
+        DrawTenBtn.onClick.AddListener(() => DrawOneBtnClick(5));
         ExitBtn.onClick.AddListener(HideCardAndFadeBlack); // 나가기 버튼 이벤트 연결
 
         // Exit 버튼은 처음에 비활성화
@@ -43,9 +46,6 @@ public class GachaManager : MonoBehaviour
     // Fade in 효과 + 카드 활성화
     private IEnumerator FadeInEffect(int num)
     {
-        // 카드와 Fade Black 초기화
-        ResetCardRotation(); // 카드 회전 리셋
-
         GachaFadeBlack.gameObject.SetActive(true);
         GachaFadeBlack.color = new Color(0, 0, 0, 0); // 시작은 완전 투명
         float elapsedTime = 0f;
@@ -64,7 +64,7 @@ public class GachaManager : MonoBehaviour
         {
             if (card != null)
             {
-                StartCoroutine(ShowCardSlowly());  // 카드 천천히 보이도록 처리
+                StartCoroutine(ShowCardSlowly(num));  // 카드 천천히 보이도록 처리
                 Debug.Log("Card is now visible: " + card.name);
             }
             else
@@ -74,63 +74,31 @@ public class GachaManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("10개 뽑기 로직이 필요함!");
+            StartCoroutine(ShowCardSlowly(num));
         }
     }
 
     // 카드가 천천히 보이도록 하는 메서드
-    private IEnumerator ShowCardSlowly()
+    private IEnumerator ShowCardSlowly(int gachaCount)
     {
         float cardAlpha = 0f;
-        card.SetActive(true); // 카드 활성화
 
-        // 카드가 점진적으로 보이도록 처리
-        CanvasGroup cardCanvasGroup = card.GetComponent<CanvasGroup>();
-        if (cardCanvasGroup == null)
+        for (int i = 0; i < gachaCount; i++)
         {
-            cardCanvasGroup = card.AddComponent<CanvasGroup>();  // CanvasGroup이 없으면 추가
+            cards[i].gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+            cards[i].Flip();
         }
-
-        // 카드의 알파 값을 점진적으로 증가시켜서 보이게 만듦
-        while (cardAlpha < 1f)
-        {
-            cardAlpha += Time.deltaTime / fadeDuration; // fadeDuration에 맞춰 천천히 변화
-            cardCanvasGroup.alpha = Mathf.Lerp(0, 1, cardAlpha);
-            yield return null;
-        }
-
-        cardCanvasGroup.alpha = 1f;  // 최종적으로 완전하게 보이게 설정
-
-        // 카드 뒤집기 효과 추가 (회전 효과)
-        StartCoroutine(CardFlipEffect());
 
         // 나가기 버튼 활성화
         ExitBtn.gameObject.SetActive(true);
-    }
-
-    // 카드가 뒤집어지는 효과
-    private IEnumerator CardFlipEffect()
-    {
-        float rotationAmount = 0f;
-        Quaternion startRotation = card.transform.rotation;
-        Quaternion endRotation = Quaternion.Euler(0, 180, 0); // 180도 회전
-
-        // 카드가 천천히 회전하도록 처리
-        while (rotationAmount < 1f)
-        {
-            rotationAmount += Time.deltaTime / fadeDuration;
-            card.transform.rotation = Quaternion.Slerp(startRotation, endRotation, rotationAmount);
-            yield return null;
-        }
-
-        card.transform.rotation = endRotation; // 최종적으로 완전 회전
     }
 
     // 나가기 버튼 클릭 시 카드와 Fade Black 비활성화
     public void HideCardAndFadeBlack()
     {
         GachaFadeBlack.gameObject.SetActive(false); // Fade Black 비활성화
-        card.SetActive(false); // 카드 비활성화
+        ResetCardState(); // 카드 비활성화
 
         // 뽑기 버튼 활성화
         DrawOneBtn.interactable = true;
@@ -161,5 +129,13 @@ public class GachaManager : MonoBehaviour
 
         // 새로운 뽑기를 시작
         StartCoroutine(FadeInEffect(1));  // 새로 뽑기 시작
+    }
+
+    private void ResetCardState()
+    {
+        foreach (var card in cards)
+        {
+            card.gameObject.SetActive(false);
+        }
     }
 }
