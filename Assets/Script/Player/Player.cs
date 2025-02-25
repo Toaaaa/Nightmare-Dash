@@ -9,140 +9,92 @@ public class Player : MonoBehaviour
     Animator animator;
     Rigidbody2D rb;
 
-    [SerializeField] float jumpHeight = 1.7f;
-    [SerializeField] float jumpDuration = 0.7f;
-    [SerializeField] float gravScale = 4f;
-    float groundY;
-
-    bool isDead = false;
-    bool isJumping = false;
-    float doubleJumpDelay = 0.05f;
-    bool isOnGround = false;
+    [SerializeField] float jumpForce = 7f; // 점프 힘
+    [SerializeField] int maxJumps = 2; // 최대 점프 횟수
+    int jumpCount = 0;
+    bool isGrounded = false;
     bool isSliding = false;
+    bool isDead = false;
+    bool fall = false;
+    float coyoteTime = 0.1f; // 코요테 타임 (땅에서 살짝 벗어나도 점프 가능)
+    float coyoteTimeCounter;
 
-
-    private void Awake()
-    {
-        groundY = transform.position.y;
-    }
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+
     }
 
     void Update()
     {
-
-        if(!isDead && isOnGround)
+        if (!isDead)
         {
-            if (!isSliding)// 달리기
+            if (isGrounded)
             {
-                animator.SetBool("isSliding", false);
+                coyoteTimeCounter = coyoteTime; // 땅에 있을 때 코요테 타임 리셋
+                jumpCount = 0;
             }
-            if (Input.GetKeyDown(KeyCode.Space))// 점프
+            else
+            {
+                coyoteTimeCounter -= Time.deltaTime;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space) && (jumpCount < maxJumps || coyoteTimeCounter > 0))
             {
                 Jump();
             }
 
-            if(Input.GetKeyDown(KeyCode.S))// 슬라이딩
+            if (Input.GetKeyDown(KeyCode.S) && isGrounded) // 슬라이딩
             {
                 Slide();
             }
         }
-        if (isJumping)// 더블 점프
-        {
-            doubleJumpDelay -= Time.deltaTime;
-            if (Input.GetKeyDown(KeyCode.Space) && doubleJumpDelay <= 0)
-            {
-                DoubleJump();
-                doubleJumpDelay = 0.05f;
-            }
-        }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {       
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isOnGround = true;
-            isJumping = false;
-            rb.gravityScale = 0;
-            transform.DOKill();// 바닥에 닿으면 DOTween 중단
-        }
-    }
-    private void OnCollisionExit2D(Collision2D collision)
+    void Jump()
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            new WaitForSeconds(0.1f);// 코요테 타임 추가
-            isOnGround = false;
-        }
-    }
+        if (fall) return;
+        rb.velocity = new Vector2(rb.velocity.x, 0f); // 기존 점프 속도 초기화 (더블 점프 시 중요)
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        animator.SetTrigger(jumpCount == 0 ? "Jump" : "DoubleJump");
 
-    public void SetIsdead(bool isdead)
-    {
-        isDead = isdead;
+        isGrounded = false;
+        jumpCount++;
+        coyoteTimeCounter = 0; // 점프 시 코요테 타임 리셋
     }
 
     void Slide()
     {
-        if(!isDead)
+        isSliding = true;
+        animator.SetBool("isSliding", true);
+    }
+
+    public void SetFall()
+    {
+        fall = true;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
         {
-            isSliding = true;
-            animator.SetBool("isSliding", true);
+            isGrounded = true;
         }
     }
-    void Jump()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isJumping) return;
-
-        isJumping = true;
-        isOnGround = false;
-        animator.SetTrigger("Jump");
-
-        float targetY = transform.position.y + jumpHeight;
-
-        transform.DOMoveY(targetY, jumpDuration / 2)// 상승
-            .SetEase(Ease.OutQuad)
-            .OnComplete(() =>
-            {
-                transform.DOMoveY(groundY, jumpDuration * 0.6f)// 하락
-                .SetEase(Ease.InQuad)
-                .OnUpdate(() =>
-                {
-                    // 땅과 충돌하면 DOTween 중단
-                    if (isOnGround)
-                    {
-                        transform.DOKill();
-                    }
-                });
-            });
+        if (collision.gameObject.CompareTag("UnderGround"))
+        {
+            fall = true;
+        }
     }
-    void DoubleJump()
+
+    void OnCollisionExit2D(Collision2D collision)
     {
-        if (!isJumping) return;
-
-        animator.SetTrigger("DoubleJump");
-
-        float targetY = transform.position.y + jumpHeight;
-
-        transform.DOKill();// Jump()에서 사용한 DOTween을 취소
-
-        transform.DOMoveY(targetY, jumpDuration / 2)// 상승
-            .SetEase(Ease.OutQuad)
-            .OnComplete(() =>
-            {
-                transform.DOMoveY(groundY, jumpDuration* 0.6f)// 하락
-                .SetEase(Ease.InQuad)
-                .OnUpdate(() =>
-                {
-                    // 땅과 충돌하면 DOTween 중단
-                    if (isOnGround)
-                    {
-                        transform.DOKill();
-                    }
-                });
-            });
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
     }
 }
