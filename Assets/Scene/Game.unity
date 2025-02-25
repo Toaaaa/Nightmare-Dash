@@ -16685,7 +16685,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1276126500166673075, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
       propertyPath: m_GravityScale
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3929388711669747774, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16693,7 +16693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3929388711669747774, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.05
+      value: -2.029
       objectReference: {fileID: 0}
     - target: {fileID: 3929388711669747774, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16726,6 +16726,14 @@ PrefabInstance:
     - target: {fileID: 3929388711669747774, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6215028111683610466, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+      propertyPath: jumpHeight
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6215028111683610466, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+      propertyPath: jumpDuration
+      value: 0.7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

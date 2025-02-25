@@ -7,21 +7,28 @@ using DG.Tweening;
 public class Player : MonoBehaviour
 {
     Animator animator;
-    Rigidbody2D _rigidbody;
+    Rigidbody2D rb;
 
-    public float jumpHeight = 5f;
-    public float jumpDuration = 0.5f;
+    [SerializeField] float jumpHeight = 1.7f;
+    [SerializeField] float jumpDuration = 0.7f;
+    [SerializeField] float gravScale = 4f;
+    float groundY;
+
     bool isDead = false;
-
     bool isJumping = false;
-    float doubleJumpDelay = 0.2f;
+    float doubleJumpDelay = 0.05f;
     bool isOnGround = false;
     bool isSliding = false;
-    
+
+
+    private void Awake()
+    {
+        groundY = transform.position.y;
+    }
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
-        _rigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -31,14 +38,11 @@ public class Player : MonoBehaviour
         {
             if (!isSliding)// 달리기
             {
-                isJumping = false;
-                doubleJumpDelay = 0.2f;
                 animator.SetBool("isSliding", false);
             }
             if (Input.GetKeyDown(KeyCode.Space))// 점프
             {
                 Jump();
-                isJumping = true;
             }
 
             if(Input.GetKeyDown(KeyCode.S))// 슬라이딩
@@ -51,9 +55,8 @@ public class Player : MonoBehaviour
             doubleJumpDelay -= Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.Space) && doubleJumpDelay <= 0)
             {
-                Jump();
-                animator.SetTrigger("DoubleJump");
-                isJumping = false;
+                DoubleJump();
+                doubleJumpDelay = 0.05f;
             }
         }
     }
@@ -61,7 +64,12 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {       
         if (collision.gameObject.CompareTag("Ground"))
+        {
             isOnGround = true;
+            isJumping = false;
+            rb.gravityScale = 0;
+            transform.DOKill();// 바닥에 닿으면 DOTween 중단
+        }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -87,7 +95,54 @@ public class Player : MonoBehaviour
     }
     void Jump()
     {
-        transform.DOJump(transform.position, jumpHeight, 1, jumpDuration)
-            .SetEase(Ease.OutQuad);
+        if (isJumping) return;
+
+        isJumping = true;
+        isOnGround = false;
+        animator.SetTrigger("Jump");
+
+        float targetY = transform.position.y + jumpHeight;
+
+        transform.DOMoveY(targetY, jumpDuration / 2)// 상승
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                transform.DOMoveY(groundY, jumpDuration * 0.6f)// 하락
+                .SetEase(Ease.InQuad)
+                .OnUpdate(() =>
+                {
+                    // 땅과 충돌하면 DOTween 중단
+                    if (isOnGround)
+                    {
+                        transform.DOKill();
+                    }
+                });
+            });
+    }
+    void DoubleJump()
+    {
+        if (!isJumping) return;
+
+        animator.SetTrigger("DoubleJump");
+
+        float targetY = transform.position.y + jumpHeight;
+
+        transform.DOKill();// Jump()에서 사용한 DOTween을 취소
+
+        transform.DOMoveY(targetY, jumpDuration / 2)// 상승
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                transform.DOMoveY(groundY, jumpDuration* 0.6f)// 하락
+                .SetEase(Ease.InQuad)
+                .OnUpdate(() =>
+                {
+                    // 땅과 충돌하면 DOTween 중단
+                    if (isOnGround)
+                    {
+                        transform.DOKill();
+                    }
+                });
+            });
     }
 }
