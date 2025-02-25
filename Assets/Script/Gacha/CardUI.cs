@@ -17,6 +17,12 @@ public class CardUI : MonoBehaviour, IPointerDownHandler
         animator = GetComponent<Animator>();
     }
 
+    private void OnEnable()
+    {
+        //카드가 활성화될때 isFlipped를 false로 초기화
+        isFlipped = false;
+    }
+
     // 카드 UI 설정 메서드
     public void SetCardUI(Card card)
     {
@@ -37,8 +43,8 @@ public class CardUI : MonoBehaviour, IPointerDownHandler
     {
         if (!isFlipped)
         {
-            animator.SetTrigger("Flip");                           // 카드 뒤집기 애니메이션 실행
-            isFlipped = true;
+            isFlipped = true; 
+            animator.SetTrigger("Flip"); // 카드 뒤집기 애니메이션 실행
         }
         else
         {

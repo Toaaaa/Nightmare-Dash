@@ -4,18 +4,24 @@ using UnityEngine;
 
 public class PlatformManager : MonoBehaviour
 {
-    // º¯¼ö
-    [SerializeField] float speed = 1.5f; // ÀÌµ¿ ¼Óµµ
-    //[SerializeField] SpawnPoint spawnPoint; // ÇÃ·§Æû »ı¼º À§Ä¡
+    GameSceneController sceneController;
+    // ë³€ìˆ˜
+    [SerializeField] float speed = 8f; // ì´ë™ ì†ë„ 8ì—ì„œ ìµœëŒ€ 12ê¹Œì§€.
+    [SerializeField] bool isGameStart = false; // ê²Œì„ ì‹œì‘ ì—¬ë¶€
+    float time = 0; // ì‹œê°„
+    //[SerializeField] SpawnPoint spawnPoint; // í”Œë«í¼ ìƒì„± ìœ„ì¹˜
 
-    // ÀÌ´Ï¼È µ¥ÀÌÅÍ + ÇÁ¸®ÆÕ
-    [SerializeField] GameObject startPlatform; // ½ÃÀÛ ÇÃ·§Æû
-    [SerializeField] Platform platformPrefab; // ÇÃ·§Æû ÇÁ¸®ÆÕ (¹ßÆÇ 1Ä­±æÀÌÀÇ ÇÁ¸®ÆÕ)
+    // ë§µ ê·¸ë¦¬ë“œ
+    [SerializeField] Transform mapGrid; // ë§µ íƒ€ì¼
+    [SerializeField] List<Point> points;  // ì½”ì¸
 
+    // ë°ì´í„° ë² ì´ìŠ¤
+    [SerializeField] List<RunningItem> runningItems; // í”¼ê²©ì‹œ ì‚¬ìš©ë˜ëŠ” ì•„ì´í…œ ë¦¬ìŠ¤íŠ¸
 
-    // µ¥ÀÌÅÍ º£ÀÌ½º
-    [SerializeField] List<RunningItem> runningItems; // ÇÇ°İ½Ã »ç¿ëµÇ´Â ¾ÆÀÌÅÛ ¸®½ºÆ®
-
+    private void Awake()
+    {
+        sceneController = SceneBase.Current as GameSceneController;
+    }
 
     void Start()
     {
@@ -23,34 +29,51 @@ public class PlatformManager : MonoBehaviour
     }
     void Update()
     {
-        //ÁøÇà ¼Óµµ¸¦ °¡Á®¿Í¼­ ±×°Í¿¡ ¸ÂÃç¼­ ´ÙÀ½ ÇÃ·¿Æû »ı¼º
+        //ì§„í–‰ ì†ë„ë¥¼ ê°€ì ¸ì™€ì„œ ê·¸ê²ƒì— ë§ì¶°ì„œ ë‹¤ìŒ í”Œë ›í¼ ìƒì„±
+        if(isGameStart)
+        {
+            mapGrid.transform.Translate(Vector3.left * speed * Time.deltaTime);
+            SpeedUpGradual();
+        }
     }
 
     public void StartGame()
     {
-        // °ÔÀÓ + ÇÃ·¿ÆûÀÌ ¿òÁ÷ÀÌ±â ½ÃÀÛ.
+        // ê²Œì„ + í”Œë ›í¼ì´ ì›€ì§ì´ê¸° ì‹œì‘.
+        isGameStart = true;
+        time = 0;
     }
     public void ResetGame()
     {
-        // °ÔÀÓ + ÇÃ·¿ÆûÀÌ ÃÊ±âÈ­
+        // ê²Œì„ + í”Œë ›í¼ì´ ì´ˆê¸°í™”
     }
     public void StopGame()
     {
-        // °ÔÀÓ + ÇÃ·¿ÆûÀÌ ¸ØÃã
+        // ê²Œì„ + í”Œë ›í¼ì´ ë©ˆì¶¤
+        isGameStart = false;
     }
 
 
-    public float GetSpeed()// ÇÃ·¿Æû ¼Óµµ.
+    public float GetSpeed()// í”Œë ›í¼ ì†ë„.
     {
         return speed;
     }
 
-    void InitalPlatform() // ÃÊ±â ÇÃ·§Æû »ı¼º (½ÃÀÛ ÇÃ·¿Æû)
+    void SpeedUpGradual() // ì ì  ë¹¨ë¼ì§€ëŠ” ì†ë„, 60ì´ˆë’¤ ìµœëŒ€ ì†ë„ 12ë„ë‹¬ (4ë§Œí¼ ì¦ê°€)
+    {
+        // ì†ë„ë¥¼ ì ì  ë¹¨ë¼ì§€ê²Œ í•˜ëŠ” í•¨ìˆ˜
+        if(time < 60)
+        {
+            speed = Mathf.Min(12f, speed + (4f / 60f) * Time.deltaTime);
+            time += Time.deltaTime;
+        }
+    }
+    void InitalPlatform() // ì´ˆê¸° í”Œë«í¼ ìƒì„± (ì‹œì‘ í”Œë ›í¼)
     {
         
     }
     void CreateRunningItem()
     {
-        // ÇÇ°İ½Ã »ç¿ëµÇ´Â ¾ÆÀÌÅÛ »ı¼º
+        // í”¼ê²©ì‹œ ì‚¬ìš©ë˜ëŠ” ì•„ì´í…œ ìƒì„±
     }
 }
