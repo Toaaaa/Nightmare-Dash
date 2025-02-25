@@ -9,8 +9,8 @@ public class DataManager : MonoBehaviour
     // 유물 데이터 관리용 Dictionary
     private Dictionary<int, ArtifactData> artifactDictionary = new Dictionary<int, ArtifactData>();
 
-    public Pet PetManager { get; set; } // 펫 참조
-    public Artifact ArtifactManager { get; set; } // 유물 참조
+    public Pet PetManager { get; set; } // 펫 매니저 참조
+    public Artifacts ArtifactManager { get; set; } // 유물 매니저 참조 (Artifacts -> Artifact로 변경)
 
     void Start()
     {
