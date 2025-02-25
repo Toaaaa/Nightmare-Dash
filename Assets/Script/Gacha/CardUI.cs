@@ -19,6 +19,7 @@ public class CardUI : MonoBehaviour, IPointerDownHandler
 
     private void OnEnable()
     {
+        //카드가 활성화될때 isFlipped를 false로 초기화
         isFlipped = false;
     }
 
