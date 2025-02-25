@@ -12,7 +12,9 @@ public class Player : MonoBehaviour
     [SerializeField] float jumpForce = 7f; // 점프 힘
     [SerializeField] int maxJumps = 2; // 최대 점프 횟수
     int jumpCount = 0;
-    bool isGrounded = false;
+    float slopeSpeed = 1.13f; // 경사면 속도
+    bool isOnSlope = false;// 경사면 위에 있는지
+    bool isGrounded = false;// 지면 위에 있는지
     bool isSliding = false;
     bool isDead = false;
     bool fall = false;
@@ -23,7 +25,7 @@ public class Player : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
-
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
     void Update()
@@ -40,7 +42,7 @@ public class Player : MonoBehaviour
                 coyoteTimeCounter -= Time.deltaTime;
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && (jumpCount < maxJumps || coyoteTimeCounter > 0))
+            if (Input.GetKeyDown(KeyCode.Space) && (jumpCount < maxJumps || coyoteTimeCounter > 0) &&!isOnSlope) // 경사로에서는 점프 불가능
             {
                 Jump();
             }
@@ -49,6 +51,13 @@ public class Player : MonoBehaviour
             {
                 Slide();
             }
+        }
+    }
+    private void FixedUpdate()
+    {
+        if (isOnSlope)
+        {
+            rb.velocity = new Vector2(slopeSpeed, rb.velocity.y);
         }
     }
 
@@ -69,7 +78,6 @@ public class Player : MonoBehaviour
         isSliding = true;
         animator.SetBool("isSliding", true);
     }
-
     public void SetFall()
     {
         fall = true;
@@ -88,8 +96,18 @@ public class Player : MonoBehaviour
         {
             fall = true;
         }
+        if (collision.gameObject.CompareTag("Hill"))
+        {
+            isOnSlope = true;
+        }
     }
-
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Hill"))
+        {
+            isOnSlope = false;
+        }
+    }
     void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
