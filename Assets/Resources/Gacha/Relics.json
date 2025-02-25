@@ -1,0 +1,74 @@
+{
+  "relics": [
+    {
+      "id": "relic_001",
+      "name": "달콤한 슈가 링",
+      "rarity": "Common",
+      "probability": 40.0,
+      "isGuaranteed": false,
+      "effect": "이동 속도 +5%"
+    },
+    {
+      "id": "relic_002",
+      "name": "튼튼한 러닝화",
+      "rarity": "Common",
+      "probability": 40.0,
+      "isGuaranteed": false,
+      "effect": "점프 높이 +10%"
+    },
+    {
+      "id": "relic_003",
+      "name": "마그넷 코어",
+      "rarity": "Rare",
+      "probability": 10.0,
+      "isGuaranteed": false,
+      "effect": "젤리 자력 범위 +20%"
+    },
+    {
+      "id": "relic_004",
+      "name": "부드러운 깃털 모자",
+      "rarity": "Rare",
+      "probability": 7.0,
+      "isGuaranteed": false,
+      "effect": "2단 점프 시 부유 시간 +0.5초"
+    },
+    {
+      "id": "relic_005",
+      "name": "체력의 성수",
+      "rarity": "Epic",
+      "probability": 2.5,
+      "isGuaranteed": false,
+      "effect": "체력 회복 아이템 효과 +30%"
+    },
+    {
+      "id": "relic_006",
+      "name": "운명의 나침반",
+      "rarity": "Epic",
+      "probability": 0.5,
+      "isGuaranteed": false,
+      "effect": "부딪혀도 체력 감소량 -20%"
+    },
+    {
+      "id": "relic_007",
+      "name": "질주의 날개",
+      "rarity": "Legendary",
+      "probability": 0.1,
+      "isGuaranteed": true,
+      "effect": "일정 시간마다 3초간 무적 + 속도 30% 증가"
+    },
+    {
+      "id": "relic_008",
+      "name": "황금 바람의 문장",
+      "rarity": "Legendary",
+      "probability": 0.05,
+      "isGuaranteed": true,
+      "effect": "최대 속도 +15%, 부딪혀도 속도 감소 없음"
+    }
+  ],
+  "pityCounterMax": {
+    "Common": 10,
+    "Rare": 20,
+    "Epic": 50,
+    "Legendary": 100
+  }
+}
