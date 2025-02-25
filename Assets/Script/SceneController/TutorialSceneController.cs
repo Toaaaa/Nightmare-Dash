@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -20,7 +19,7 @@ public class TutorialSceneController : SceneBase
     protected override void OnStart(object data)
     {
         base.OnStart(data);
-        //storyEffect.Play();
+        storyEffect.Play();
     }
 
     public void PlayTextEffect()
@@ -42,6 +41,6 @@ public class TutorialSceneController : SceneBase
 
     public void StartTutorial()
     {
-
+        //TODO:튜토리얼 시작
     }
 }
