@@ -4,53 +4,53 @@ using UnityEngine.UI;
 
 public class GachaManager : MonoBehaviour
 {
-    public Button DrawOneBtn;  // "Draw One" ¹öÆ°
-    public Button DrawTenBtn;  // "Draw Ten" ¹öÆ°
-    public Button ExitBtn;     // "Exit" ¹öÆ° (³ª°¡±â ¹öÆ°)
-    public Image GachaFadeBlack; // °ËÀº»ö ÆäÀÌµå È­¸é
-    public float fadeDuration = 1.0f; // ÆäÀÌµå È¿°ú Áö¼Ó ½Ã°£
-    private float maxAlpha = 0.5f; // ÃÖ´ë Åõ¸íµµ
-    public GameObject card;  // ¾À¿¡¼­ Á÷Á¢ Á¸ÀçÇÏ´Â Ä«µå ¿ÀºêÁ§Æ® (Inspector¿¡¼­ ÇÒ´ç ÇÊ¿ä)
+    public Button DrawOneBtn;  // "Draw One" ë²„íŠ¼
+    public Button DrawTenBtn;  // "Draw Ten" ë²„íŠ¼
+    public Button ExitBtn;     // "Exit" ë²„íŠ¼ (ë‚˜ê°€ê¸° ë²„íŠ¼)
+    public Image GachaFadeBlack; // ê²€ì€ìƒ‰ í˜ì´ë“œ í™”ë©´
+    public float fadeDuration = 1.0f; // í˜ì´ë“œ íš¨ê³¼ ì§€ì† ì‹œê°„
+    private float maxAlpha = 0.5f; // ìµœëŒ€ íˆ¬ëª…ë„
+    public GameObject card;  // ì”¬ì—ì„œ ì§ì ‘ ì¡´ì¬í•˜ëŠ” ì¹´ë“œ ì˜¤ë¸Œì íŠ¸ (Inspectorì—ì„œ í• ë‹¹ í•„ìš”)
 
     void Start()
     {
-        // ¹öÆ° Å¬¸¯ ÀÌº¥Æ® ¿¬°á
+        // ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸ ì—°ê²°
         DrawOneBtn.onClick.AddListener(() => DrawOneBtnClick(1));
         DrawTenBtn.onClick.AddListener(() => DrawOneBtnClick(10));
-        ExitBtn.onClick.AddListener(HideCardAndFadeBlack); // ³ª°¡±â ¹öÆ° ÀÌº¥Æ® ¿¬°á
+        ExitBtn.onClick.AddListener(HideCardAndFadeBlack); // ë‚˜ê°€ê¸° ë²„íŠ¼ ì´ë²¤íŠ¸ ì—°ê²°
 
-        // Exit ¹öÆ°Àº Ã³À½¿¡ ºñÈ°¼ºÈ­
+        // Exit ë²„íŠ¼ì€ ì²˜ìŒì— ë¹„í™œì„±í™”
         ExitBtn.gameObject.SetActive(false);
 
-        // µğ¹ö±ë: Ä«µå°¡ ÇÒ´çµÇ¾ú´ÂÁö È®ÀÎ
+        // ë””ë²„ê¹…: ì¹´ë“œê°€ í• ë‹¹ë˜ì—ˆëŠ”ì§€ í™•ì¸
         if (card == null)
         {
             Debug.LogError("card is NOT assigned! Assign the card object in the Inspector.");
         }
         else
         {
-            card.SetActive(false); // °ÔÀÓ ½ÃÀÛ ½Ã ºñÈ°¼ºÈ­
+            card.SetActive(false); // ê²Œì„ ì‹œì‘ ì‹œ ë¹„í™œì„±í™”
             Debug.Log("Card is assigned correctly: " + card.name);
         }
     }
 
-    // ¹öÆ° Å¬¸¯ ½Ã È£ÃâµÇ´Â ¸Ş¼­µå
+    // ë²„íŠ¼ í´ë¦­ ì‹œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
     public void DrawOneBtnClick(int num)
     {
         StartCoroutine(FadeInEffect(num));
     }
 
-    // Fade in È¿°ú + Ä«µå È°¼ºÈ­
+    // Fade in íš¨ê³¼ + ì¹´ë“œ í™œì„±í™”
     private IEnumerator FadeInEffect(int num)
     {
-        // Ä«µå¿Í Fade Black ÃÊ±âÈ­
-        ResetCardRotation(); // Ä«µå È¸Àü ¸®¼Â
+        // ì¹´ë“œì™€ Fade Black ì´ˆê¸°í™”
+        ResetCardRotation(); // ì¹´ë“œ íšŒì „ ë¦¬ì…‹
 
         GachaFadeBlack.gameObject.SetActive(true);
-        GachaFadeBlack.color = new Color(0, 0, 0, 0); // ½ÃÀÛÀº ¿ÏÀü Åõ¸í
+        GachaFadeBlack.color = new Color(0, 0, 0, 0); // ì‹œì‘ì€ ì™„ì „ íˆ¬ëª…
         float elapsedTime = 0f;
 
-        // ÆäÀÌµå ÀÎ È¿°ú (±æ°Ô ¼³Á¤)
+        // í˜ì´ë“œ ì¸ íš¨ê³¼ (ê¸¸ê²Œ ì„¤ì •)
         while (elapsedTime < fadeDuration)
         {
             elapsedTime += Time.deltaTime;
@@ -59,12 +59,12 @@ public class GachaManager : MonoBehaviour
             yield return null;
         }
 
-        // Ä«µå È°¼ºÈ­ (Ä«µåµµ Á¶±İ ÃµÃµÈ÷ º¸ÀÌµµ·Ï Á¶Á¤)
+        // ì¹´ë“œ í™œì„±í™” (ì¹´ë“œë„ ì¡°ê¸ˆ ì²œì²œíˆ ë³´ì´ë„ë¡ ì¡°ì •)
         if (num == 1)
         {
             if (card != null)
             {
-                StartCoroutine(ShowCardSlowly());  // Ä«µå ÃµÃµÈ÷ º¸ÀÌµµ·Ï Ã³¸®
+                StartCoroutine(ShowCardSlowly());  // ì¹´ë“œ ì²œì²œíˆ ë³´ì´ë„ë¡ ì²˜ë¦¬
                 Debug.Log("Card is now visible: " + card.name);
             }
             else
@@ -74,48 +74,48 @@ public class GachaManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("10°³ »Ì±â ·ÎÁ÷ÀÌ ÇÊ¿äÇÔ!");
+            Debug.Log("10ê°œ ë½‘ê¸° ë¡œì§ì´ í•„ìš”í•¨!");
         }
     }
 
-    // Ä«µå°¡ ÃµÃµÈ÷ º¸ÀÌµµ·Ï ÇÏ´Â ¸Ş¼­µå
+    // ì¹´ë“œê°€ ì²œì²œíˆ ë³´ì´ë„ë¡ í•˜ëŠ” ë©”ì„œë“œ
     private IEnumerator ShowCardSlowly()
     {
         float cardAlpha = 0f;
-        card.SetActive(true); // Ä«µå È°¼ºÈ­
+        card.SetActive(true); // ì¹´ë“œ í™œì„±í™”
 
-        // Ä«µå°¡ Á¡ÁøÀûÀ¸·Î º¸ÀÌµµ·Ï Ã³¸®
+        // ì¹´ë“œê°€ ì ì§„ì ìœ¼ë¡œ ë³´ì´ë„ë¡ ì²˜ë¦¬
         CanvasGroup cardCanvasGroup = card.GetComponent<CanvasGroup>();
         if (cardCanvasGroup == null)
         {
-            cardCanvasGroup = card.AddComponent<CanvasGroup>();  // CanvasGroupÀÌ ¾øÀ¸¸é Ãß°¡
+            cardCanvasGroup = card.AddComponent<CanvasGroup>();  // CanvasGroupì´ ì—†ìœ¼ë©´ ì¶”ê°€
         }
 
-        // Ä«µåÀÇ ¾ËÆÄ °ªÀ» Á¡ÁøÀûÀ¸·Î Áõ°¡½ÃÄÑ¼­ º¸ÀÌ°Ô ¸¸µê
+        // ì¹´ë“œì˜ ì•ŒíŒŒ ê°’ì„ ì ì§„ì ìœ¼ë¡œ ì¦ê°€ì‹œì¼œì„œ ë³´ì´ê²Œ ë§Œë“¦
         while (cardAlpha < 1f)
         {
-            cardAlpha += Time.deltaTime / fadeDuration; // fadeDuration¿¡ ¸ÂÃç ÃµÃµÈ÷ º¯È­
+            cardAlpha += Time.deltaTime / fadeDuration; // fadeDurationì— ë§ì¶° ì²œì²œíˆ ë³€í™”
             cardCanvasGroup.alpha = Mathf.Lerp(0, 1, cardAlpha);
             yield return null;
         }
 
-        cardCanvasGroup.alpha = 1f;  // ÃÖÁ¾ÀûÀ¸·Î ¿ÏÀüÇÏ°Ô º¸ÀÌ°Ô ¼³Á¤
+        cardCanvasGroup.alpha = 1f;  // ìµœì¢…ì ìœ¼ë¡œ ì™„ì „í•˜ê²Œ ë³´ì´ê²Œ ì„¤ì •
 
-        // Ä«µå µÚÁı±â È¿°ú Ãß°¡ (È¸Àü È¿°ú)
+        // ì¹´ë“œ ë’¤ì§‘ê¸° íš¨ê³¼ ì¶”ê°€ (íšŒì „ íš¨ê³¼)
         StartCoroutine(CardFlipEffect());
 
-        // ³ª°¡±â ¹öÆ° È°¼ºÈ­
+        // ë‚˜ê°€ê¸° ë²„íŠ¼ í™œì„±í™”
         ExitBtn.gameObject.SetActive(true);
     }
 
-    // Ä«µå°¡ µÚÁı¾îÁö´Â È¿°ú
+    // ì¹´ë“œê°€ ë’¤ì§‘ì–´ì§€ëŠ” íš¨ê³¼
     private IEnumerator CardFlipEffect()
     {
         float rotationAmount = 0f;
         Quaternion startRotation = card.transform.rotation;
-        Quaternion endRotation = Quaternion.Euler(0, 180, 0); // 180µµ È¸Àü
+        Quaternion endRotation = Quaternion.Euler(0, 180, 0); // 180ë„ íšŒì „
 
-        // Ä«µå°¡ ÃµÃµÈ÷ È¸ÀüÇÏµµ·Ï Ã³¸®
+        // ì¹´ë“œê°€ ì²œì²œíˆ íšŒì „í•˜ë„ë¡ ì²˜ë¦¬
         while (rotationAmount < 1f)
         {
             rotationAmount += Time.deltaTime / fadeDuration;
@@ -123,43 +123,43 @@ public class GachaManager : MonoBehaviour
             yield return null;
         }
 
-        card.transform.rotation = endRotation; // ÃÖÁ¾ÀûÀ¸·Î ¿ÏÀü È¸Àü
+        card.transform.rotation = endRotation; // ìµœì¢…ì ìœ¼ë¡œ ì™„ì „ íšŒì „
     }
 
-    // ³ª°¡±â ¹öÆ° Å¬¸¯ ½Ã Ä«µå¿Í Fade Black ºñÈ°¼ºÈ­
+    // ë‚˜ê°€ê¸° ë²„íŠ¼ í´ë¦­ ì‹œ ì¹´ë“œì™€ Fade Black ë¹„í™œì„±í™”
     public void HideCardAndFadeBlack()
     {
-        GachaFadeBlack.gameObject.SetActive(false); // Fade Black ºñÈ°¼ºÈ­
-        card.SetActive(false); // Ä«µå ºñÈ°¼ºÈ­
+        GachaFadeBlack.gameObject.SetActive(false); // Fade Black ë¹„í™œì„±í™”
+        card.SetActive(false); // ì¹´ë“œ ë¹„í™œì„±í™”
 
-        // »Ì±â ¹öÆ° È°¼ºÈ­
+        // ë½‘ê¸° ë²„íŠ¼ í™œì„±í™”
         DrawOneBtn.interactable = true;
         DrawTenBtn.interactable = true;
 
-        // Exit ¹öÆ° ºñÈ°¼ºÈ­
+        // Exit ë²„íŠ¼ ë¹„í™œì„±í™”
         ExitBtn.gameObject.SetActive(false);
     }
 
-    // Ä«µå È¸Àü »óÅÂ ¸®¼Â
+    // ì¹´ë“œ íšŒì „ ìƒíƒœ ë¦¬ì…‹
     private void ResetCardRotation()
     {
-        card.transform.rotation = Quaternion.Euler(0, 0, 0); // Ä«µå È¸Àü ÃÊ±âÈ­
+        card.transform.rotation = Quaternion.Euler(0, 0, 0); // ì¹´ë“œ íšŒì „ ì´ˆê¸°í™”
     }
 
-    // »Ì±â ¹öÆ°À» ´Ù½Ã ´­·¶À» ¶§ Ä«µå¿Í ÆäÀÌµå ºí·¢À» ÃÊ±âÈ­ÇÏ¿© »õ·Î Ãâ·ÂµÇ°Ô ¸¸µê
+    // ë½‘ê¸° ë²„íŠ¼ì„ ë‹¤ì‹œ ëˆŒë €ì„ ë•Œ ì¹´ë“œì™€ í˜ì´ë“œ ë¸”ë™ì„ ì´ˆê¸°í™”í•˜ì—¬ ìƒˆë¡œ ì¶œë ¥ë˜ê²Œ ë§Œë“¦
     public void ResetForNewDraw()
     {
-        HideCardAndFadeBlack(); // ±âÁ¸ Ä«µå¿Í Fade Black ºñÈ°¼ºÈ­
+        HideCardAndFadeBlack(); // ê¸°ì¡´ ì¹´ë“œì™€ Fade Black ë¹„í™œì„±í™”
 
-        // Ä«µå°¡ »õ·Î »ÌÈú ¶§ ´Ù½Ã È°¼ºÈ­µÇ°í ÃÊ±â »óÅÂ·Î ¼³Á¤µÊ
-        DrawOneBtn.interactable = false; // »Ì±â ¹öÆ° ºñÈ°¼ºÈ­
+        // ì¹´ë“œê°€ ìƒˆë¡œ ë½‘í ë•Œ ë‹¤ì‹œ í™œì„±í™”ë˜ê³  ì´ˆê¸° ìƒíƒœë¡œ ì„¤ì •ë¨
+        DrawOneBtn.interactable = false; // ë½‘ê¸° ë²„íŠ¼ ë¹„í™œì„±í™”
         DrawTenBtn.interactable = false;
 
-        // Ä«µå È¸Àü »óÅÂ ÃÊ±âÈ­
-        ResetCardRotation(); // Ä«µå È¸Àü ¸®¼Â
-        card.SetActive(true); // Ä«µå È°¼ºÈ­
+        // ì¹´ë“œ íšŒì „ ìƒíƒœ ì´ˆê¸°í™”
+        ResetCardRotation(); // ì¹´ë“œ íšŒì „ ë¦¬ì…‹
+        card.SetActive(true); // ì¹´ë“œ í™œì„±í™”
 
-        // »õ·Î¿î »Ì±â¸¦ ½ÃÀÛ
-        StartCoroutine(FadeInEffect(1));  // »õ·Î »Ì±â ½ÃÀÛ
+        // ìƒˆë¡œìš´ ë½‘ê¸°ë¥¼ ì‹œì‘
+        StartCoroutine(FadeInEffect(1));  // ìƒˆë¡œ ë½‘ê¸° ì‹œì‘
     }
 }

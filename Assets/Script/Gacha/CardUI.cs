@@ -26,16 +26,16 @@ public class CardUI : MonoBehaviour, IPointerDownHandler
     // 카드 UI 설정 메서드
     public void SetCardUI(Card card)
     {
-        cardName.text = card.cardName;
-        cardType.text = "Rarity: " + card.cardType;
-        cardEffect.text = "Effect: " + card.cardEffect;
+        cardName.text = card.cardName;                            // 카드 이름
+        cardType.text = "Rarity: " + card.cardType;                // 카드 등급
+        cardEffect.text = "Effect: " + card.cardEffect;            // 카드 효과
 
         if (cardImage != null)
         {
-            cardImage.sprite = card.cardImage;
+            cardImage.sprite = card.cardImage;                     // 카드 이미지
         }
 
-        animator.SetTrigger("ShowCard");
+        animator.SetTrigger("ShowCard");                            // 카드 애니메이션 실행
     }
 
     // 카드 클릭 처리
@@ -43,12 +43,12 @@ public class CardUI : MonoBehaviour, IPointerDownHandler
     {
         if (!isFlipped)
         {
-            isFlipped = true;
-            animator.SetTrigger("Flip");
+            isFlipped = true; 
+            animator.SetTrigger("Flip"); // 카드 뒤집기 애니메이션 실행
         }
         else
         {
-            Destroy(gameObject); // 카드 제거
+            Destroy(gameObject);                                  // 카드 제거
         }
     }
 }
