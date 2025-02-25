@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GatchaUI : BaseUI
 {
@@ -15,6 +16,7 @@ public class GatchaUI : BaseUI
     private void OnGatchaClick()
     {
         uiManager.SetUIState(UIState.Gatcha);
+        SceneManager.LoadScene("Gacha");
     }
 
     protected override UIState GetUIState()
