@@ -35,6 +35,10 @@ public class PlatformManager : MonoBehaviour
             mapGrid.transform.Translate(Vector3.left * speed * Time.deltaTime);
             SpeedUpGradual();
         }
+        if(Input.GetKeyDown(KeyCode.F1))
+        {
+            StartGame();
+        }
     }
 
     public void StartGame()
