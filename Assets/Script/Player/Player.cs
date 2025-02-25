@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     int jumpCount = 0;
     float slopeSpeed = 1.13f; // 경사면 속도
     bool isOnSlope = false;// 경사면 위에 있는지
-    bool isGrounded = false;// 지면 위에 있는지
+    bool isOnGround = false;// 지면 위에 있는지
     bool isSliding = false;
     bool isDead = false;
     bool fall = false;
@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     {
         if (!isDead)
         {
-            if (isGrounded)
+            if (isOnGround)
             {
                 coyoteTimeCounter = coyoteTime; // 땅에 있을 때 코요테 타임 리셋
                 jumpCount = 0;
@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
                 Jump();
             }
 
-            if (Input.GetKeyDown(KeyCode.S) && isGrounded) // 슬라이딩
+            if (Input.GetKeyDown(KeyCode.S) && isOnGround) // 슬라이딩
             {
                 Slide();
             }
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         animator.SetTrigger(jumpCount == 0 ? "Jump" : "DoubleJump");
 
-        isGrounded = false;
+        isOnGround = false;
         jumpCount++;
         coyoteTimeCounter = 0; // 점프 시 코요테 타임 리셋
     }
@@ -87,7 +87,15 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = true;
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                // 법선 벡터(normal)가 위쪽(0, 1)에 가까운 경우에만 "땅"으로 인정
+                if (contact.normal.y > 0.7f)
+                {
+                    isOnGround = true;
+                    return;
+                }
+            }
         }
     }
     void OnTriggerEnter2D(Collider2D collision)
@@ -112,7 +120,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = false;
+            isOnGround = false;
         }
     }
 }
