@@ -68,18 +68,16 @@ public class PlatformManager : MonoBehaviour
         sceneController.SetPlayerPos(spawnPoint);// 플레이어 위치 초기화
         sceneController.ResetPlayer();// 플레이어 상태 초기화
         mapGrid.position = gridPoint; // 맵 타일 위치 초기화
+        points.ForEach(p => p.PointAnimReset());// 코인 애니메이션 초기화
     }
     public void StopGame()
     {
         isGameStart = false;// 게임 정지(플렛폼 정지)
     }
-
-
     public float GetSpeed()// 플렛폼 속도.
     {
         return speed;
     }
-
     void SpeedUpGradual() // 점점 빨라지는 속도, 60초뒤 최대 속도 12도달 (4만큼 증가)
     {
         // 속도를 점점 빨라지게 하는 함수
