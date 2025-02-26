@@ -41,6 +41,7 @@ public class GameSceneController : SceneBase
     public Hp GameHp { get; set; } = new();
 
     public InGameUIController uiController;
+    [SerializeField] Player player;
 
     protected override void OnStart(object data)
     {
@@ -74,5 +75,18 @@ public class GameSceneController : SceneBase
     public void Return()
     {
         LoadScene("MainLobby");
+    }
+
+    public Vector2 GetPlayerPos()
+    {
+        return player.transform.position;
+    }
+    public void SetPlayerPos(Vector2 pos)
+    {
+        player.transform.position = pos;
+    }
+    public void ResetPlayer()
+    {
+        player.ResetP();
     }
 }

@@ -97,7 +97,18 @@ public class Player : MonoBehaviour
         animator.SetBool("isSliding", true);
     }
 
-
+    public void ResetP()
+    {
+        rb.velocity = Vector2.zero;
+        SetHpMax();
+        fall = false;
+        isDead = false;
+        coyoteTimeCounter = coyoteTime;
+        //애니메이션 리셋
+        animator.SetBool("isSliding", false);
+        animator.ResetTrigger("Jump");
+        animator.ResetTrigger("DoubleJump");
+    }
     public void SetFall()
     {
         fall = true;
