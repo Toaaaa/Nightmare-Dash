@@ -5,7 +5,6 @@ public class CardUI : MonoBehaviour
 {
     public Image cardImage;    // 카드 이미지
     public Text cardName;      // 카드 이름
-    public Text cardType;      // 카드 유형
     public Text cardEffect;    // 카드 효과
     private Animator animator; // 카드 애니메이터
 
@@ -19,7 +18,7 @@ public class CardUI : MonoBehaviour
         }
     }
 
-    // ✅ 카드 UI 설정 메서드 (유물 정보 추가)
+    // ✅ 카드 UI 설정 메서드 (유물 효과를 한글로 변환)
     public void SetCardUI(Card card)
     {
         if (card == null)
@@ -32,25 +31,13 @@ public class CardUI : MonoBehaviour
 
         // ✅ 카드 기본 정보 설정
         cardName.text = !string.IsNullOrEmpty(card.cardName) ? card.cardName : "Unknown";
-        cardType.text = !string.IsNullOrEmpty(card.cardType) ? "Rarity: " + card.cardType : "Rarity: Unknown";
-        cardEffect.text = !string.IsNullOrEmpty(card.cardEffect) ? "Effect: " + card.cardEffect : "Effect: None";
 
         // ✅ 카드에 유물이 있을 경우 UI 업데이트
         if (card.artifact != null)
         {
-            cardEffect.text += $"\n🛡️ Artifact: {card.artifact.Name ?? "Unknown"}";
-            cardEffect.text += $"\n🔹 Rarity: {card.artifact.Rarity}";
+            cardEffect.text = card.artifact.GetEffectDescription(); // ✅ 효과 한글 변환
 
-            // ✅ 유물 효과 데이터가 없을 경우 기본값 설정
-            if (card.artifact.Effect == null)
-            {
-                Debug.LogWarning($"⚠️ 카드 '{card.cardName}'의 유물 효과가 없습니다. 기본값(0)으로 설정합니다.", this);
-                card.artifact.Effect = new Effect { Hp = 0, Currency = 0, Invincibility = 0 };
-            }
-
-            cardEffect.text += $"\n❤️ HP: {card.artifact.Effect.Hp}, 💰 Currency: {card.artifact.Effect.Currency}, 🛡️ Invincibility: {card.artifact.Effect.Invincibility}";
-
-            // ✅ 유물 이미지가 있을 경우 카드 이미지로 설정
+            // ✅ 유물 이미지 설정 (유물이 없으면 기본 카드 이미지 사용)
             if (cardImage != null)
             {
                 cardImage.sprite = card.artifact.ArtifactImage ?? card.cardImage;
@@ -63,6 +50,9 @@ public class CardUI : MonoBehaviour
             {
                 cardImage.sprite = card.cardImage;
             }
+
+            // ✅ 효과 없음 표시
+            cardEffect.text = "효과 없음";
         }
 
         // ✅ 애니메이션 실행 (animator가 null이면 실행 안 함)
@@ -76,7 +66,7 @@ public class CardUI : MonoBehaviour
         }
 
         // ✅ 디버깅 로그
-        Debug.Log($"✅ 카드 UI 설정 완료: {cardName.text}");
+        Debug.Log($"✅ 카드 UI 설정 완료: {cardName.text} | 효과: {cardEffect.text}");
     }
 
     // ✅ 카드 뒤집기 애니메이션 실행

@@ -28,6 +28,19 @@ public class ArtifactData
     public Effect Effect { get; set; }
     public bool IsObtained { get; set; }     // 유물을 얻었는지 여부
     public Sprite ArtifactImage { get; set; }  // ✅ 유물 이미지 추가
+    public string GetEffectDescription()
+    {
+        string description = "";
+
+        if (Effect.Hp > 0)
+            description += $"체력 +{Effect.Hp} ";
+        if (Effect.Currency > 0)
+            description += $"재화 획득량 +{Effect.Currency} ";
+        if (Effect.Invincibility > 0)
+            description += $"무적 시간 +{Effect.Invincibility}초";
+
+        return string.IsNullOrEmpty(description) ? "효과 없음" : description.Trim();
+    }
 }
 
 public class Artifacts : MonoBehaviour
