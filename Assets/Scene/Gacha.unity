@@ -409,7 +409,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "10\uD68C \uBF51\uAE30"
+  m_Text: "5\uD68C \uBF51\uAE30"
 --- !u!222 &177139331
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -736,6 +736,7 @@ GameObject:
   m_Component:
   - component: {fileID: 576278211}
   - component: {fileID: 576278212}
+  - component: {fileID: 576278213}
   m_Layer: 0
   m_Name: Deck
   m_TagString: Untagged
@@ -772,8 +773,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deck: []
   total: 0
-  cardSpawnPoint: {fileID: 1368134394}
-  cardPrefab: {fileID: 0}
+--- !u!114 &576278213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576278210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8d141699c70f7946b9aeb86b9be05b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ArtifactImages: []
 --- !u!1 &582111727
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,6 +1335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52532b654eb4d6c45b3e67db31f9c716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  front: {fileID: 6160479198033358468}
   cardImage: {fileID: 991371045}
   cardName: {fileID: 1764513701}
   cardType: {fileID: 1347811819}
@@ -1860,6 +1873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52532b654eb4d6c45b3e67db31f9c716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  front: {fileID: 1271930}
   cardImage: {fileID: 241288934}
   cardName: {fileID: 1208774568}
   cardType: {fileID: 203443091}
@@ -2024,6 +2038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52532b654eb4d6c45b3e67db31f9c716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  front: {fileID: 1105258747}
   cardImage: {fileID: 1915896049}
   cardName: {fileID: 1854494257}
   cardType: {fileID: 1478324119}
@@ -2267,6 +2282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52532b654eb4d6c45b3e67db31f9c716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  front: {fileID: 1117531989}
   cardImage: {fileID: 246217636}
   cardName: {fileID: 1997575307}
   cardType: {fileID: 1869902093}
@@ -2646,7 +2662,7 @@ GameObject:
   - component: {fileID: 1534412444}
   - component: {fileID: 1534412443}
   m_Layer: 5
-  m_Name: Draw ten Btn
+  m_Name: Draw five Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3584,7 +3600,6 @@ MonoBehaviour:
   ExitBtn: {fileID: 1269662881}
   GachaFadeBlack: {fileID: 1368134395}
   fadeDuration: 0.5
-  card: {fileID: 5722967122080438583}
   cards:
   - {fileID: 9023442350566828692}
   - {fileID: 864301247}
@@ -4230,6 +4245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52532b654eb4d6c45b3e67db31f9c716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  front: {fileID: 6160479198033358468}
   cardImage: {fileID: 6002531921088348590}
   cardName: {fileID: 2072073955}
   cardType: {fileID: 658974003}

@@ -4,116 +4,114 @@ using UnityEngine;
 
 public class RandomSelect : MonoBehaviour
 {
-    [System.Serializable]
-    public class Artifact
-    {
-        public string cardName;
-        public string cardType;
-        public int weight;
-        public string cardEffect;
-        public Sprite cardImage;
-    }
-
-    [System.Serializable]
-    public class ArtifactList
-    {
-        public List<Artifact> artifacts;
-    }
-
     public List<Card> deck = new List<Card>();  // 카드 덱
     public int total = 0;  // 카드들의 가중치 총 합
 
-    public Transform cardSpawnPoint;  // 카드가 생성될 위치
-    public GameObject cardPrefab;  // 카드 프리팹
-
     void Start()
     {
-        // JSON 파일 불러오기
-        TextAsset jsonData = Resources.Load<TextAsset>("artifacts");  // artifacts.json 파일
-        if (jsonData != null)
+        // ✅ Artifacts.cs에서 유물 데이터 가져오기
+        Artifacts artifactManager = FindObjectOfType<Artifacts>();
+
+        if (artifactManager == null)
         {
-            ArtifactList artifactList = JsonUtility.FromJson<ArtifactList>(jsonData.ToString());
-            foreach (var artifact in artifactList.artifacts)
+            Debug.LogError("🚨 Artifacts Manager를 찾을 수 없습니다! 'Artifacts' 스크립트가 있는지 확인하세요.");
+            return;
+        }
+
+        // ✅ Artifacts.cs의 데이터를 기반으로 덱 구성
+        foreach (var artifact in artifactManager.ArtifactsList)
+        {
+            if (artifact == null)
             {
-                // Artifact를 Card로 변환하여 덱에 추가
-                Card card = new Card
-                {
-                    cardName = artifact.cardName,
-                    cardType = artifact.cardType,
-                    cardEffect = artifact.cardEffect,
-                    cardImage = artifact.cardImage
-                };
-
-                // 카드 등급에 따라 weight 값 설정
-                switch (card.cardType)  // 예시: cardType에 따라 weight를 설정
-                {
-                    case "S":
-                        card.weight = 5; // 낮은 가중치 (잘 안 나옴)
-                        break;
-                    case "A":
-                        card.weight = 10; // 중간 가중치
-                        break;
-                    case "B":
-                        card.weight = 15; // 높은 가중치
-                        break;
-                    case "C":
-                        card.weight = 20; // 가장 높은 가중치 (잘 나옴)
-                        break;
-                    default:
-                        card.weight = 10; // 기본 값
-                        break;
-                }
-
-                deck.Add(card);  // 덱에 Card 객체 추가
+                Debug.LogError("🚨 artifact가 null입니다! ArtifactsList를 확인하세요.");
+                continue;
             }
 
-            // 덱에 있는 카드들의 가중치 총합 계산
-            for (int i = 0; i < deck.Count; i++)
+            // ✅ 유물 효과가 null일 경우 기본값 설정
+            if (artifact.Effect == null)
             {
-                total += deck[i].weight;
+                Debug.LogWarning($"⚠️ 유물 '{artifact.Name}'의 효과 데이터가 없습니다. 기본값(0)으로 설정합니다.");
+                artifact.Effect = new Effect { Hp = 0, Currency = 0, Invincibility = 0 };
             }
+
+            Card card = new Card
+            {
+                cardName = artifact.Name ?? "Unknown",
+                cardType = artifact.Rarity.ToString(),
+                cardEffect = $"HP: {artifact.Effect.Hp}, Currency: {artifact.Effect.Currency}, Invincibility: {artifact.Effect.Invincibility}",
+                cardImage = artifact.ArtifactImage,
+                artifact = artifact,
+                weight = GetWeightByRarity(artifact.Rarity) // ✅ 유물 등급에 따라 가중치 적용
+            };
+
+            deck.Add(card);
+            total += card.weight;
+        }
+
+        if (deck.Count == 0 || total == 0)
+        {
+            Debug.LogError("🚨 덱이 비어 있거나 가중치 합이 0입니다. 유물 데이터가 정상적으로 로드되었는지 확인하세요.");
         }
         else
         {
-            Debug.LogError("JSON 파일을 찾을 수 없습니다.");
+            Debug.Log($"✅ 덱 초기화 완료! 총 카드 개수: {deck.Count}, 가중치 총합: {total}");
         }
     }
 
+    // ✅ 유물 등급에 따라 가중치 반환
+    private int GetWeightByRarity(ArtifactRarity rarity)
+    {
+        switch (rarity)
+        {
+            case ArtifactRarity.S: return 5;  // S등급 (가장 희귀)
+            case ArtifactRarity.A: return 10; // A등급
+            case ArtifactRarity.B: return 15; // B등급
+            case ArtifactRarity.C: return 20; // C등급 (가장 흔함)
+            default: return 10;
+        }
+    }
 
-    // 가중치 랜덤으로 카드를 선택하는 메서드
+    // ✅ 가중치를 기반으로 랜덤 카드 선택 (GachaManager에서 호출됨)
     public Card RandomCard()
     {
-        int weight = 0;
-        int selectNum = Mathf.RoundToInt(total * Random.Range(0.0f, 1.0f));
-
-        for (int i = 0; i < deck.Count; i++)
+        if (deck == null || deck.Count == 0 || total == 0)
         {
-            weight += deck[i].weight;
-            if (selectNum <= weight)
+            Debug.LogError("🚨 덱에 카드가 없거나 가중치가 0입니다. Artifacts.cs를 확인하세요.");
+            return null;
+        }
+
+        int randomValue = Random.Range(0, total);
+        int accumulatedWeight = 0;
+
+        foreach (var card in deck)
+        {
+            accumulatedWeight += card.weight;
+            if (randomValue <= accumulatedWeight)
             {
-                Card temp = new Card(deck[i]);
-                return temp;
+                if (card == null)
+                {
+                    Debug.LogError("🚨 선택된 카드가 null입니다. 덱을 확인하세요.");
+                    return null;
+                }
+
+                Card selectedCard = new Card(card);
+                Debug.Log($"🎲 랜덤 카드 선택: {selectedCard.cardName} (등급: {selectedCard.cardType})");
+
+                // ✅ 카드 유물 정보 확인
+                if (selectedCard.artifact == null)
+                {
+                    Debug.LogWarning($"⚠️ 카드 '{selectedCard.cardName}'에 연결된 유물이 없습니다.");
+                }
+                else if (selectedCard.artifact.ArtifactImage == null)
+                {
+                    Debug.LogWarning($"⚠️ 카드 '{selectedCard.cardName}'에 연결된 유물 '{selectedCard.artifact.Name}'의 이미지가 없습니다.");
+                }
+
+                return selectedCard;
             }
         }
+
+        Debug.LogError("🚨 가중치를 기반으로 카드 선택에 실패했습니다.");
         return null;
-    }
-
-    // 카드를 랜덤으로 뽑아 화면에 표시하는 메서드
-    public void SpawnRandomCard()
-    {
-        Card selectedCard = RandomCard();
-        if (selectedCard != null)
-        {
-            // 카드 생성
-            GameObject cardObject = Instantiate(cardPrefab, cardSpawnPoint);
-            cardObject.transform.localPosition = Vector3.zero;  // 카드의 위치를 중앙에 배치
-
-            // 카드 UI 설정
-            CardUI cardUI = cardObject.GetComponent<CardUI>();
-            if (cardUI != null)
-            {
-                cardUI.SetCardUI(selectedCard);  // 랜덤으로 뽑힌 카드 정보를 설정
-            }
-        }
     }
 }
