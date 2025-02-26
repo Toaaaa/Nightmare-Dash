@@ -1132,6 +1132,26 @@ PrefabInstance:
       propertyPath: m_GravityScale
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 3296017369385932239, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3296017369385932239, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3296017369385932239, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3296017369385932239, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 61193797
+      objectReference: {fileID: 0}
+    - target: {fileID: 3296017369385932239, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3929388711669747774, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.5
@@ -1173,14 +1193,27 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6215028111683610466, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+      propertyPath: playerFX
+      value: 
+      objectReference: {fileID: 4521117778981832616}
+    - target: {fileID: 6215028111683610466, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
       propertyPath: jumpForce
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 8592756841229984939, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a01aff9fb09b9d04183601fe3be8ee42, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+--- !u!95 &4521117778981832616 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5507330600824209834, guid: 55df148a823b25946ad25583dab2f40f, type: 3}
+  m_PrefabInstance: {fileID: 4521117778981832615}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6916448876902630949
 PrefabInstance:
   m_ObjectHideFlags: 0

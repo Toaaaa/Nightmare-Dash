@@ -12,8 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] float jumpForce = 7f; // 점프 힘
     [SerializeField] int maxJumps = 2; // 최대 점프 횟수
     [SerializeField] BoxCollider2D hitbox; // 피격 판정
-
-
+    [SerializeField] Animator playerFX; // 플레이어 이펙트
     [SerializeField]float maxHp = 100f;
     float currentHp;
 
@@ -126,6 +125,12 @@ public class Player : MonoBehaviour
             hitbox.size = new Vector2(1f, 0.6f);
         }
     }
+    public void GroundSmokeFX()
+    {
+        playerFX.SetTrigger("GroundFX");
+    }
+
+
     public float GetMaxHp()
     {
         return maxHp;
