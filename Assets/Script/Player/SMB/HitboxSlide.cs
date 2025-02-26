@@ -13,7 +13,7 @@ public class HitboxSlide : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if(cts != null)
-            cts.Cancel();//만약 delay 도중 다시 슬라이드 상태로 진입할 경우, 기존의 유니태스크 취소.
+            cts.Cancel();//만약 delay 도중 (0.25초이내) 다시 슬라이드 상태로 진입할 경우, 기존의 유니태스크 취소.
         animator.GetComponent<Player>().HitboxSet(1);
     }
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -21,11 +21,10 @@ public class HitboxSlide : StateMachineBehaviour
         cts = new CancellationTokenSource();
         HitboxChangeDelay(animator, cts.Token).Forget();
     }
-    private async UniTask HitboxChangeDelay(Animator animator, CancellationToken token)
+    private async UniTask HitboxChangeDelay(Animator animator, CancellationToken token)// 슬라이딩 피격판정 유지 보정 시간 (0.25초)
     {
         try
         {
-            Debug.Log("히트박스 변경");
             await UniTask.Delay(250, cancellationToken: token);
             animator.GetComponent<Player>().HitboxSet(0);
         }
