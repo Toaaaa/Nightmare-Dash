@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GatchaUI : BaseUI
+public class GachaUI : MonoBehaviour
 {
     [SerializeField] private Button gatchaButton;
 
@@ -15,12 +15,7 @@ public class GatchaUI : BaseUI
 
     private void OnGatchaClick()
     {
-        uiManager.SetUIState(UIState.Gatcha);
         SceneManager.LoadScene("Gacha");
     }
 
-    protected override UIState GetUIState()
-    {
-        return UIState.Lobby;
-    }
 }

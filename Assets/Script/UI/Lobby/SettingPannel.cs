@@ -12,36 +12,71 @@ public class SettingPannel : MonoBehaviour
     [SerializeField] private Button quitButton;
     [SerializeField] private GameObject lobbyUI;
 
-    private void Start()
+    private void OnEnable()
     {
-        // ±âÁ¸ ¼³Á¤ ºÒ·¯¿À±â
-        //jumpscareToggle.isOn = PlayerPrefs.GetInt("JumpscareEnabled", 1) == 1;
+        // GameSettingsManager ì¸ìŠ¤í„´ìŠ¤ê°€ ì¡´ì¬í•˜ëŠ”ì§€ í™•ì¸
+        if (GameSettingsManager.Instance == null)
+        {
+            Debug.LogError("[SettingPannel] GameSettingsManager ì¸ìŠ¤í„´ìŠ¤ê°€ ì—†ìŠµë‹ˆë‹¤!");
+            return;
+        }
+
+        // ê¸°ì¡´ ì„¤ì • ë¶ˆëŸ¬ì˜¤ê¸°
         volumeSlider.value = GameSettingsManager.Instance.Volume;
         muteToggle.isOn = GameSettingsManager.Instance.IsMuted;
 
-        // ÀÌº¥Æ® ¿¬°á
-        //jumpscareToggle.onValueChanged.AddListener(SetJumpscare);
-        volumeSlider.onValueChanged.AddListener(value => GameSettingsManager.Instance.Volume = value);
-        muteToggle.onValueChanged.AddListener(value => GameSettingsManager.Instance.IsMuted = value);
+        // ì´ë²¤íŠ¸ ì—°ê²°
+        volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
+        muteToggle.onValueChanged.AddListener(OnMuteChanged);
         closeButton.onClick.AddListener(CloseSettings);
         quitButton.onClick.AddListener(QuitGame);
-
-
     }
 
+    private void OnDisable()
+    {
+        // ì´ë²¤íŠ¸ ë¦¬ìŠ¤ë„ˆ ì œê±° (ì¤‘ë³µ ë“±ë¡ ë°©ì§€)
+        volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
+        muteToggle.onValueChanged.RemoveListener(OnMuteChanged);
+        closeButton.onClick.RemoveListener(CloseSettings);
+        quitButton.onClick.RemoveListener(QuitGame);
+    }
+
+    private void OnVolumeChanged(float value)
+    {
+        if (GameSettingsManager.Instance != null)
+        {
+            GameSettingsManager.Instance.Volume = value;
+        }
+    }
+
+    private void OnMuteChanged(bool isMuted)
+    {
+        if (GameSettingsManager.Instance != null)
+        {
+            GameSettingsManager.Instance.IsMuted = isMuted;
+        }
+    }
 
     private void CloseSettings()
     {
-        gameObject.SetActive(false);  // ¼³Á¤ Ã¢ ´İ±â
-        lobbyUI.SetActive(true);//·Îºñ ´Ù½Ã È°¼ºÈ­
+        gameObject.SetActive(false);  // ì„¤ì • ì°½ ë‹«ê¸°
+
+        if (lobbyUI != null)
+        {
+            lobbyUI.SetActive(true); // ë¡œë¹„ ë‹¤ì‹œ í™œì„±í™”
+        }
+        else
+        {
+            Debug.LogWarning("[SettingPannel] lobbyUIê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+        }
     }
 
     private void QuitGame()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;  // ¿¡µğÅÍ¿¡¼­ ½ÇÇà ÁßÁö
+        UnityEditor.EditorApplication.isPlaying = false;  // ì—ë””í„°ì—ì„œ ì‹¤í–‰ ì¤‘ì§€
 #else
-        Application.Quit();  // ºôµåµÈ °ÔÀÓ Á¾·á
+        Application.Quit();  // ë¹Œë“œëœ ê²Œì„ ì¢…ë£Œ
 #endif
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class StartUI : BaseUI
+public class StartUI : MonoBehaviour
 {
     [SerializeField] private Button startButton;
 
@@ -15,13 +15,9 @@ public class StartUI : BaseUI
 
     private void OnStartClick()
     {
-        uiManager.SetUIState(UIState.Game);
+        
         SceneManager.LoadScene("Game");
 
     }
 
-    protected override UIState GetUIState()
-    {
-        return UIState.Lobby;
-    }
 }
