@@ -5,17 +5,20 @@ using UnityEngine.UI;
 
 public class PlayerCustomUI : BaseUI
 {
+
     [SerializeField] private Button customizeButton;
+    [Header("Tabs")]
     [SerializeField] private Button achievementTab;
     [SerializeField] private Button petTab;
     [SerializeField] private Button relicTab;
+    [Header("CloseButton")]
     [SerializeField] private Button closeButton;
-
+    [Header("Panel")]
     [SerializeField] private GameObject achievementPanel;
     [SerializeField] private GameObject petPanel;
     [SerializeField] private GameObject relicPanel;
     [SerializeField] private GameObject customizeUIPanel; // 전체 패널
-
+    [Header("이건 뭐라하지")]
     [SerializeField] private Transform slotContainer; // 슬롯 리스트
     [SerializeField] private GameObject slotPrefab; // 슬롯 프리팹
     [SerializeField] private TMP_Text descriptionText; // 설명 표시
