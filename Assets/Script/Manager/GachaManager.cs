@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening.Core.Easing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -166,8 +167,7 @@ public class GachaManager : MonoBehaviour
         }
 
         // ✅ 플레이어에게 유물 추가
-        PlayerData.Instance.AddArtifact(artifact);
-
+        GameManager.instance.playerData.AddArtifact(artifact);
         Debug.Log($"🎁 플레이어가 '{artifact.Name}' 유물을 획득했습니다!");
     }
 }

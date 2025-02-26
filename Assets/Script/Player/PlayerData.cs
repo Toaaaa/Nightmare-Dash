@@ -5,19 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerData", menuName = "ScriptableObjects/PlayerData", order = 1)]
 public class PlayerData : ScriptableObject
 {
-    private static PlayerData _instance;
-    public static PlayerData Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = Resources.Load<PlayerData>("PlayerData");
-            }
-            return _instance;
-        }
-    }
-
     // ✅ 기본 스탯
     [Header("기본 스탯")]
     [SerializeField] private float ori_MaxHp = 100f; // 기본 체력
@@ -86,12 +73,12 @@ public class PlayerData : ScriptableObject
         add_MaxHp = 0;
         add_score = 0;
         add_InvincibleTime = 0;
-        OwnedArtifacts.Clear(); // 보유 유물 초기화
+        OwnedArtifacts.Clear();
 
         Debug.Log("🔄 유물 효과 초기화 완료!");
     }
 
-    // ✅ 유물 데이터 저장 (PlayerPrefs 사용)
+    // ✅ 유물 데이터 저장
     public void SavePlayerData()
     {
         List<int> artifactIds = OwnedArtifacts.ConvertAll(a => a.Id);
@@ -115,7 +102,7 @@ public class PlayerData : ScriptableObject
                 if (artifact != null)
                 {
                     OwnedArtifacts.Add(artifact);
-                    ApplyArtifactEffect(artifact); // 저장된 유물 효과 다시 적용
+                    ApplyArtifactEffect(artifact);
                 }
             }
             Debug.Log($"✅ 플레이어 유물 불러오기 완료! 보유 유물 개수: {OwnedArtifacts.Count}");
