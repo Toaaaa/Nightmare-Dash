@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +15,10 @@ public class PlayerCustomUI : BaseUI
     [SerializeField] private GameObject petPanel;
     [SerializeField] private GameObject relicPanel;
     [SerializeField] private GameObject customizeUIPanel; // 전체 패널
+
+    [SerializeField] private Transform slotContainer; // 슬롯 리스트
+    [SerializeField] private GameObject slotPrefab; // 슬롯 프리팹
+    [SerializeField] private TMP_Text descriptionText; // 설명 표시
 
     private void Start()
     {
@@ -43,11 +49,31 @@ public class PlayerCustomUI : BaseUI
         activePanel.SetActive(true);
     }
 
+    public void LoadItems(List<string> items)// 아이템 리스트 불러오기
+    {
+        foreach (Transform child in slotContainer) Destroy(child.gameObject);
+
+        foreach (var item in items)
+        {
+            GameObject newSlot = Instantiate(slotPrefab, slotContainer);
+            newSlot.GetComponentInChildren<TMP_Text>().text = item;
+            newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(item));
+        }
+    }
+
+    private void ShowDescription(string itemName)
+    {
+        descriptionText.text = $"{itemName} 설명을 여기에 표시";
+    }
+
     private void CloseUI()
     {
         customizeUIPanel.SetActive(false); // UI 패널 닫기
         uiManager.SetUIState(UIState.Lobby); // 로비 UI로 복귀
     }
+
+
+
 
     protected override UIState GetUIState()
     {
