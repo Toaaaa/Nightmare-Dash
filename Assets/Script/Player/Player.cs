@@ -126,6 +126,8 @@ public class Player : MonoBehaviour
     {
         fall = true;
         currentHp = 0;
+        GameSceneController gc = SceneBase.Current as GameSceneController;
+        gc.uiController.hpBar.GetDmg(0);// 추락시 hp바 0으로 갱신
     }
     public void HitboxSet(int num)
     {
@@ -204,7 +206,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("UnderGround"))
         {
-            fall = true;
+            SetFall();
         }
         if (collision.gameObject.CompareTag("Hill"))
         {
