@@ -9,14 +9,21 @@ public class Player : MonoBehaviour
     Animator animator;
     Rigidbody2D rb;
 
+    [Header("Player Setting")]
     [SerializeField] float jumpForce = 7f; // 점프 힘
     [SerializeField] int maxJumps = 2; // 최대 점프 횟수
+    [SerializeField] float jumpGravity = 3.5f;
+    [SerializeField] float fallGravity = 7.5f;
+    [SerializeField] PlayerData playerData;
+    [Header("Player Ojects & Status")]
     [SerializeField] BoxCollider2D hitbox; // 피격 판정
-
-
+    [SerializeField] Animator playerFX; // 플레이어 이펙트
     [SerializeField]float maxHp = 100f;
     float currentHp;
+    float invincibleTime; // 무적 시간
+    float scoreValue; // 점수 획득 배율
 
+    // 이동 및 게임 플레이 관련 변수
     int jumpCount = 0;
     float slopeSpeed = 1.13f; // 경사면 속도
     bool isOnSlope = false;// 경사면 위에 있는지
@@ -27,10 +34,14 @@ public class Player : MonoBehaviour
     float coyoteTimeCounter;
 
     void Start()
-    {
+    {      
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        //플레이어 데이터 초기화
+        maxHp = playerData.GetTotalHp();
+        invincibleTime = playerData.GetTotalInvincibleTime();
+        scoreValue = playerData.GetTotalScoreValue();
         SetHpMax();
         HitboxSet(0);
     }
@@ -38,7 +49,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CheckIsDead();
-
+        AdjustGravity();
         if (!isDead)
         {
             if (isOnGround)
@@ -97,7 +108,20 @@ public class Player : MonoBehaviour
         animator.SetBool("isSliding", true);
     }
 
-
+    public void ResetP()
+    {
+        rb.velocity = Vector2.zero;
+        SetHpMax();
+        HitboxSet(0);
+        fall = false;
+        isDead = false;
+        coyoteTimeCounter = coyoteTime;
+        //애니메이션 리셋
+        animator.SetBool("isSliding", false);
+        animator.ResetTrigger("Jump");
+        animator.ResetTrigger("DoubleJump");
+        animator.SetBool("isFirstEnter", false);
+    }
     public void SetFall()
     {
         fall = true;
@@ -115,6 +139,10 @@ public class Player : MonoBehaviour
             hitbox.size = new Vector2(1f, 0.6f);
         }
     }
+    public void GroundSmokeFX()
+    {
+        playerFX.SetTrigger("GroundFX");
+    }
     public float GetMaxHp()
     {
         return maxHp;
@@ -123,6 +151,10 @@ public class Player : MonoBehaviour
     {
         return currentHp;
     }
+    public float GetScoreValue()
+    {
+        return scoreValue;
+    }// 플레이어가 코인을 획득할시 얻는 점수의 배율.
     public void SetHpMax()
     {
         currentHp = maxHp;
@@ -134,11 +166,22 @@ public class Player : MonoBehaviour
         GameSceneController gc = SceneBase.Current as GameSceneController;
         gc.uiController.hpBar.GetDmg(hppercent);// 데미지 받을시 hp바 갱신
     }
+
     void CheckIsDead()
     {
         isDead =  currentHp <= 0 ? true : false;
     }
-
+    void AdjustGravity()
+    {
+        if(rb.velocity.y < 0)
+        {
+            rb.gravityScale = fallGravity;
+        }
+        else
+        {
+            rb.gravityScale = jumpGravity;
+        }
+    }// 점프시와 떨어질때의 중력 조절
 
 
     void OnCollisionEnter2D(Collision2D collision)

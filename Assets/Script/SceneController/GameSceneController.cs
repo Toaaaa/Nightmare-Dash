@@ -4,17 +4,17 @@ using UnityEngine;
 public class GameSceneController : SceneBase
 {
     //점수
-    public int Score
+    public float Score
     {
         get => score;
         set
         {
             score = value;
-            OnChangedScoreAmountEvnet(score);
+            OnChangedScoreAmountEvnet((int)score);
         }
     }
 
-    private int score = 0;
+    private float score = 0;
 
     //점수값이 변할때 발생하는 이벤트
     public Action<int> OnChangedScoreAmountEvnet = delegate { };
@@ -41,6 +41,7 @@ public class GameSceneController : SceneBase
     public Hp GameHp { get; set; } = new();
 
     public InGameUIController uiController;
+    [SerializeField] Player player;
 
     protected override void OnStart(object data)
     {
@@ -74,5 +75,18 @@ public class GameSceneController : SceneBase
     public void Return()
     {
         LoadScene("MainLobby");
+    }
+
+    public Vector2 GetPlayerPos()
+    {
+        return player.transform.position;
+    }
+    public void SetPlayerPos(Vector2 pos)
+    {
+        player.transform.position = pos;
+    }
+    public void ResetPlayer()
+    {
+        player.ResetP();
     }
 }
