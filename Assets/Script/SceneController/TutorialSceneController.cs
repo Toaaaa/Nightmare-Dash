@@ -3,6 +3,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.UI;
 
 public class TutorialSceneController : SceneBase
 {
@@ -12,23 +13,44 @@ public class TutorialSceneController : SceneBase
 
     [SerializeField]
     private TextMeshProUGUI storyText;
-
     [SerializeField]
     private PlayableDirector storyEffect;
+    [SerializeField]
+    private Image fadePanel;
+    [SerializeField]
+    private Player player;
+    [SerializeField]
+    private PlatformManager platformManager;
 
     protected override void OnStart(object data)
     {
         base.OnStart(data);
+        //초기 비활성 상태
+        player.gameObject.SetActive(false);
+        platformManager.gameObject.SetActive(false);
+        //스토리 소개 연출 재생
         storyEffect.Play();
+        Debug.Log("호출");
     }
 
+    //튜토리얼 시작 (Timeline에서 호출)
+    public void StartTutorial()
+    {
+        player.gameObject.SetActive(true);
+        platformManager.gameObject.SetActive(true);
+    }
+
+    //타이핑 효과 재생 (Timeline에서 호출)
     public void PlayTextEffect()
     {
         StartCoroutine(IPlayTextEffect());
     }
 
+    //텍스트 타이핑 효과 코루틴
     public IEnumerator IPlayTextEffect()
     {
+        storyText.text = string.Empty;
+
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < story.Length; i++)
@@ -39,8 +61,29 @@ public class TutorialSceneController : SceneBase
         }
     }
 
-    public void StartTutorial()
+    public void EndTutorial()
     {
-        //TODO:튜토리얼 시작
+        StartCoroutine(IFadeIn());
+    }
+
+    private IEnumerator IFadeIn()
+    {
+        float elapsedTime = 0f;
+        Color color = fadePanel.color;
+        color.a = 0f;
+        fadePanel.color = color;
+        fadePanel.gameObject.SetActive(true);
+
+        while (elapsedTime < 1.0f)
+        {
+            elapsedTime += Time.deltaTime;
+            color.a = Mathf.Lerp(0f, 1f, elapsedTime / 1.0f);
+            fadePanel.color = color;
+            yield return null;
+        }
+
+        color.a = 1f;
+        fadePanel.color = color;
+        LoadScene("MainLobby");
     }
 }

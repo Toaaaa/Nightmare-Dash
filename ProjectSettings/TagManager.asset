@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - UnderGround
   - Hill
+  - TutorialZone
   layers:
   - Default
   - TransparentFX
