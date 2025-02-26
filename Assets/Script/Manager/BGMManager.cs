@@ -7,7 +7,6 @@ public class BGMManager : MonoBehaviour
 {
     public static BGMManager instance;
     public AudioSource audioSource;
-    private BGMManager bgmManager;
 
     public AudioClip titleAndLobbyBGM;
     public AudioClip gameBGM;
@@ -18,7 +17,13 @@ public class BGMManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            audioSource = GetComponent<AudioSource>();
+
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
+            
+            audioSource.loop = true;
         }
         else
         {
@@ -30,7 +35,6 @@ public class BGMManager : MonoBehaviour
     void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoded;
-        bgmManager = FindObjectOfType<BGMManager>();
 
         PlayBGMForScene(SceneManager.GetActiveScene().name);
     }
@@ -47,22 +51,29 @@ public class BGMManager : MonoBehaviour
         if (audioSource.clip == clip && audioSource.isPlaying) return;
 
         audioSource.clip = clip;
-        audioSource.loop = true;
         audioSource.Play();
     }
 
     void PlayBGMForScene(string sceneName)
     {
-        if (bgmManager == null) return;
+        Debug.Log($"[BGMManager] Scene Loaded: {sceneName}");
 
-        if (sceneName == "Title" || sceneName == "Lobby")
+        if (sceneName == "Title" || sceneName == "MainLobby")
         {
-            bgmManager.PlayBGM(bgmManager.titleAndLobbyBGM);
+
+            Debug.Log("[BGMManager] Playing Title & MainLobby BGM: " + titleAndLobbyBGM.name);
+            if (audioSource.clip != titleAndLobbyBGM)
+            {
+                PlayBGM(titleAndLobbyBGM);
+            }
         }
         else
         {
-            bgmManager.PlayBGM(bgmManager.gameBGM);
+            Debug.Log("[BGMManager] Playing Game BGM: " + gameBGM.name);
+            if (audioSource.clip != gameBGM)
+            {
+                PlayBGM(gameBGM);
+            }
         }
-
     }
 }
