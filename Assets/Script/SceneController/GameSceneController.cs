@@ -40,8 +40,7 @@ public class GameSceneController : SceneBase
 
     public Hp GameHp { get; set; } = new();
 
-    [SerializeField]
-    private InGameUIController uiController;
+    public InGameUIController uiController;
 
     protected override void OnStart(object data)
     {
