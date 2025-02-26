@@ -15,7 +15,6 @@ public class Player : MonoBehaviour
     float slopeSpeed = 1.13f; // 경사면 속도
     bool isOnSlope = false;// 경사면 위에 있는지
     bool isOnGround = false;// 지면 위에 있는지
-    bool isSliding = false;
     bool isDead = false;
     bool fall = false;
     float coyoteTime = 0.1f; // 코요테 타임 (땅에서 살짝 벗어나도 점프 가능)
@@ -34,22 +33,31 @@ public class Player : MonoBehaviour
         {
             if (isOnGround)
             {
+                if(Input.GetKey(KeyCode.S)) // 슬라이딩
+                {
+                    Slide();
+                }
+                else // 기본 달리기
+                {
+                    animator.SetBool("isRunning", true);
+                    animator.SetBool("isSliding", false);
+                    animator.ResetTrigger("DoubleJump");
+                }
+
                 coyoteTimeCounter = coyoteTime; // 땅에 있을 때 코요테 타임 리셋
                 jumpCount = 0;
             }
-            else
+            else // 코요테 타임 카운트
             {
                 coyoteTimeCounter -= Time.deltaTime;
+                animator.SetBool("isRunning", false);
+                animator.SetBool("isSliding", false);
             }
 
             if (Input.GetKeyDown(KeyCode.Space) && (jumpCount < maxJumps || coyoteTimeCounter > 0) &&!isOnSlope) // 경사로에서는 점프 불가능
             {
+                jumpCount++;
                 Jump();
-            }
-
-            if (Input.GetKeyDown(KeyCode.S) && isOnGround) // 슬라이딩
-            {
-                Slide();
             }
         }
     }
@@ -66,16 +74,16 @@ public class Player : MonoBehaviour
         if (fall) return;
         rb.velocity = new Vector2(rb.velocity.x, 0f); // 기존 점프 속도 초기화 (더블 점프 시 중요)
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        animator.SetTrigger(jumpCount == 0 ? "Jump" : "DoubleJump");
+        animator.SetTrigger(jumpCount == 1 ? "Jump" : "DoubleJump");
+        animator.SetBool("isRunning", false);
 
         isOnGround = false;
-        jumpCount++;
         coyoteTimeCounter = 0; // 점프 시 코요테 타임 리셋
     }
 
     void Slide()
     {
-        isSliding = true;
+        animator.SetBool("isRunning", false);
         animator.SetBool("isSliding", true);
     }
     public void SetFall()
