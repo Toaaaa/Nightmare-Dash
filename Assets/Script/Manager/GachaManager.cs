@@ -4,53 +4,48 @@ using UnityEngine.UI;
 
 public class GachaManager : MonoBehaviour
 {
-    public Button DrawOneBtn;  // "Draw One" 버튼
-    public Button DrawTenBtn;  // "Draw Ten" 버튼
-    public Button ExitBtn;     // "Exit" 버튼 (나가기 버튼)
-    public Image GachaFadeBlack; // 검은색 페이드 화면
-    public float fadeDuration = 1.0f; // 페이드 효과 지속 시간
-    private float maxAlpha = 0.5f; // 최대 투명도
-    public GameObject card;  // 씬에서 직접 존재하는 카드 오브젝트 (Inspector에서 할당 필요)
+    public Button DrawOneBtn, DrawTenBtn, ExitBtn;
+    public Image GachaFadeBlack;
+    public float fadeDuration = 1.0f;
+    private float maxAlpha = 0.5f;
 
     [SerializeField]
-    private CardUI[] cards;
+    private CardUI[] cards; // ✅ 여러 장의 카드 UI 배열
 
     void Start()
     {
-        // 버튼 클릭 이벤트 연결
+        if (cards == null || cards.Length == 0)
+        {
+            Debug.LogError("🚨 'cards' 배열이 비어 있습니다! Inspector에서 CardUI 오브젝트들을 연결하세요.");
+            return;
+        }
+
+        foreach (var card in cards)
+        {
+            if (card == null)
+            {
+                Debug.LogError("🚨 'cards' 배열 내에 CardUI가 없는 요소가 있습니다! Inspector에서 확인하세요.");
+                return;
+            }
+        }
+
         DrawOneBtn.onClick.AddListener(() => DrawOneBtnClick(1));
         DrawTenBtn.onClick.AddListener(() => DrawOneBtnClick(5));
-        ExitBtn.onClick.AddListener(HideCardAndFadeBlack); // 나가기 버튼 이벤트 연결
-
-        // Exit 버튼은 처음에 비활성화
+        ExitBtn.onClick.AddListener(HideCardAndFadeBlack);
         ExitBtn.gameObject.SetActive(false);
-
-        // 디버깅: 카드가 할당되었는지 확인
-        if (card == null)
-        {
-            Debug.LogError("card is NOT assigned! Assign the card object in the Inspector.");
-        }
-        else
-        {
-            card.SetActive(false); // 게임 시작 시 비활성화
-            Debug.Log("Card is assigned correctly: " + card.name);
-        }
     }
 
-    // 버튼 클릭 시 호출되는 메서드
     public void DrawOneBtnClick(int num)
     {
         StartCoroutine(FadeInEffect(num));
     }
 
-    // Fade in 효과 + 카드 활성화
     private IEnumerator FadeInEffect(int num)
     {
         GachaFadeBlack.gameObject.SetActive(true);
-        GachaFadeBlack.color = new Color(0, 0, 0, 0); // 시작은 완전 투명
+        GachaFadeBlack.color = new Color(0, 0, 0, 0);
         float elapsedTime = 0f;
 
-        // 페이드 인 효과 (길게 설정)
         while (elapsedTime < fadeDuration)
         {
             elapsedTime += Time.deltaTime;
@@ -59,83 +54,99 @@ public class GachaManager : MonoBehaviour
             yield return null;
         }
 
-        // 카드 활성화 (카드도 조금 천천히 보이도록 조정)
-        if (num == 1)
+        StartCoroutine(ShowCardSlowly(num));
+    }
+
+    private IEnumerator ShowCardSlowly(int gachaCount)
+    {
+        for (int i = 0; i < gachaCount; i++)
         {
-            if (card != null)
+            if (i < cards.Length)
             {
-                StartCoroutine(ShowCardSlowly(num));  // 카드 천천히 보이도록 처리
-                Debug.Log("Card is now visible: " + card.name);
+                SpawnRandomCard(cards[i]);  // ✅ 여러 장의 카드 UI 활용
             }
             else
             {
-                Debug.LogError("Card object is null! Make sure it's assigned in the Inspector.");
+                Debug.LogWarning($"⚠️ {i + 1}번째 카드를 뽑으려고 했으나 'cards' 배열의 크기를 초과했습니다.");
             }
-        }
-        else
-        {
-            StartCoroutine(ShowCardSlowly(num));
-        }
-    }
-
-    // 카드가 천천히 보이도록 하는 메서드
-    private IEnumerator ShowCardSlowly(int gachaCount)
-    {
-        float cardAlpha = 0f;
-
-        for (int i = 0; i < gachaCount; i++)
-        {
-            cards[i].gameObject.SetActive(true);
             yield return new WaitForSeconds(0.1f);
-            cards[i].Flip();
         }
 
-        // 나가기 버튼 활성화
         ExitBtn.gameObject.SetActive(true);
     }
 
-    // 나가기 버튼 클릭 시 카드와 Fade Black 비활성화
+    // ✅ 기존 카드 오브젝트를 활용하여 카드 UI 업데이트
+    public void SpawnRandomCard(CardUI cardUI)
+    {
+        if (cardUI == null)
+        {
+            Debug.LogError("🚨 'CardUI' 오브젝트를 찾을 수 없습니다! 'Card' 오브젝트에 CardUI를 추가하세요.");
+            return;
+        }
+
+        cardUI.gameObject.SetActive(true);
+
+        RandomSelect randomSelect = FindObjectOfType<RandomSelect>();
+        if (randomSelect == null)
+        {
+            Debug.LogError("🚨 'RandomSelect' 오브젝트를 찾을 수 없습니다! 'Deck' 오브젝트에 RandomSelect 스크립트가 있는지 확인하세요.");
+            return;
+        }
+
+        Card selectedCard = randomSelect.RandomCard();
+        if (selectedCard == null)
+        {
+            Debug.LogError("🚨 선택된 카드가 null입니다! RandomSelect에서 카드가 올바르게 생성되는지 확인하세요.");
+            return;
+        }
+
+        // ✅ 카드 데이터 검증 후 UI 적용
+        if (string.IsNullOrEmpty(selectedCard.cardName))
+        {
+            Debug.LogWarning("⚠️ 선택된 카드의 이름이 없습니다.");
+            selectedCard.cardName = "Unknown";
+        }
+
+        if (string.IsNullOrEmpty(selectedCard.cardType))
+        {
+            Debug.LogWarning("⚠️ 선택된 카드의 등급 정보가 없습니다.");
+            selectedCard.cardType = "Unknown";
+        }
+
+        if (selectedCard.cardImage == null)
+        {
+            Debug.LogWarning($"⚠️ 카드 '{selectedCard.cardName}'의 이미지가 없습니다.");
+        }
+
+        Debug.Log($"✅ 랜덤 카드 선택: {selectedCard.cardName} (등급: {selectedCard.cardType})");
+        cardUI.SetCardUI(selectedCard);
+    }
+
     public void HideCardAndFadeBlack()
     {
-        GachaFadeBlack.gameObject.SetActive(false); // Fade Black 비활성화
-        ResetCardState(); // 카드 비활성화
-
-        // 뽑기 버튼 활성화
+        GachaFadeBlack.gameObject.SetActive(false);
+        ResetCardState();
         DrawOneBtn.interactable = true;
         DrawTenBtn.interactable = true;
-
-        // Exit 버튼 비활성화
         ExitBtn.gameObject.SetActive(false);
     }
 
-    // 카드 회전 상태 리셋
-    private void ResetCardRotation()
-    {
-        card.transform.rotation = Quaternion.Euler(0, 0, 0); // 카드 회전 초기화
-    }
-
-    // 뽑기 버튼을 다시 눌렀을 때 카드와 페이드 블랙을 초기화하여 새로 출력되게 만듦
     public void ResetForNewDraw()
     {
-        HideCardAndFadeBlack(); // 기존 카드와 Fade Black 비활성화
-
-        // 카드가 새로 뽑힐 때 다시 활성화되고 초기 상태로 설정됨
-        DrawOneBtn.interactable = false; // 뽑기 버튼 비활성화
+        HideCardAndFadeBlack();
+        DrawOneBtn.interactable = false;
         DrawTenBtn.interactable = false;
-
-        // 카드 회전 상태 초기화
-        ResetCardRotation(); // 카드 회전 리셋
-        card.SetActive(true); // 카드 활성화
-
-        // 새로운 뽑기를 시작
-        StartCoroutine(FadeInEffect(1));  // 새로 뽑기 시작
+        StartCoroutine(FadeInEffect(1));
     }
 
     private void ResetCardState()
     {
         foreach (var card in cards)
         {
-            card.gameObject.SetActive(false);
+            if (card != null)
+            {
+                card.gameObject.SetActive(false);
+            }
         }
     }
 }

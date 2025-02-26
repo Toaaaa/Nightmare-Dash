@@ -10,7 +10,6 @@ public class HeadCollider : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("Ground");
             player.SetFall();
         }
     }
