@@ -18,7 +18,34 @@ public class RandomSelect : MonoBehaviour
             return;
         }
 
-        // ✅ Artifacts.cs의 데이터를 기반으로 덱 구성
+        // ✅ ArtifactsList가 비어 있으면 다시 가져오기 시도
+        if (artifactManager.ArtifactsList.Count == 0)
+        {
+            Debug.LogWarning("⚠️ ArtifactsList가 비어 있습니다. 1초 후 다시 시도합니다.");
+            StartCoroutine(WaitAndInitializeDeck(1f, artifactManager));
+            return;
+        }
+
+        InitializeDeck(artifactManager);
+    }
+
+    // ✅ ArtifactsList가 비어 있을 경우 다시 시도하는 코루틴
+    private IEnumerator WaitAndInitializeDeck(float delay, Artifacts artifactManager)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (artifactManager.ArtifactsList.Count == 0)
+        {
+            Debug.LogError("🚨 ArtifactsList가 여전히 비어 있습니다. 덱을 생성할 수 없습니다.");
+            yield break;
+        }
+
+        InitializeDeck(artifactManager);
+    }
+
+    // ✅ 덱 초기화 메서드
+    private void InitializeDeck(Artifacts artifactManager)
+    {
         foreach (var artifact in artifactManager.ArtifactsList)
         {
             if (artifact == null)
@@ -27,25 +54,20 @@ public class RandomSelect : MonoBehaviour
                 continue;
             }
 
-            // ✅ 유물 효과가 null일 경우 기본값 설정
-            if (artifact.Effect == null)
-            {
-                Debug.LogWarning($"⚠️ 유물 '{artifact.Name}'의 효과 데이터가 없습니다. 기본값(0)으로 설정합니다.");
-                artifact.Effect = new Effect { Hp = 0, Currency = 0, Invincibility = 0 };
-            }
-
             Card card = new Card
             {
                 cardName = artifact.Name ?? "Unknown",
                 cardType = artifact.Rarity.ToString(),
-                cardEffect = $"HP: {artifact.Effect.Hp}, Currency: {artifact.Effect.Currency}, Invincibility: {artifact.Effect.Invincibility}",
+                cardEffect = artifact.GetEffectDescription(), // ✅ 효과 설명 한글로 표시
                 cardImage = artifact.ArtifactImage,
                 artifact = artifact,
-                weight = GetWeightByRarity(artifact.Rarity) // ✅ 유물 등급에 따라 가중치 적용
+                weight = GetWeightByRarity(artifact.Rarity)
             };
 
             deck.Add(card);
             total += card.weight;
+
+            Debug.Log($"✅ 카드 추가됨: {card.cardName}, 효과: {card.cardEffect}, 가중치: {card.weight}");
         }
 
         if (deck.Count == 0 || total == 0)
