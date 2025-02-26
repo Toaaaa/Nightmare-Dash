@@ -9,13 +9,16 @@ public class Player : MonoBehaviour
     Animator animator;
     Rigidbody2D rb;
 
+    [Header("Player Setting")]
     [SerializeField] float jumpForce = 7f; // 점프 힘
     [SerializeField] int maxJumps = 2; // 최대 점프 횟수
+    [SerializeField] float jumpGravity = 3.5f;
+    [SerializeField] float fallGravity = 7.5f;
+    [Header("Player Ojects & Status")]
     [SerializeField] BoxCollider2D hitbox; // 피격 판정
     [SerializeField] Animator playerFX; // 플레이어 이펙트
     [SerializeField]float maxHp = 100f;
     float currentHp;
-
     int jumpCount = 0;
     float slopeSpeed = 1.13f; // 경사면 속도
     bool isOnSlope = false;// 경사면 위에 있는지
@@ -37,7 +40,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CheckIsDead();
-
+        AdjustGravity();
         if (!isDead)
         {
             if (isOnGround)
@@ -100,6 +103,7 @@ public class Player : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
         SetHpMax();
+        HitboxSet(0);
         fall = false;
         isDead = false;
         coyoteTimeCounter = coyoteTime;
@@ -107,6 +111,7 @@ public class Player : MonoBehaviour
         animator.SetBool("isSliding", false);
         animator.ResetTrigger("Jump");
         animator.ResetTrigger("DoubleJump");
+        animator.SetBool("isFirstEnter", false);
     }
     public void SetFall()
     {
@@ -129,8 +134,6 @@ public class Player : MonoBehaviour
     {
         playerFX.SetTrigger("GroundFX");
     }
-
-
     public float GetMaxHp()
     {
         return maxHp;
@@ -150,11 +153,22 @@ public class Player : MonoBehaviour
         GameSceneController gc = SceneBase.Current as GameSceneController;
         gc.uiController.hpBar.GetDmg(hppercent);// 데미지 받을시 hp바 갱신
     }
+
     void CheckIsDead()
     {
         isDead =  currentHp <= 0 ? true : false;
     }
-
+    void AdjustGravity()
+    {
+        if(rb.velocity.y < 0)
+        {
+            rb.gravityScale = fallGravity;
+        }
+        else
+        {
+            rb.gravityScale = jumpGravity;
+        }
+    }// 점프시와 떨어질때의 중력 조절
 
 
     void OnCollisionEnter2D(Collision2D collision)
