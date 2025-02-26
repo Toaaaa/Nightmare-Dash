@@ -4262,7 +4262,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\uC5EC\uAE30\uAC00 \uC5B4\uB518\uC9C0 \uC5BC\uB9C8\uB098 \uB2EC\uB838\uB294\uC9C0
+    \uBAA8\uB974\uACA0\uB2E4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c32f62cea3a7ac4a87163664fe808b6, type: 2}
   m_sharedMaterial: {fileID: 203199768491628503, guid: 5c32f62cea3a7ac4a87163664fe808b6, type: 2}
@@ -4289,8 +4290,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 75
-  m_fontSizeBase: 75
+  m_fontSize: 65
+  m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4365,7 +4366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &6863450363398360532
 Animator:
   serializedVersion: 5
@@ -4826,6 +4827,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6513051816935244019, guid: b731250277b22a545b39f35631d8a409, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7769237345083003234, guid: b731250277b22a545b39f35631d8a409, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

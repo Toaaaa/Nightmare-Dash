@@ -38,6 +38,8 @@ public class TutorialSceneController : SceneBase
     {
         player.gameObject.SetActive(true);
         platformManager.gameObject.SetActive(true);
+        //BGM재생
+        BGMManager.instance.PlayGameBGM();
     }
 
     //타이핑 효과 재생 (Timeline에서 호출)
@@ -61,11 +63,15 @@ public class TutorialSceneController : SceneBase
         }
     }
 
+    //튜토리얼 종료
     public void EndTutorial()
     {
+        PlayerPrefs.SetInt("TutorialClear", 1);
+        PlayerPrefs.Save();
         StartCoroutine(IFadeIn());
     }
 
+    //페이드 인 재생
     private IEnumerator IFadeIn()
     {
         float elapsedTime = 0f;
@@ -84,6 +90,8 @@ public class TutorialSceneController : SceneBase
 
         color.a = 1f;
         fadePanel.color = color;
+
+        //로비로 이동
         LoadScene("MainLobby");
     }
 }
