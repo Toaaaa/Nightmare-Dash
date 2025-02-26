@@ -30,7 +30,6 @@ public class TutorialSceneController : SceneBase
         platformManager.gameObject.SetActive(false);
         //스토리 소개 연출 재생
         storyEffect.Play();
-        Debug.Log("호출");
     }
 
     //튜토리얼 시작 (Timeline에서 호출)
