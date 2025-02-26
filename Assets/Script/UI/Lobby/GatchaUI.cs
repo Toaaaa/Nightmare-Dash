@@ -11,6 +11,7 @@ public class GatchaUI : BaseUI
     private void Start()
     {
         gatchaButton.onClick.AddListener(OnGatchaClick);
+
     }
 
     private void OnGatchaClick()
