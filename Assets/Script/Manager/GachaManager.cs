@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening.Core.Easing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -120,6 +121,12 @@ public class GachaManager : MonoBehaviour
 
         Debug.Log($"✅ 랜덤 카드 선택: {selectedCard.cardName} (등급: {selectedCard.cardType})");
         cardUI.SetCardUI(selectedCard);
+
+        // ✅ 뽑은 유물을 플레이어 데이터에 추가
+        if (selectedCard.artifact != null)
+        {
+            OnGachaResult(selectedCard.artifact);
+        }
     }
 
     public void HideCardAndFadeBlack()
@@ -148,5 +155,19 @@ public class GachaManager : MonoBehaviour
                 card.gameObject.SetActive(false);
             }
         }
+    }
+
+    // ✅ 가챠에서 뽑힌 유물을 플레이어가 획득하도록 적용
+    public void OnGachaResult(ArtifactData artifact)
+    {
+        if (artifact == null)
+        {
+            Debug.LogError("🚨 뽑힌 유물이 없습니다!");
+            return;
+        }
+
+        // ✅ 플레이어에게 유물 추가
+        GameManager.instance.playerData.AddArtifact(artifact);
+        Debug.Log($"🎁 플레이어가 '{artifact.Name}' 유물을 획득했습니다!");
     }
 }
