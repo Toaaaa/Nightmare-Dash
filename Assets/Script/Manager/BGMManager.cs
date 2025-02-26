@@ -56,12 +56,12 @@ public class BGMManager : MonoBehaviour
 
     void PlayBGMForScene(string sceneName)
     {
-        Debug.Log($"[BGMManager] Scene Loaded: {sceneName}");
+        
 
         if (sceneName == "Title" || sceneName == "MainLobby")
         {
 
-            Debug.Log("[BGMManager] Playing Title & MainLobby BGM: " + titleAndLobbyBGM.name);
+            
             if (audioSource.clip != titleAndLobbyBGM)
             {
                 PlayBGM(titleAndLobbyBGM);
@@ -69,7 +69,7 @@ public class BGMManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("[BGMManager] Playing Game BGM: " + gameBGM.name);
+            
             if (audioSource.clip != gameBGM)
             {
                 PlayBGM(gameBGM);
