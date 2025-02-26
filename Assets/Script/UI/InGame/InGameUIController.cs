@@ -26,7 +26,7 @@ public class InGameUIController : MonoBehaviour
         sceneController.GameHp.OnChangedHpAmountEvent += hpBar.UpdateHpBar;
 
         hpBar.SetHpBar(sceneController.GameHp.MaxHp);
-        UpdateScoreText(sceneController.Score);
+        UpdateScoreText((int)sceneController.Score);
     }
 
     private void OnDestroy()
