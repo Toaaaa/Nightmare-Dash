@@ -8,8 +8,7 @@ public class Obstacle : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("플레이어와 충돌!");
-
+            collision.GetComponentInParent<Player>().GetDmg(15);
         }
     }
 }
