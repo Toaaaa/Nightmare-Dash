@@ -2,129 +2,125 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
     Animator animator;
-    Rigidbody2D _rigidbody;
+    Rigidbody2D rb;
 
-    public float jumpForce = 5f;
-    public float runSpeed = 3f;
-    public float slideSpeed = 6f;
-    public float slideDuration = 0.5f;
-    public float slideCooldownTime = 0.2f;
-    public bool isDead = false;
-    float deathCooldown = 0f;
-    float slideCooldown = 0f;
-    float slideTimer = 0f;
-
-    bool isJump = false;
-    bool isGrounded = false;
+    [SerializeField] float jumpForce = 7f; // 점프 힘
+    [SerializeField] int maxJumps = 2; // 최대 점프 횟수
+    int jumpCount = 0;
+    float slopeSpeed = 1.13f; // 경사면 속도
+    bool isOnSlope = false;// 경사면 위에 있는지
+    bool isOnGround = false;// 지면 위에 있는지
     bool isSliding = false;
-    
+    bool isDead = false;
+    bool fall = false;
+    float coyoteTime = 0.1f; // 코요테 타임 (땅에서 살짝 벗어나도 점프 가능)
+    float coyoteTimeCounter;
+
     void Start()
     {
         animator = GetComponentInChildren<Animator>();
-        _rigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
     void Update()
     {
-        if (isDead)
+        if (!isDead)
         {
-            if(deathCooldown <= 0)
+            if (isOnGround)
             {
-
+                coyoteTimeCounter = coyoteTime; // 땅에 있을 때 코요테 타임 리셋
+                jumpCount = 0;
             }
             else
             {
-                deathCooldown -= Time.deltaTime;
-            }
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded )
-            {
-                isJump = true;
+                coyoteTimeCounter -= Time.deltaTime;
             }
 
-            if(Input.GetKeyDown(KeyCode.LeftShift) && isGrounded && slideCooldown <= 0)
+            if (Input.GetKeyDown(KeyCode.Space) && (jumpCount < maxJumps || coyoteTimeCounter > 0) &&!isOnSlope) // 경사로에서는 점프 불가능
             {
-                StartSlide();
+                Jump();
+            }
+
+            if (Input.GetKeyDown(KeyCode.S) && isOnGround) // 슬라이딩
+            {
+                Slide();
             }
         }
-
-        animator.SetBool("isJumping", !isGrounded);
-        animator.SetBool("isRunning", !isSliding && runSpeed > 0);
-        animator.SetBool("isSliding", isSliding);
     }
-
     private void FixedUpdate()
     {
-        if (isDead) return;
-
-        Vector3 velocity = _rigidbody.velocity;
-
-        if (isSliding)
+        if (isOnSlope)
         {
-            velocity.x = slideSpeed;
-        }
-
-        else
-        {
-            velocity.x = runSpeed;
-        }
-
-        if (isJump)
-        {
-            velocity.y = jumpForce;
-            isJump = false;
-            isGrounded = false;
-        }
-
-        _rigidbody.velocity = velocity;
-
-        if (isSliding)
-        {
-            slideTimer -= Time.fixedDeltaTime;
-            if(slideTimer <= 0)
-            {
-                Endslide();
-            }
-        }
-
-        if(slideCooldown > 0)
-        {
-            slideCooldown -= Time.fixedDeltaTime;
+            rb.velocity = new Vector2(slopeSpeed, rb.velocity.y);
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void Jump()
     {
-        if(isDead) return;
-        
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
-        
-        deathCooldown = 1f;
+        if (fall) return;
+        rb.velocity = new Vector2(rb.velocity.x, 0f); // 기존 점프 속도 초기화 (더블 점프 시 중요)
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        animator.SetTrigger(jumpCount == 0 ? "Jump" : "DoubleJump");
+
+        isOnGround = false;
+        jumpCount++;
+        coyoteTimeCounter = 0; // 점프 시 코요테 타임 리셋
     }
 
-    void StartSlide()
+    void Slide()
     {
         isSliding = true;
-        slideTimer = slideDuration;
-        slideCooldown = slideCooldownTime + slideDuration;
+        animator.SetBool("isSliding", true);
+    }
+    public void SetFall()
+    {
+        fall = true;
     }
 
-    void Endslide()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        isSliding = false;
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                // 법선 벡터(normal)가 위쪽(0, 1)에 가까운 경우에만 "땅"으로 인정
+                if (contact.normal.y > 0.7f)
+                {
+                    isOnGround = true;
+                    return;
+                }
+            }
+        }
     }
-
-    public void OnSlideAnimationEnd()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        Endslide();
+        if (collision.gameObject.CompareTag("UnderGround"))
+        {
+            fall = true;
+        }
+        if (collision.gameObject.CompareTag("Hill"))
+        {
+            isOnSlope = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Hill"))
+        {
+            isOnSlope = false;
+        }
+    }
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = false;
+        }
     }
 }
