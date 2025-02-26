@@ -3,35 +3,43 @@ using UnityEngine.UI;
 
 public class PlayerCustomUI : BaseUI
 {
-    [SerializeField] private GameObject customUI; // 커스터마이징 패널
-    [SerializeField] private Button customButton;
+    [SerializeField] private Button custommizeButton;
+    [SerializeField] private Button achievementTab;
+    [SerializeField] private Button petTab;
+    [SerializeField] private Button relicTab;
     [SerializeField] private Button closeButton;
+
+    [SerializeField] private GameObject achievementPanel;
+    [SerializeField] private GameObject petPanel;
+    [SerializeField] private GameObject relicPanel;
+
+    [SerializeField] private GameObject customizeUIPanel;
 
     private void Start()
     {
-        customButton.onClick.AddListener(OnCustomClick);
-        closeButton.onClick.AddListener(CloseCustomPanel);
-        
-        // 초기 UI 설정
-        customUI.SetActive(false);  // 커스터마이징 UI 비활성화
+        custommizeButton.onClick.AddListener(() => ShowPanel(customizeUIPanel));
+        achievementTab.onClick.AddListener(() => ShowPanel(achievementPanel));
+        petTab.onClick.AddListener(() => ShowPanel(petPanel));
+        relicTab.onClick.AddListener(() => ShowPanel(relicPanel));
+        closeButton.onClick.AddListener(CloseUI);
+
+        ShowPanel(achievementPanel); // 기본적으로 업적 탭 활성화
     }
 
-    private void CloseCustomPanel()
+    private void ShowPanel(GameObject activePanel)
     {
-        customUI.SetActive(false);  // 커스터마이징 UI 숨기기
+        customizeUIPanel.SetActive(activePanel == customizeUIPanel);
+        achievementPanel.SetActive(activePanel == achievementPanel);
+        petPanel.SetActive(activePanel == petPanel);
+        relicPanel.SetActive(activePanel == relicPanel);
+        // 선택한 패널 활성화
+        activePanel.SetActive(true);
     }
 
-    private void OnCustomClick()
+    private void CloseUI()
     {
-        if (uiManager != null)
-        {
-            uiManager.SetUIState(UIState.PlayerCustom);
-            customUI.SetActive(true);   // 커스터마이징 UI 활성화
-        }
-        else
-        {
-            Debug.LogError("UIManager가 설정되지 않았습니다.");
-        }
+        customizeUIPanel.gameObject.SetActive(false);
+        uiManager.SetUIState(UIState.Lobby); // 로비 UI 다시 활성화
     }
 
     protected override UIState GetUIState()
