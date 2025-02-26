@@ -33,11 +33,11 @@ public class ArtifactData
         string description = "";
 
         if (Effect.Hp > 0)
-            description += $"체력 +{Effect.Hp} ";
+            description += $"체력 +{Effect.Hp} \n";
         if (Effect.Currency > 0)
-            description += $"재화 획득량 +{Effect.Currency} ";
+            description += $"\n재화 획득량 +{Effect.Currency} ";
         if (Effect.Invincibility > 0)
-            description += $"무적 시간 +{Effect.Invincibility}초";
+            description += $"\n무적 시간 +{Effect.Invincibility}초";
 
         return string.IsNullOrEmpty(description) ? "효과 없음" : description.Trim();
     }
