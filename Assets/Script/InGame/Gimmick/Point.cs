@@ -11,7 +11,7 @@ public class Point : MonoBehaviour //타일을 달리면서 획득하는 점수
         {
             if(SceneBase.Current is GameSceneController gameScene)
             {
-                gameScene.Score += 1;// 점수 획득
+                gameScene.Score += 1 * collision.GetComponentInParent<Player>().GetScoreValue();// 점수 획득 (획득시 점수 배율을 곱해서 적용)
                 GetComponent<Animator>().SetTrigger("GetCoin");// 코인 획득 애니메이션 재생
             }
         }

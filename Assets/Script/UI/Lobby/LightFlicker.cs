@@ -14,6 +14,12 @@ public class LightFlicker : MonoBehaviour
     {
         if (light2D == null) light2D = GetComponent<Light2D>();
         StartCoroutine(FlickerLight());
+        OnLightFlicker();
+    }
+    public void OnLightFlicker()
+    {
+        AchievementManager.Instance.UnlockAchievement("빛이 사라졌다");
+        Debug.Log("빛이 사라졌다.");
     }
 
     private IEnumerator FlickerLight()

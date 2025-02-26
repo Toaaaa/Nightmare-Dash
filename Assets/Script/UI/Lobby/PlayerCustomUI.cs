@@ -1,25 +1,148 @@
-using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening; // DOTween 사용
 
 public class PlayerCustomUI : BaseUI
 {
-    [SerializeField] private Button customButton;
+    [SerializeField] private Button customizeButton;
 
+    [Header("Tabs")]
+    [SerializeField] private Button achievementTab;
+    [SerializeField] private Button petTab;
+    [SerializeField] private Button relicTab;
+    private Button currentTab; // 현재 선택된 탭 추적
+
+    [Header("Close Button")]
+    [SerializeField] private Button closeButton;
+
+    [Header("Panels")]
+    [SerializeField] private GameObject achievementPanel;
+    [SerializeField] private GameObject petPanel;
+    [SerializeField] private GameObject relicPanel;
+    [SerializeField] private GameObject customizeUIPanel;
+
+    [Header("Slots")]
+    [SerializeField] private Transform slotContainer;
+    [SerializeField] private GameObject slotPrefab;
+
+    [Header("Description")]
+    [SerializeField] private TMP_Text descriptionText;
+
+    public static PlayerCustomUI Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+        // 업적이 달성될 때 UI 업데이트 이벤트 연결
+        AchievementManager.Instance.OnAchievementUnlocked += UpdateAchievementUI;
+        UpdateAchievementUI();
+    }
     private void Start()
     {
-        customButton.onClick.AddListener(OnCustomClick);
-    }
+        // 버튼 이벤트 설정
+        customizeButton.onClick.AddListener(OpenCustomizeUI);
+        achievementTab.onClick.AddListener(() => ShowPanel(achievementPanel, achievementTab));
+        petTab.onClick.AddListener(() => ShowPanel(petPanel, petTab));
+        relicTab.onClick.AddListener(() => ShowPanel(relicPanel, relicTab));
+        closeButton.onClick.AddListener(CloseUI);
 
-    private void OnCustomClick()
+        // 기본 패널 설정
+        ShowPanel(achievementPanel, achievementTab);
+        
+    }
+    public void UpdateAchievementUI(string achievementName = null)
     {
-        uiManager.SetUIState(UIState.PlayerCustom);
+        // 기존 슬롯 삭제
+        foreach (Transform child in slotContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // 업적 목록 불러오기
+        List<Achievement> achievements = AchievementManager.Instance.achievements;
+        foreach (var achievement in achievements)
+        {
+            GameObject newSlot = Instantiate(slotPrefab, slotContainer); // 프리팹 인스턴스
+            TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();//텍스트메시프로만 가져옴
+            if (slotText != null)
+                slotText.text = achievement.Name;
+                
+            Button slotButton = newSlot.GetComponent<Button>();
+            if (slotButton != null) 
+                slotButton.onClick.AddListener(() => ShowDescription(achievement.Name)); slotButton.enabled = true;
+
+
+            Image slotImage = newSlot.GetComponent<Image>();
+            if (slotImage != null)
+                slotImage.color = achievement.IsUnlocked ? Color.white : Color.gray; slotImage.enabled = true;
+
+        }
+    }
+    private void OpenCustomizeUI()
+    {
+        customizeUIPanel.SetActive(true);
+        customizeUIPanel.transform.localScale = Vector3.zero;
+        customizeUIPanel.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack); // 등장 애니메이션
+        ShowPanel(achievementPanel, achievementTab);
     }
 
+    private void ShowPanel(GameObject activePanel, Button activeTab)
+    {
+        // 모든 패널 비활성화 후 선택된 패널 활성화
+        achievementPanel.SetActive(false);
+        petPanel.SetActive(false);
+        relicPanel.SetActive(false);
+        activePanel.SetActive(true);
+
+        // 선택된 탭 스타일 변경
+        if (currentTab != null)
+            currentTab.GetComponent<Image>().color = Color.gray; // 기본 색상
+
+        activeTab.GetComponent<Image>().color = Color.white; // 활성화된 색상
+        currentTab = activeTab;
+    }
+
+    public void LoadItems(List<string> items)
+    {
+        foreach (Transform child in slotContainer) Destroy(child.gameObject);
+
+        foreach (var item in items)
+        {
+            GameObject newSlot = Instantiate(slotPrefab, slotContainer);
+            newSlot.GetComponentInChildren<TMP_Text>().text = item;
+
+            // 버튼 클릭 애니메이션 추가
+            Button slotButton = newSlot.GetComponent<Button>();
+            slotButton.onClick.AddListener(() => ShowDescription(item));
+            slotButton.onClick.AddListener(() => slotButton.transform.DOScale(1.1f, 0.1f).OnComplete(() => slotButton.transform.DOScale(1f, 0.1f)));
+        }
+    }
+
+    private void ShowDescription(string itemName)
+    {
+        descriptionText.text = $"{itemName} 설명을 여기에 표시";
+        descriptionText.DOFade(0, 0);  // 투명하게 초기화
+        descriptionText.DOFade(1, 0.3f); // 점점 나타나는 효과
+    }
+
+    private void CloseUI()
+    {
+        customizeUIPanel.transform.DOScale(0, 0.2f).SetEase(Ease.InBack)
+            .OnComplete(() => customizeUIPanel.SetActive(false)); // 애니메이션 후 비활성화
+        uiManager.SetUIState(UIState.Lobby);
+    }
+    private void OnDestroy()
+    {
+        // 이벤트 해제 (메모리 누수 방지)
+        if (AchievementManager.Instance != null)
+        {
+            AchievementManager.Instance.OnAchievementUnlocked -= UpdateAchievementUI;
+        }
+    }
     protected override UIState GetUIState()
     {
-        return UIState.Lobby;
+        return UIState.PlayerCustom;
     }
 }
-

@@ -4,17 +4,17 @@ using UnityEngine;
 public class GameSceneController : SceneBase
 {
     //점수
-    public int Score
+    public float Score
     {
         get => score;
         set
         {
             score = value;
-            OnChangedScoreAmountEvnet(score);
+            OnChangedScoreAmountEvnet((int)score);
         }
     }
 
-    private int score = 0;
+    private float score = 0;
 
     //점수값이 변할때 발생하는 이벤트
     public Action<int> OnChangedScoreAmountEvnet = delegate { };
