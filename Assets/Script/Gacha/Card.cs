@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +11,7 @@ public class Card
     public string cardType;
     public int weight;
 
+    public Card() { }
     public Card(Card card)
     {
         this.cardName = card.cardName;
