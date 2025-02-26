@@ -122,9 +122,10 @@ public class Player : MonoBehaviour
         animator.ResetTrigger("DoubleJump");
         animator.SetBool("isFirstEnter", false);
     }
-    public void SetFall()
+    public void SetFall()// 낙하로 인한 사망
     {
         fall = true;
+        currentHp = 0;
     }
     public void HitboxSet(int num)
     {
@@ -138,7 +139,7 @@ public class Player : MonoBehaviour
             hitbox.offset = new Vector2(0, -1.7f);
             hitbox.size = new Vector2(1f, 0.6f);
         }
-    }
+    }// 충돌 판정 설정
     public void GroundSmokeFX()
     {
         playerFX.SetTrigger("GroundFX");
