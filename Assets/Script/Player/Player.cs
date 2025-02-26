@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
 
     [SerializeField] float jumpForce = 7f; // 점프 힘
     [SerializeField] int maxJumps = 2; // 최대 점프 횟수
+    [SerializeField] BoxCollider2D hitbox; // 피격 판정
+
+
     int jumpCount = 0;
     float slopeSpeed = 1.13f; // 경사면 속도
     bool isOnSlope = false;// 경사면 위에 있는지
@@ -25,6 +28,7 @@ public class Player : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        HitboxSet(0);
     }
 
     void Update()
@@ -90,7 +94,19 @@ public class Player : MonoBehaviour
     {
         fall = true;
     }
-
+    public void HitboxSet(int num)
+    {
+        if(num == 0)// 일반 상태 hitbox
+        {
+            hitbox.offset = new Vector2(0, -0.86f);
+            hitbox.size = new Vector2(1f, 2.3f);
+        }
+        else// 슬라이딩 상태 hitbox
+        {
+            hitbox.offset = new Vector2(0, -1.7f);
+            hitbox.size = new Vector2(1f, 0.6f);
+        }
+    }
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
