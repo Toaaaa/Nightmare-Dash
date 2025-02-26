@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class DataManager : MonoBehaviour
 {
+    public static DataManager Instance { get; private set; }
     // 펫 데이터 관리용 Dictionary
     private Dictionary<int, PetData> petDictionary = new Dictionary<int, PetData>();
 
