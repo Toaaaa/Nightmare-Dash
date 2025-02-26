@@ -22,7 +22,7 @@ public class BGMManager : MonoBehaviour
             {
                 audioSource = gameObject.AddComponent<AudioSource>();
             }
-            
+
             audioSource.loop = true;
         }
         else
@@ -54,14 +54,24 @@ public class BGMManager : MonoBehaviour
         audioSource.Play();
     }
 
+    //게임BGM재생
+    public void PlayGameBGM()
+    {
+        PlayBGM(gameBGM);
+    }
+
     void PlayBGMForScene(string sceneName)
     {
-        
+        //튜토리얼 BGM은 따로 튜토리얼 씬에서 재생
+        if (sceneName == "Tutorial")
+        {
+            //재생하고있는 음악 정지
+            audioSource.Stop();
+            return;
+        }
 
         if (sceneName == "Title" || sceneName == "MainLobby")
         {
-
-            
             if (audioSource.clip != titleAndLobbyBGM)
             {
                 PlayBGM(titleAndLobbyBGM);
@@ -69,7 +79,7 @@ public class BGMManager : MonoBehaviour
         }
         else
         {
-            
+
             if (audioSource.clip != gameBGM)
             {
                 PlayBGM(gameBGM);

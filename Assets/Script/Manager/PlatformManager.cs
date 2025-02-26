@@ -8,6 +8,7 @@ public class PlatformManager : MonoBehaviour
     // 변수
     [SerializeField] float speed = 8f; // 이동 속도 8에서 최대 12까지.
     [SerializeField] bool isGameStart = false; // 게임 시작 여부
+    [SerializeField]
     Vector2 spawnPoint = new Vector2(0, 0);// 플레이어 초기 생성 위치.
     Vector2 gridPoint = new Vector2(0, 0); // 맵 타일 초기 위치.
     float time = 0; // 시간
@@ -22,7 +23,7 @@ public class PlatformManager : MonoBehaviour
 
     private void Awake()
     {
-        spawnPoint = sceneController.GetPlayerPos();// 플레이어 초기 생성 위치.
+        //spawnPoint = sceneController.GetPlayerPos();// 플레이어 초기 생성 위치.
         gridPoint = mapGrid.position; // 맵 타일 초기 위치.
 
     }
@@ -65,6 +66,7 @@ public class PlatformManager : MonoBehaviour
     {
         isGameStart = false;// 게임 정지(플렛폼 정지)
         time = 0;
+        player.ResetP();// 플레이어 데이터
         sceneController.SetPlayerPos(spawnPoint);// 플레이어 위치 초기화
         sceneController.ResetPlayer();// 플레이어 상태 초기화
         mapGrid.position = gridPoint; // 맵 타일 위치 초기화

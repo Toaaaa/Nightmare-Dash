@@ -11,6 +11,7 @@ public class GachaUI : MonoBehaviour
     private void Start()
     {
         gatchaButton.onClick.AddListener(OnGatchaClick);
+
     }
 
     private void OnGatchaClick()

@@ -233,7 +233,7 @@ Rigidbody2D:
   m_Mass: 1.1
   m_LinearDrag: 0
   m_AngularDrag: 0
-  m_GravityScale: 4
+  m_GravityScale: 3.5
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -259,6 +259,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpForce: 14
   maxJumps: 2
+  jumpGravity: 3.5
+  fallGravity: 8
+  playerData: {fileID: 11400000, guid: c91583d10a74a654dae3b3024f8c8cd9, type: 2}
   hitbox: {fileID: 6866751273796170008}
   playerFX: {fileID: 5507330600824209834}
   maxHp: 100

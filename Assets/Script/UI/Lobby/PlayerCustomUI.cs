@@ -25,8 +25,6 @@ public class PlayerCustomUI : BaseUI
 
     [Header("Slots")]
     [SerializeField] private Transform slotContainer;
-    [SerializeField] private Transform petSlotContainer;  // 펫 슬롯 리스트
-    [SerializeField] private Transform relicSlotContainer; // 유물 슬롯 리스트
     [SerializeField] private GameObject slotPrefab;
 
     [Header("Description")]
@@ -106,43 +104,22 @@ public class PlayerCustomUI : BaseUI
         currentTab = activeTab;
     }
 
-    // 펫 슬롯 로드
-    public void LoadPetSlots()
+    public void LoadItems(List<string> items)
     {
-        foreach (Transform child in petSlotContainer) Destroy(child.gameObject);
+        foreach (Transform child in slotContainer) Destroy(child.gameObject);
 
-        foreach (var pet in DataManager.Instance.PetManager.Pets)
+        foreach (var item in items)
         {
-            GameObject newSlot = Instantiate(slotPrefab, petSlotContainer);
-            TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
-            Image slotImage = newSlot.GetComponent<Image>();
+            GameObject newSlot = Instantiate(slotPrefab, slotContainer);
+            newSlot.GetComponentInChildren<TMP_Text>().text = item;
 
-            slotText.text = pet.PetName;
-            slotText.color = pet.IsObtained ? Color.white : Color.gray; // 획득 여부에 따른 색상 변경
-            slotImage.color = pet.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
-
-            newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(pet.PetName));
+            // 버튼 클릭 애니메이션 추가
+            Button slotButton = newSlot.GetComponent<Button>();
+            slotButton.onClick.AddListener(() => ShowDescription(item));
+            slotButton.onClick.AddListener(() => slotButton.transform.DOScale(1.1f, 0.1f).OnComplete(() => slotButton.transform.DOScale(1f, 0.1f)));
         }
     }
 
-    // 유물 슬롯 로드
-    public void LoadArtifactSlots()
-    {
-        foreach (Transform child in relicSlotContainer) Destroy(child.gameObject);
-
-        foreach (var artifact in DataManager.Instance.ArtifactManager.ArtifactsList)
-        {
-            GameObject newSlot = Instantiate(slotPrefab, relicSlotContainer);
-            TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
-            Image slotImage = newSlot.GetComponent<Image>();
-
-            slotText.text = artifact.Name;
-            slotText.color = artifact.IsObtained ? Color.white : Color.gray;
-            slotImage.color = artifact.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
-
-            newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(artifact.Name));
-        }
-    }
     private void ShowDescription(string itemName)
     {
         descriptionText.text = $"{itemName} 설명을 여기에 표시";
