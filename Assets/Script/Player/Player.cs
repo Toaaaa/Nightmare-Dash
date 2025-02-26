@@ -14,6 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] BoxCollider2D hitbox; // 피격 판정
 
 
+    [SerializeField]float maxHp = 100f;
+    float currentHp;
+
     int jumpCount = 0;
     float slopeSpeed = 1.13f; // 경사면 속도
     bool isOnSlope = false;// 경사면 위에 있는지
@@ -28,11 +31,14 @@ public class Player : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        SetHpMax();
         HitboxSet(0);
     }
 
     void Update()
     {
+        CheckIsDead();
+
         if (!isDead)
         {
             if (isOnGround)
@@ -90,6 +96,8 @@ public class Player : MonoBehaviour
         animator.SetBool("isRunning", false);
         animator.SetBool("isSliding", true);
     }
+
+
     public void SetFall()
     {
         fall = true;
@@ -107,6 +115,32 @@ public class Player : MonoBehaviour
             hitbox.size = new Vector2(1f, 0.6f);
         }
     }
+    public float GetMaxHp()
+    {
+        return maxHp;
+    }
+    public float GetCurrentHp()
+    {
+        return currentHp;
+    }
+    public void SetHpMax()
+    {
+        currentHp = maxHp;
+    }
+    public void GetDmg(int dmg)
+    {
+        currentHp -= dmg;
+        float hppercent = currentHp / maxHp;
+        GameSceneController gc = SceneBase.Current as GameSceneController;
+        gc.uiController.hpBar.GetDmg(hppercent);// 데미지 받을시 hp바 갱신
+    }
+    void CheckIsDead()
+    {
+        isDead =  currentHp <= 0 ? true : false;
+    }
+
+
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
