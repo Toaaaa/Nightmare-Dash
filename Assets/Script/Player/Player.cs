@@ -113,9 +113,15 @@ public class Player : MonoBehaviour
         rb.velocity = Vector2.zero;
         SetHpMax();
         HitboxSet(0);
+        maxHp = playerData.GetTotalHp();
+        invincibleTime = playerData.GetTotalInvincibleTime();
+        scoreValue = playerData.GetTotalScoreValue();
         fall = false;
         isDead = false;
         coyoteTimeCounter = coyoteTime;
+        //Hp바 초기화
+        GameSceneController gc = SceneBase.Current as GameSceneController;
+        gc.uiController.hpBar.GetDmg(0);// 추락시 hp바 0으로 갱신
         //애니메이션 리셋
         animator.SetBool("isSliding", false);
         animator.ResetTrigger("Jump");

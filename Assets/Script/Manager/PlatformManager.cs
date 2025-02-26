@@ -65,6 +65,7 @@ public class PlatformManager : MonoBehaviour
     {
         isGameStart = false;// 게임 정지(플렛폼 정지)
         time = 0;
+        player.ResetP();// 플레이어 데이터
         sceneController.SetPlayerPos(spawnPoint);// 플레이어 위치 초기화
         sceneController.ResetPlayer();// 플레이어 상태 초기화
         mapGrid.position = gridPoint; // 맵 타일 위치 초기화
