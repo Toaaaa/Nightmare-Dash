@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 50091017}
   - component: {fileID: 50091018}
   m_Layer: 5
-  m_Name: SlotContainer
+  m_Name: RelicContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -727,7 +727,7 @@ GameObject:
   - component: {fileID: 138945660}
   - component: {fileID: 138945661}
   m_Layer: 5
-  m_Name: SlotContainer
+  m_Name: PetSlotContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1266,6 +1266,8 @@ MonoBehaviour:
   relicPanel: {fileID: 960620112}
   customizeUIPanel: {fileID: 1597546137}
   slotContainer: {fileID: 1278116261}
+  petSlotContainer: {fileID: 138945660}
+  relicSlotContainer: {fileID: 50091017}
   slotPrefab: {fileID: 2080880750}
   descriptionText: {fileID: 1649735580}
 --- !u!1 &575589957 stripped
@@ -2276,7 +2278,7 @@ GameObject:
   - component: {fileID: 1278116261}
   - component: {fileID: 1278116262}
   m_Layer: 5
-  m_Name: SlotContainer
+  m_Name: AchSlotContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
