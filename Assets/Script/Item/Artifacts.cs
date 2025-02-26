@@ -48,6 +48,12 @@ public class Artifacts : MonoBehaviour
     public List<ArtifactData> ArtifactsList { get; set; } = new List<ArtifactData>();
     public Sprite[] ArtifactImages;  // ✅ 유물 이미지를 저장할 배열
 
+    void Awake()
+    {
+        InitializeArtifacts(); // 🔹 Start() 전에 유물 데이터 초기화
+    }
+
+
     void Start()
     {
         // ✅ Resources에서 유물 이미지 불러오기
