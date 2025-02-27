@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,34 +11,24 @@ public class DataManager : MonoBehaviour
     public Pet PetManager { get; set; }
     public Artifacts ArtifactManager { get; set; }
 
+    public Coin Coin = new();
+
+    public Diamond Diamond = new();
+
     private void Awake()
     {
-        // ✅ ArtifactManager를 강제로 찾고 할당
-        if (ArtifactManager == null)
+        if (Instance == null)
         {
-            ArtifactManager = FindObjectOfType<Artifacts>();
-            if (ArtifactManager == null)
-            {
-                Debug.LogError("🚨 ArtifactManager를 찾을 수 없습니다! 씬에 존재하는지 확인하세요.");
-                return;
-            }
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-
-        // ✅ 유물 데이터 즉시 초기화
-        InitializeArtifactData();
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    private void Start()
-    {
-        InitializePetData();
-        Debug.Log($"✅ 초기화 완료: 펫 개수 {petDictionary.Count}, 유물 개수 {artifactDictionary.Count}");
-
-        // 예제 실행
-        //SetPetObtained(1, true);
-        SetArtifactObtained(1, true);
-    }
-
-    void InitializePetData()
+    public void InitializePetData()
     {
         if (PetManager == null || PetManager.Pets == null)
         {
@@ -58,9 +47,11 @@ public class DataManager : MonoBehaviour
                 Debug.LogWarning($"⚠️ 중복된 Pet ID 발견: {pet.Id}");
             }
         }
+
+        Debug.Log($"✅ 초기화 완료: 펫 개수 {petDictionary.Count}, 유물 개수 {artifactDictionary.Count}");
     }
 
-    void InitializeArtifactData()
+    public void InitializeArtifactData()
     {
         if (ArtifactManager == null || ArtifactManager.ArtifactsList == null)
         {

@@ -4,13 +4,17 @@ using UnityEngine.UI;
 
 public class GachaManager : MonoBehaviour
 {
-    public Button DrawOneBtn, DrawTenBtn, ExitBtn;
+    public Button DrawOneBtn, DrawFiveBtn, ExitBtn;
     public Image GachaFadeBlack;
     public float fadeDuration = 1.0f;
     private float maxAlpha = 0.5f;
 
     [SerializeField]
     private CardUI[] cards; // ✅ 여러 장의 카드 UI 배열
+
+    private Diamond diamond; // 유료 재화
+
+    private readonly int gachaPrice = 100; // 가챠 1회 가격
 
     private void Start()
     {
@@ -29,14 +33,20 @@ public class GachaManager : MonoBehaviour
             }
         }
 
+        diamond = DataManager.Instance.Diamond;
+
+        DrawOneBtn.interactable = diamond.IsCanUse(gachaPrice);
+        DrawFiveBtn.interactable = diamond.IsCanUse(gachaPrice * 5);
+
         DrawOneBtn.onClick.AddListener(() => DrawOneBtnClick(1));
-        DrawTenBtn.onClick.AddListener(() => DrawOneBtnClick(5));
+        DrawFiveBtn.onClick.AddListener(() => DrawOneBtnClick(5));
         ExitBtn.onClick.AddListener(HideCardAndFadeBlack);
         ExitBtn.gameObject.SetActive(false);
     }
 
     public void DrawOneBtnClick(int num)
     {
+        diamond.Use(gachaPrice * num);
         StartCoroutine(FadeInEffect(num));
     }
 
@@ -133,7 +143,7 @@ public class GachaManager : MonoBehaviour
         GachaFadeBlack.gameObject.SetActive(false);
         ResetCardState();
         DrawOneBtn.interactable = true;
-        DrawTenBtn.interactable = true;
+        DrawFiveBtn.interactable = true;
         ExitBtn.gameObject.SetActive(false);
     }
 
@@ -141,7 +151,7 @@ public class GachaManager : MonoBehaviour
     {
         HideCardAndFadeBlack();
         DrawOneBtn.interactable = false;
-        DrawTenBtn.interactable = false;
+        DrawFiveBtn.interactable = false;
         StartCoroutine(FadeInEffect(1));
     }
 
