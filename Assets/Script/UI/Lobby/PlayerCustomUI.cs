@@ -226,8 +226,6 @@ public class PlayerCustomUI : BaseUI
         if (string.IsNullOrEmpty(itemName))
             descriptionText.text = "설명을 여기에 표시";
         else descriptionText.text = itemName;
-        descriptionText.DOFade(0, 0);  // 투명하게 초기화
-        descriptionText.DOFade(1, 0.3f); // 점점 나타나는 효과
 
         if (descriptionImg != null)
         {
@@ -235,8 +233,6 @@ public class PlayerCustomUI : BaseUI
             descriptionImg.color = new Color(1, 1, 1, 1); // 투명도를 초기화 (이미지 표시)
         }
 
-        descriptionImg.DOFade(0, 0);
-        descriptionImg.DOFade(1, 0.3f);
     }
 
 
