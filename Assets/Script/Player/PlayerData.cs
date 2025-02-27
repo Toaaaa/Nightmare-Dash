@@ -17,9 +17,10 @@ public class PlayerData : ScriptableObject
     private float add_score = 0f;
     private float add_InvincibleTime = 0f;
 
-    // ✅ 플레이어가 보유한 유물 리스트
-    [Header("보유 유물 리스트")]
+    // ✅ 플레이어가 보유한 유물 & 펫 리스트
+    [Header("보유 유물 및 펫 리스트")]
     public List<ArtifactData> OwnedArtifacts = new List<ArtifactData>();
+    public List<PetData> OwnedPets = new List<PetData>(); // ✅ 펫 리스트 추가됨
 
     // ✅ 업적 리스트 추가
     [Header("업적 데이터")]
@@ -68,14 +69,12 @@ public class PlayerData : ScriptableObject
             return;
         }
 
-        // 중복 유물인지 확인
         if (OwnedArtifacts.Exists(a => a.Id == artifact.Id))
         {
             HandleDuplicateArtifact(artifact);
             return;
         }
 
-        // 유물 추가
         OwnedArtifacts.Add(artifact);
         ApplyArtifactEffect(artifact);
 
@@ -90,48 +89,84 @@ public class PlayerData : ScriptableObject
         // 여기에 강화 시스템 로직 추가 가능 (예: 동일 유물 3개 모으면 등급 업)
     }
 
-    // ✅ 유물 효과 초기화 (게임 시작 시 호출)
+    // ✅ 펫 획득 (중복 방지)
+    public void AddPet(PetData pet)
+    {
+        if (pet == null)
+        {
+            Debug.LogError("🚨 펫 데이터가 null입니다!");
+            return;
+        }
+
+        if (OwnedPets.Exists(p => p.Id == pet.Id))
+        {
+            Debug.Log($"⚠️ 중복 펫 획득: {pet.PetName} → 추가 강화 가능!");
+            return;
+        }
+
+        OwnedPets.Add(pet);
+        Debug.Log($"🎉 플레이어가 '{pet.PetName}' 펫을 획득했습니다!");
+        SavePlayerData();
+    }
+
+    // ✅ 유물 & 펫 효과 초기화 (게임 시작 시 호출)
     public void ResetAddStats()
     {
         add_MaxHp = 0;
         add_score = 0;
         add_InvincibleTime = 0;
         OwnedArtifacts.Clear();
+        OwnedPets.Clear(); // ✅ 펫도 초기화
 
-        Debug.Log("🔄 유물 효과 초기화 완료!");
+        Debug.Log("🔄 유물 & 펫 효과 초기화 완료!");
     }
 
-    // ✅ 유물 데이터 저장
+    // ✅ 유물 & 펫 데이터 저장
     public void SavePlayerData()
     {
         PlayerPrefs.SetString("Coin", Coin.ToString());
         PlayerPrefs.SetString("Diamond", Diamond.ToString());
         List<int> artifactIds = OwnedArtifacts.ConvertAll(a => a.Id);
-        string json = JsonUtility.ToJson(new ArtifactSaveData(artifactIds));
-        PlayerPrefs.SetString("PlayerArtifacts", json);
+        List<int> petIds = OwnedPets.ConvertAll(p => p.Id); // ✅ 펫도 저장
+
+        string json = JsonUtility.ToJson(new PlayerSaveData(artifactIds, petIds));
+        PlayerPrefs.SetString("PlayerData", json);
         PlayerPrefs.Save();
     }
 
-    // ✅ 유물 데이터 불러오기
-    public void LoadPlayerData(Artifacts artifactManager)
+    // ✅ 유물 & 펫 데이터 불러오기
+    public void LoadPlayerData(Artifacts artifactManager, Pet petManager)
     {
-        if (PlayerPrefs.HasKey("PlayerArtifacts"))
+        if (PlayerPrefs.HasKey("PlayerData"))
         {
-            string json = PlayerPrefs.GetString("PlayerArtifacts");
-            ArtifactSaveData saveData = JsonUtility.FromJson<ArtifactSaveData>(json);
-            OwnedArtifacts = new List<ArtifactData>();
+            string json = PlayerPrefs.GetString("PlayerData");
+            PlayerSaveData saveData = JsonUtility.FromJson<PlayerSaveData>(json);
 
-            foreach (int id in saveData.Ids)
+            OwnedArtifacts = new List<ArtifactData>();
+            OwnedPets = new List<PetData>();
+
+            foreach (int id in saveData.ArtifactIds)
             {
                 ArtifactData artifact = artifactManager.ArtifactsList.Find(a => a.Id == id);
                 if (artifact != null)
                 {
-                    artifact.IsObtained = true;  // ✅ 유물 획득 상태 업데이트
+                    artifact.IsObtained = true;
                     OwnedArtifacts.Add(artifact);
                     ApplyArtifactEffect(artifact);
                 }
             }
-            Debug.Log($"✅ 플레이어 유물 불러오기 완료! 보유 유물 개수: {OwnedArtifacts.Count}");
+
+            foreach (int id in saveData.PetIds)
+            {
+                PetData pet = petManager.Pets.Find(p => p.Id == id);
+                if (pet != null)
+                {
+                    pet.IsObtained = true;
+                    OwnedPets.Add(pet);
+                }
+            }
+
+            Debug.Log($"✅ 플레이어 데이터 불러오기 완료! 보유 유물: {OwnedArtifacts.Count}, 보유 펫: {OwnedPets.Count}");
         }
 
         if (PlayerPrefs.HasKey("Coin"))
@@ -152,17 +187,19 @@ public class PlayerData : ScriptableObject
             Diamond = 0;
         }
     }
-
 }
 
-// ✅ 유물 ID 저장을 위한 데이터 구조
+// ✅ 유물 & 펫 ID 저장을 위한 데이터 구조
 [System.Serializable]
-public class ArtifactSaveData
+public class PlayerSaveData
 {
-    public List<int> Ids;
-    public ArtifactSaveData(List<int> ids)
+    public List<int> ArtifactIds;
+    public List<int> PetIds;
+
+    public PlayerSaveData(List<int> artifactIds, List<int> petIds)
     {
-        Ids = ids;
+        ArtifactIds = artifactIds;
+        PetIds = petIds;
     }
 }
 
