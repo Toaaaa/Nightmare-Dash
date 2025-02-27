@@ -387,6 +387,8 @@ GameObject:
   - component: {fileID: 419476114}
   - component: {fileID: 419476113}
   - component: {fileID: 419476112}
+  - component: {fileID: 419476116}
+  - component: {fileID: 419476115}
   m_Layer: 0
   m_Name: DataManager
   m_TagString: Untagged
@@ -433,6 +435,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &419476115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419476111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8d141699c70f7946b9aeb86b9be05b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ArtifactImages: []
+--- !u!114 &419476116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419476111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f98b799991f8027478009444267f1943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Pets: []
 --- !u!1 &638684166
 GameObject:
   m_ObjectHideFlags: 0
