@@ -6,7 +6,7 @@ public class PlatformManager : MonoBehaviour
 {
     [SerializeField] GameSceneController sceneController;
     // 변수
-    [SerializeField] float speed = 8f; // 이동 속도 8에서 최대 12까지.
+    [SerializeField] float speed = 7f; // 이동 속도 7에서 최대 12까지.
     [SerializeField] bool isGameStart = false; // 게임 시작 여부
     [SerializeField]
     Vector2 spawnPoint = new Vector2(0, 0);// 플레이어 초기 생성 위치.
@@ -45,7 +45,7 @@ public class PlatformManager : MonoBehaviour
             StopGame();
             // 게임 오버 연출
         }
-
+#if UNITY_EDITOR
         // 테스트 코드
         if(Input.GetKeyDown(KeyCode.F1))
         {
@@ -59,6 +59,7 @@ public class PlatformManager : MonoBehaviour
         {
             ResetGame();
         }
+#endif
     }
 
     public void StartGame()
