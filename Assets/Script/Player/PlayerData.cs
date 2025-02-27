@@ -21,10 +21,30 @@ public class PlayerData : ScriptableObject
     [Header("보유 유물 리스트")]
     public List<ArtifactData> OwnedArtifacts = new List<ArtifactData>();
 
+    // ✅ 업적 리스트 추가
+    [Header("업적 데이터")]
+    public List<string> UnlockedAchievements = new List<string>();
+
     // ✅ 총 능력치 반환 (기본 + 추가)
     public float GetTotalHp() => ori_MaxHp + add_MaxHp;
     public float GetTotalScoreValue() => ori_score + add_score;
     public float GetTotalInvincibleTime() => ori_InvincibleTime + add_InvincibleTime;
+
+    // ✅ 업적 해금
+    public void UnlockAchievement(string achievementName)
+    {
+        if (!UnlockedAchievements.Contains(achievementName))
+        {
+            UnlockedAchievements.Add(achievementName);
+            SavePlayerData();
+            Debug.Log($"🏆 업적 해금: {achievementName}");
+        }
+    }
+
+    public bool IsAchievementUnlocked(string achievementName)
+    {
+        return UnlockedAchievements.Contains(achievementName);
+    }
 
     // ✅ 유물 효과 적용
     private void ApplyArtifactEffect(ArtifactData artifact)
@@ -120,5 +140,16 @@ public class ArtifactSaveData
     public ArtifactSaveData(List<int> ids)
     {
         Ids = ids;
+    }
+}
+
+// ✅ 업적 저장용 구조체
+[System.Serializable]
+public class AchievementSaveData
+{
+    public List<string> Archiev;
+    public AchievementSaveData(List<string> archiev)
+    {
+        Archiev = archiev;
     }
 }
