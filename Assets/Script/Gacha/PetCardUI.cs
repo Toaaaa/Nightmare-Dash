@@ -11,18 +11,13 @@ public class PetCardUI : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        if (animator == null)
-        {
-            Debug.LogError("🚨 Animator가 할당되지 않았습니다! PetCardUI 오브젝트에 Animator 컴포넌트가 있는지 확인하세요.");
-        }
     }
 
-    // ✅ 펫 UI 설정 메서드
+    // 펫 UI 설정 메서드
     public void SetPetUI(PetData pet)
     {
         if (pet == null)
         {
-            Debug.LogError("🚨 SetPetUI()에서 pet가 null입니다!");
             return;
         }
 

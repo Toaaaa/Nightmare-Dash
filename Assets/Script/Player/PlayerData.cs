@@ -28,7 +28,7 @@ public class PlayerData : ScriptableObject
     [Header("보유 재화")]
     public long Diamond;
     public long Coin;
-    
+
     // ✅ 총 능력치 반환 (기본 + 추가)
     public float GetTotalHp() => ori_MaxHp + add_MaxHp;
     public float GetTotalScoreValue() => ori_score + add_score;
@@ -41,7 +41,6 @@ public class PlayerData : ScriptableObject
         {
             UnlockedAchievements.Add(achievementName);
             SavePlayerData();
-            Debug.Log($"🏆 업적 해금: {achievementName}");
         }
     }
 
@@ -56,8 +55,6 @@ public class PlayerData : ScriptableObject
         add_MaxHp += artifact.Effect.Hp;
         add_score += artifact.Effect.Currency;
         add_InvincibleTime += artifact.Effect.Invincibility;
-
-        Debug.Log($"🔹 유물 효과 적용: 체력 +{artifact.Effect.Hp}, 재화 배율 +{artifact.Effect.Currency}, 무적시간 +{artifact.Effect.Invincibility}");
     }
 
     // ✅ 유물 획득 및 적용
@@ -65,7 +62,6 @@ public class PlayerData : ScriptableObject
     {
         if (artifact == null)
         {
-            Debug.LogError("🚨 유물이 null입니다!");
             return;
         }
 
@@ -77,15 +73,12 @@ public class PlayerData : ScriptableObject
 
         OwnedArtifacts.Add(artifact);
         ApplyArtifactEffect(artifact);
-
-        Debug.Log($"✅ 유물 획득: {artifact.Name} → 효과 적용 완료!");
         SavePlayerData();
     }
 
     // ✅ 중복 유물 처리 (강화 시스템 추가 가능)
     private void HandleDuplicateArtifact(ArtifactData artifact)
     {
-        Debug.Log($"⚠️ 중복 유물 획득: {artifact.Name} → 추가 강화 또는 보상 지급 가능!");
         // 여기에 강화 시스템 로직 추가 가능 (예: 동일 유물 3개 모으면 등급 업)
     }
 
@@ -94,18 +87,15 @@ public class PlayerData : ScriptableObject
     {
         if (pet == null)
         {
-            Debug.LogError("🚨 펫 데이터가 null입니다!");
             return;
         }
 
         if (OwnedPets.Exists(p => p.Id == pet.Id))
         {
-            Debug.Log($"⚠️ 중복 펫 획득: {pet.PetName} → 추가 강화 가능!");
             return;
         }
 
         OwnedPets.Add(pet);
-        Debug.Log($"🎉 플레이어가 '{pet.PetName}' 펫을 획득했습니다!");
         SavePlayerData();
     }
 
@@ -117,8 +107,6 @@ public class PlayerData : ScriptableObject
         add_InvincibleTime = 0;
         OwnedArtifacts.Clear();
         OwnedPets.Clear(); // ✅ 펫도 초기화
-
-        Debug.Log("🔄 유물 & 펫 효과 초기화 완료!");
     }
 
     // ✅ 유물 & 펫 데이터 저장
@@ -165,8 +153,6 @@ public class PlayerData : ScriptableObject
                     OwnedPets.Add(pet);
                 }
             }
-
-            Debug.Log($"✅ 플레이어 데이터 불러오기 완료! 보유 유물: {OwnedArtifacts.Count}, 보유 펫: {OwnedPets.Count}");
         }
 
         if (PlayerPrefs.HasKey("Coin"))
