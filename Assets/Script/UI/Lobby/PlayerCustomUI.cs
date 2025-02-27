@@ -63,13 +63,6 @@ public class PlayerCustomUI : BaseUI
         relicTab.onClick.AddListener(() => ShowPanel(relicPanel, relicTab));
         closeButton.onClick.AddListener(CloseUI);
 
-        // 버튼 이벤트 설정
-        customizeButton.onClick.AddListener(OpenCustomizeUI);
-        achievementTab.onClick.AddListener(() => ShowPanel(achievementPanel, achievementTab));
-        petTab.onClick.AddListener(() => ShowPanel(petPanel, petTab));
-        relicTab.onClick.AddListener(() => ShowPanel(relicPanel, relicTab));
-        closeButton.onClick.AddListener(CloseUI);
-
         // 기본 패널 설정
         ShowPanel(achievementPanel, achievementTab);
 
@@ -141,12 +134,22 @@ public class PlayerCustomUI : BaseUI
         {
             GameObject newSlot = Instantiate(petslotPrefab, petSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
-            Image slotImage = newSlot.GetComponent<Image>();
-
-            slotText.text = pet.PetName;
+            if (slotText != null)
+                slotText.text = pet.PetName;
             slotText.color = pet.IsObtained ? Color.white : Color.gray; // 획득 여부에 따른 색상 변경
-            slotImage.color = pet.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f); slotImage.enabled = true;
+            Image slotImage = newSlot.GetComponent<Image>();
+            if (slotImage != null)
+            {
+                slotImage.color = Color.white;
+                slotImage.enabled = true;
+                slotImage.color = pet.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
 
+            }
+            Button slotButton = newSlot.GetComponent<Button>();
+            if (slotButton != null)
+                slotButton.onClick.AddListener(() => ShowDescription(pet.PetName)); slotButton.enabled = true;
+
+            // 설명 표시 이벤트 추가
             newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(pet.PetName));
         }
     }
@@ -171,13 +174,21 @@ public class PlayerCustomUI : BaseUI
         {
             GameObject newSlot = Instantiate(relicslotPrefab, relicSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
+            if (slotText != null)
+                slotText.text = artifact.Name;
+            slotText.color = artifact.IsObtained ? Color.black : Color.gray; // 획득 여부에 따른 색상 변경
             Image slotImage = newSlot.GetComponent<Image>();
-
-            // UI 설정
-            slotText.text = artifact.Name;
-            
-            slotText.color = Color.white;  // 플레이어가 보유한 유물이므로 항상 흰색
-            slotImage.color = new Color(1, 1, 1, 1f); // 불투명
+            if (slotImage != null)
+            {
+                slotImage.color = Color.white;
+                slotImage.enabled = true;
+                slotImage.color = artifact.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
+            }
+            Sprite slotSprite = newSlot.GetComponent<Sprite>();
+                slotImage.sprite = slotSprite;
+            Button slotButton = newSlot.GetComponent<Button>();
+            if (slotButton != null)
+                slotButton.onClick.AddListener(() => ShowDescription(artifact.Name)); slotButton.enabled = true;
 
             // 설명 표시 이벤트 추가
             newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(artifact.Name));

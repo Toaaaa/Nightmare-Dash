@@ -26,23 +26,7 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        // ✅ ArtifactManager 찾기
-        if (ArtifactManager == null)
-        {
-            ArtifactManager = FindObjectOfType<Artifacts>();  // 씬에서 자동으로 찾기
-            if (ArtifactManager == null)
-            {
-                Debug.LogError("🚨 ArtifactManager를 찾을 수 없습니다! 씬에 존재하는지 확인하세요.");
-                return;
-            }
-        }
-
-        // ✅ ArtifactsList가 null인지 확인
-        if (ArtifactManager.ArtifactsList == null)
-        {
-            Debug.LogError("🚨 ArtifactManager.ArtifactsList가 null입니다! 초기화가 필요합니다.");
-            ArtifactManager.ArtifactsList = new List<ArtifactData>(); // 초기화
-        }
+       
         InitializePetData();
         InitializeArtifactData();
     }
