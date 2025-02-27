@@ -89,11 +89,11 @@ public class PlayerCustomUI : BaseUI
             GameObject newSlot = Instantiate(slotPrefab, slotContainer); // 프리팹 인스턴스
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();//텍스트메시프로만 가져옴
             if (slotText != null)
-                slotText.text = achievement.Description;
+                slotText.text = achievement.Name;
                 
             Button slotButton = newSlot.GetComponent<Button>();
             if (slotButton != null) 
-                slotButton.onClick.AddListener(() => ShowDescription(achievement.Name)); slotButton.enabled = true;
+                slotButton.onClick.AddListener(() => ShowDescription(achievement.Description)); slotButton.enabled = true;
 
 
             Image slotImage = newSlot.GetComponent<Image>();
