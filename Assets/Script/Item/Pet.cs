@@ -30,7 +30,6 @@ public class Pet : MonoBehaviour
         if (Pets == null)
         {
             Pets = new List<PetData>();
-            Debug.LogWarning("⚠️ Pets 리스트가 null이어서 초기화됨.");
         }
     }
 
@@ -41,14 +40,11 @@ public class Pet : MonoBehaviour
 
         if (PetImages == null || PetImages.Length == 0)
         {
-            Debug.LogError("🚨 펫 이미지가 로드되지 않았습니다! Resources/Pets/ 폴더를 확인하세요.");
             return;
         }
 
         // ✅ 이미지 이름 기준으로 정렬 (Pets_1, Pets_2 순서대로)
         Array.Sort(PetImages, (a, b) => a.name.CompareTo(b.name));
-
-        Debug.Log($"📂 로드된 펫 이미지 개수: {PetImages.Length}");
 
         // ✅ 펫 데이터 초기화
         InitializePets();
@@ -59,7 +55,6 @@ public class Pet : MonoBehaviour
         if (Pets == null)
         {
             Pets = new List<PetData>();
-            Debug.LogWarning("⚠️ Pets 리스트가 null이어서 다시 초기화됨.");
         }
 
         Pets.Clear(); // ✅ 기존 데이터 제거 후 새로 추가
@@ -71,7 +66,6 @@ public class Pet : MonoBehaviour
         Pets.Add(new PetData { Id = 5, PetName = "녹색 개구리 1", PetDescription = "작은 녹색 개구리", IsObtained = false, PetImage = GetPetImage(4) });
         Pets.Add(new PetData { Id = 6, PetName = "녹색 개구리 2", PetDescription = "큰 녹색 개구리", IsObtained = false, PetImage = GetPetImage(5) });
 
-        Debug.Log($"✅ PetManager 초기화 완료! 총 {Pets.Count}개의 펫이 로드됨.");
     }
 
     // ✅ 펫 이미지 가져오기 (배열 크기를 넘어가면 null 반환)
@@ -81,7 +75,6 @@ public class Pet : MonoBehaviour
         {
             return PetImages[index];
         }
-        Debug.LogWarning($"⚠️ PetImages[{index}]를 찾을 수 없습니다. null로 설정됨.");
         return null;
     }
 }

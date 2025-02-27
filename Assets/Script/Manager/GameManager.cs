@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
             dataManager = FindObjectOfType<DataManager>();
             if (dataManager == null)
             {
-                Debug.LogError("🚨 DataManager를 찾을 수 없습니다!");
+                return;
             }
         }
         else
@@ -37,32 +37,29 @@ public class GameManager : MonoBehaviour
     {
         if (playerData == null)
         {
-            Debug.LogWarning("⚠️ PlayerData가 null입니다. Resources에서 다시 로드합니다.");
             playerData = Resources.Load<PlayerData>("PlayerData");
         }
 
         if (playerData == null)
         {
-            Debug.LogError("🚨 PlayerData를 불러오지 못했습니다! Resources 폴더를 확인하세요.");
+            return;
         }
         else
         {
-            Debug.Log("✅ PlayerData 로드 성공!");
             Artifacts artifactManager = FindObjectOfType<Artifacts>();
             Pet petManager = FindObjectOfType<Pet>(); // ✅ 펫 데이터 로드 추가
 
             if (artifactManager == null)
             {
-                Debug.LogError("🚨 Artifacts Manager를 찾을 수 없습니다!");
+                return;
             }
             else if (petManager == null)
             {
-                Debug.LogError("🚨 Pet Manager를 찾을 수 없습니다!");
+                return;
             }
             else
             {
                 playerData.LoadPlayerData(artifactManager, petManager);
-                Debug.Log("✅ 플레이어 데이터 불러오기 완료!");
             }
         }
     }
@@ -76,7 +73,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("🚨 DataManager 인스턴스가 설정되지 않았습니다!");
+            return;
         }
     }
 
@@ -89,7 +86,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("🚨 DataManager 인스턴스가 설정되지 않았습니다!");
+            return;
         }
     }
 
@@ -98,14 +95,11 @@ public class GameManager : MonoBehaviour
     {
         if (playerData == null)
         {
-            Debug.LogError("🚨 PlayerData가 없습니다!");
             return;
         }
 
-        Debug.Log($"🎒 플레이어가 보유한 유물 개수: {playerData.OwnedArtifacts.Count}");
         foreach (var artifact in playerData.OwnedArtifacts)
         {
-            Debug.Log($"🔹 유물: {artifact.Name} (효과: {artifact.GetEffectDescription()})");
         }
     }
 
@@ -114,14 +108,11 @@ public class GameManager : MonoBehaviour
     {
         if (playerData == null)
         {
-            Debug.LogError("🚨 PlayerData가 없습니다!");
             return;
         }
 
-        Debug.Log($"🐾 플레이어가 보유한 펫 개수: {playerData.OwnedPets.Count}");
         foreach (var pet in playerData.OwnedPets)
         {
-            Debug.Log($"🐶 펫: {pet.PetName} (설명: {pet.PetDescription})");
         }
     }
 
@@ -130,11 +121,9 @@ public class GameManager : MonoBehaviour
     {
         if (playerData == null)
         {
-            Debug.LogError("🚨 PlayerData가 없습니다! 저장할 수 없습니다.");
             return;
         }
 
         playerData.SavePlayerData();
-        Debug.Log("✅ 플레이어 데이터 저장 완료!");
     }
 }

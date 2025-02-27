@@ -1,32 +1,38 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PetSelect : MonoBehaviour
 {
-    public List<PetData> petList;
+    public List<PetData> petList;  // 펫 데이터 리스트
 
     private void Start()
     {
-        InitializePetList();
+        // 초기화
+        StartCoroutine(WaitForPetManager());
     }
 
-    private void InitializePetList()
+    // PetManager가 로드될 때까지 대기
+    private IEnumerator WaitForPetManager()
     {
-        Pet petManager = FindObjectOfType<Pet>();
-        if (petManager == null)
+        while (FindObjectOfType<Pet>() == null)
         {
-            Debug.LogError("🚨 PetManager를 찾을 수 없습니다!");
-            return;
+            yield return null;
         }
 
-        petList = petManager.Pets;
+        Pet petManager = FindObjectOfType<Pet>();
+        if (petManager != null)
+        {
+            petList = petManager.Pets;
+        }
+
     }
 
+    // 랜덤 펫 선택
     public PetData GetRandomPet()
     {
-        if (petList == null || petList.Count == 0)
+        if (petList.Count == 0)
         {
-            Debug.LogError("🚨 펫 리스트가 비어 있습니다!");
             return null;
         }
 

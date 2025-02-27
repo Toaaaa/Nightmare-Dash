@@ -26,8 +26,6 @@ public class GachaTabManager : MonoBehaviour
 
         // ✅ ArtifactBtn을 맨 위로 올리기
         artifactBtn.transform.SetAsLastSibling();
-
-        Debug.Log("🔹 유물 가챠 화면 활성화 (ArtifactBtn이 위로 이동)");
     }
 
     // 펫 가챠 활성화, 유물 가챠 비활성화
@@ -38,7 +36,5 @@ public class GachaTabManager : MonoBehaviour
 
         // ✅ PetBtn을 맨 위로 올리기
         petBtn.transform.SetAsLastSibling();
-
-        Debug.Log("🔹 펫 가챠 화면 활성화 (PetBtn이 위로 이동)");
     }
 }
