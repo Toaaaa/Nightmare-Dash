@@ -24,6 +24,7 @@ public class AchievementManager : MonoBehaviour
         }
 
         InitializeAchievements();
+        LoadAchievements();
     }
 
     private void InitializeAchievements()
@@ -52,6 +53,29 @@ public class AchievementManager : MonoBehaviour
             ach.IsUnlocked = true;
             OnAchievementUnlocked?.Invoke(ach.Name); // UI 업데이트 호출
             Debug.Log($" 업적 달성: {name}");
+            SaveAchievements();
+        }
+    }
+
+    // 🔹 업적 저장
+    private void SaveAchievements()
+    {
+        foreach (var achievement in achievements)
+        {
+            PlayerPrefs.SetInt($"Achievement_{achievement.Name}", achievement.IsUnlocked ? 1 : 0);
+        }
+        PlayerPrefs.Save();
+    }
+
+    // 🔹 업적 불러오기
+    private void LoadAchievements()
+    {
+        foreach (var achievement in achievements)
+        {
+            if (PlayerPrefs.HasKey($"Achievement_{achievement.Name}"))
+            {
+                achievement.IsUnlocked = PlayerPrefs.GetInt($"Achievement_{achievement.Name}") == 1;
+            }
         }
     }
 }
