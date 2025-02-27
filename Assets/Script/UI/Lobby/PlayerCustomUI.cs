@@ -40,7 +40,7 @@ public class PlayerCustomUI : BaseUI
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        
+        GameManager.instance.LoadPlayerData();
     }
     private void Start()
     {
@@ -68,6 +68,8 @@ public class PlayerCustomUI : BaseUI
 
         LoadArtifactSlots();
     }
+
+
     public void UpdateAchievementUI(string achievementName = null)
     {
         // 기존 슬롯 삭제
