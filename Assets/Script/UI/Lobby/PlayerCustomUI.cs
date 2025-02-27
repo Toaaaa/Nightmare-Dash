@@ -69,7 +69,7 @@ public class PlayerCustomUI : BaseUI
         // 기본 패널 설정
         ShowPanel(achievementPanel, achievementTab);
 
-        LoadArtifactSlots();
+        
     }
    
 
@@ -212,14 +212,6 @@ public class PlayerCustomUI : BaseUI
         else descriptionText.text = itemName;
         descriptionText.DOFade(0, 0);  // 투명하게 초기화
         descriptionText.DOFade(1, 0.3f); // 점점 나타나는 효과
-
-       /* if (previewimg != null)
-        {
-            previewimg.sprite = spriteImg;
-            previewimg.color = new Color(1, 1, 1, 1); // 투명도를 초기화 (이미지 표시)
-        }
-        previewimg.DOFade(0, 0);
-        previewimg.DOFade(1, 0.3f);*/
 
     }
 

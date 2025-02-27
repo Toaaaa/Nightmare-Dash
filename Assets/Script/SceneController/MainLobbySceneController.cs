@@ -24,6 +24,7 @@ public class MainLobbySceneController : SceneBase
         if (playerCustomUI != null)
         {
             playerCustomUI.LoadArtifactSlots();
+            playerCustomUI.LoadPetSlots();
         }
         else
         {
