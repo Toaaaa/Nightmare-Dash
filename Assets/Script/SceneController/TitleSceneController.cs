@@ -22,4 +22,13 @@ public class TitleSceneController : SceneBase
             LoadScene("Tutorial");
         }
     }
+
+    public void OnClickExit()
+    {
+        Application.Quit();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+    }
 }

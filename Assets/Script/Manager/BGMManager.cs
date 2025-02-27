@@ -10,6 +10,7 @@ public class BGMManager : MonoBehaviour
 
     public AudioClip titleAndLobbyBGM;
     public AudioClip gameBGM;
+    public AudioClip gachaBGM;
 
     void Awake()
     {
@@ -77,6 +78,15 @@ public class BGMManager : MonoBehaviour
                 PlayBGM(titleAndLobbyBGM);
             }
         }
+
+        else if (sceneName == "Gacha")
+        {
+            if(audioSource.clip != gachaBGM)
+            {
+                PlayBGM(gachaBGM);
+            }
+        }
+
         else
         {
 

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 147214285479252444, guid: c31125446c7821747bcd3e860067f379, type: 3}
       propertyPath: m_Name
-      value: CommonButton
+      value: LobbyButton
       objectReference: {fileID: 0}
     - target: {fileID: 1708891020691705932, guid: c31125446c7821747bcd3e860067f379, type: 3}
       propertyPath: m_Pivot.x

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 public class Player : MonoBehaviour
 {
@@ -21,10 +22,11 @@ public class Player : MonoBehaviour
     [SerializeField]float maxHp = 100f;
     float currentHp;
     float invincibleTime; // 무적 시간
+    bool isInvincible = false;
+    int jumpCount = 0;
     float scoreValue; // 점수 획득 배율
 
     // 이동 및 게임 플레이 관련 변수
-    int jumpCount = 0;
     float slopeSpeed = 1.2f; // 경사면 속도
     bool isOnSlope = false;// 경사면 위에 있는지
     bool isOnGround = false;// 지면 위에 있는지
@@ -86,7 +88,7 @@ public class Player : MonoBehaviour
     {
         if (isOnSlope)
         {
-            rb.velocity = new Vector2(slopeSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(slopeSpeed, rb.velocity.y);// 경사면 이동 보정
         }
     }
 
@@ -116,6 +118,8 @@ public class Player : MonoBehaviour
         maxHp = playerData.GetTotalHp();
         invincibleTime = playerData.GetTotalInvincibleTime();
         scoreValue = playerData.GetTotalScoreValue();
+        isInvincible = false;
+        maxJumps = 2;
         fall = false;
         isDead = false;
         coyoteTimeCounter = coyoteTime;
@@ -128,7 +132,39 @@ public class Player : MonoBehaviour
         animator.ResetTrigger("Jump");
         animator.ResetTrigger("DoubleJump");
         animator.SetBool("isFirstEnter", false);
+    }// 게임 재시작시 플레이어 초기화
+
+    // 아이템 획득시 효과 적용
+    public void Heal(float heal)
+    {
+        currentHp += heal;
+        if(currentHp > maxHp)
+        {
+            currentHp = maxHp;
+        }
+    }// 회복 아이템 획득시 체력 회복
+    public async void Invinsible()
+    {
+        await InvinsibleSet();
+    }// 무적 아이템 획득시 무적 상태로 전환
+    async UniTask InvinsibleSet()
+    {
+        isInvincible = true;
+        await UniTask.Delay((int)invincibleTime * 1000);
+        isInvincible = false;
     }
+    public async void TripleJumpActivate()// 5초간 3단 점프 활성화
+    {
+        await TripleJumpSet();
+    }
+    async UniTask TripleJumpSet()
+    {
+        maxJumps = 3;
+        await UniTask.Delay(5000);
+        maxJumps = 2;
+    }
+
+    // 기타 플레이어 상태 설정
     public void SetFall()// 낙하로 인한 사망
     {
         fall = true;
@@ -171,6 +207,7 @@ public class Player : MonoBehaviour
     }
     public void GetDmg(int dmg)
     {
+        if(isInvincible) return;// 무적 상태일때는 데미지를 받지 않음
         // 피격시 깜빡임
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         Color originalColor = spriteRenderer.color;
@@ -187,7 +224,7 @@ public class Player : MonoBehaviour
         float hppercent = currentHp / maxHp;
         GameSceneController gc = SceneBase.Current as GameSceneController;
         gc.uiController.hpBar.GetDmg(hppercent);// 데미지 받을시 hp바 갱신
-    }
+    }// 데미지 연산
 
     void CheckIsDead()
     {
@@ -234,6 +271,10 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Hill"))
         {
             isOnSlope = true;
+        }
+        if(collision.TryGetComponent<RunningItem>(out var item))
+        {
+            item.ApplyItemEffect(this);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)

@@ -235,6 +235,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grid
       objectReference: {fileID: 0}
+    - target: {fileID: 1331702422322069946, guid: 1beedf149aafcd44fb427184489b786f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.96
+      objectReference: {fileID: 0}
     - target: {fileID: 3787636810438418347, guid: 1beedf149aafcd44fb427184489b786f, type: 3}
       propertyPath: m_Size.x
       value: 433
@@ -21192,7 +21196,6 @@ MonoBehaviour:
   player: {fileID: 394776107}
   mapGrid: {fileID: 4164133810485595321}
   points: []
-  runningItems: []
 --- !u!4 &999454207
 Transform:
   m_ObjectHideFlags: 0
