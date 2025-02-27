@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] BoxCollider2D hitbox; // 피격 판정
     [SerializeField] Animator playerFX; // 플레이어 이펙트
     [SerializeField]float maxHp = 100f;
+    [SerializeField] SpriteRenderer petImage;
     float currentHp;
     float invincibleTime; // 무적 시간
     bool isInvincible = false;
@@ -114,6 +115,12 @@ public class Player : MonoBehaviour
     {
         animator.SetBool("isRunning", false);
         animator.SetBool("isSliding", true);
+    }
+
+    public void SetPetImage(Sprite sprite)
+    {
+        petImage.gameObject.SetActive(true);
+        petImage.sprite = sprite;
     }
 
     public void ResetP()

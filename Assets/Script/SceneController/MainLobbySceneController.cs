@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MainLobbySceneController : SceneBase
 {
+
+    public PetData EquipPetImage = null;
+
     protected override void OnStart(object data)
     {
         base.OnStart(data);
@@ -20,5 +23,15 @@ public class MainLobbySceneController : SceneBase
         {
             Debug.LogWarning("PlayerCustomUI가 씬에 존재하지 않습니다.");
         }
+    }
+
+    public void PlayGame()
+    {
+        if (EquipPetImage == null)
+        {
+            Debug.Log("펫 이미지를 설정해주세요!");
+            return;
+        }
+        LoadScene("Game", EquipPetImage);
     }
 }

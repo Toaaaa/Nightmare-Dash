@@ -279,6 +279,8 @@ public class PlayerCustomUI : BaseUI
         //펫을 플레이어 하위 오브젝트로 소환
         SpawnPet(pet.PetImage);
 
+        (SceneBase.Current as MainLobbySceneController).EquipPetImage = pet;
+
         Debug.Log($"펫 장착됨: {pet.PetName}");
     }
 
