@@ -16,6 +16,8 @@ public class Coin
 
     public Action<long> OnChangedCoinAmountEvent = delegate { };
 
+    private long exchangePrice = 10;
+
     //코인 획득
     public void Add(long amount)
     {
@@ -40,4 +42,24 @@ public class Coin
         return Current - amount >= 0;
     }
 
+    //교환할수있는지 판단
+    public bool IsExchange()
+    {
+        return Current != 0 && Current % exchangePrice == 0;
+    }
+
+    //교환 가능한 다이아몬드 반환
+    public long GetExchangedDiamondAmount()
+    {
+        if (IsExchange())
+        {
+            long exchangedDiamond = Current / exchangePrice; //교환된 다이아
+            Current %= exchangePrice;
+            Use(exchangedDiamond * exchangePrice); // 코인사용
+            long currentdiamond = exchangedDiamond * exchangePrice;
+            DataManager.Instance.Diamond.Add(exchangedDiamond);
+            return exchangedDiamond;
+        }
+        return 0;
+    }
 }

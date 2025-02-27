@@ -34,6 +34,7 @@ public class PlayerCustomUI : BaseUI
 
     [Header("Description")]
     [SerializeField] private TMP_Text descriptionText;
+    [SerializeField] private Image previewimg;
 
     public static PlayerCustomUI Instance { get; private set; }
     private void Awake()
@@ -41,6 +42,8 @@ public class PlayerCustomUI : BaseUI
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         GameManager.instance.LoadPlayerData();
+
+
     }
     private void Start()
     {
@@ -66,8 +69,9 @@ public class PlayerCustomUI : BaseUI
         // 기본 패널 설정
         ShowPanel(achievementPanel, achievementTab);
 
-        LoadArtifactSlots();
+        
     }
+   
 
 
     public void UpdateAchievementUI(string achievementName = null)
@@ -89,7 +93,7 @@ public class PlayerCustomUI : BaseUI
                 
             Button slotButton = newSlot.GetComponent<Button>();
             if (slotButton != null) 
-                slotButton.onClick.AddListener(() => ShowDescription(achievement.Name)); slotButton.enabled = true;
+                slotButton.onClick.AddListener(() => ShowDescription(achievement.Description)); slotButton.enabled = true;
 
 
             Image slotImage = newSlot.GetComponent<Image>();
@@ -168,12 +172,14 @@ public class PlayerCustomUI : BaseUI
 
         // 기존 슬롯 삭제
         foreach (Transform child in relicSlotContainer) Destroy(child.gameObject);
+       
         // 플레이어가 보유한 유물 리스트 가져오기
         List<ArtifactData> ownedArtifacts = GameManager.instance.playerData.OwnedArtifacts;
         Debug.Log($"OwnedArtifacts 개수: {ownedArtifacts.Count}");
         // 유물 슬롯 생성
         foreach (var artifact in ownedArtifacts)
         {
+            Debug.Log("슬롯 생성");
             GameObject newSlot = Instantiate(relicslotPrefab, relicSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
             if (slotText != null)
@@ -184,7 +190,7 @@ public class PlayerCustomUI : BaseUI
             if (slotImage != null)
             {
                 slotImage.sprite = artifact.ArtifactImage;
-
+                
                 slotbackgroundimg.color = Color.white;
                 slotbackgroundimg.enabled = true;
                 slotImage.enabled = true;
@@ -201,9 +207,12 @@ public class PlayerCustomUI : BaseUI
     }
     private void ShowDescription(string itemName)
     {
-        descriptionText.text = $"{itemName} 설명을 여기에 표시";
+        if (string.IsNullOrEmpty(itemName))
+            descriptionText.text = "설명을 여기에 표시";
+        else descriptionText.text = itemName;
         descriptionText.DOFade(0, 0);  // 투명하게 초기화
         descriptionText.DOFade(1, 0.3f); // 점점 나타나는 효과
+
     }
 
     private void CloseUI()
