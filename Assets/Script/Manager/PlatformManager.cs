@@ -17,15 +17,20 @@ public class PlatformManager : MonoBehaviour
     [SerializeField] Player player; // 플레이어
     [SerializeField] Transform mapGrid; // 맵 타일
     [SerializeField] List<Point> points;  // 코인
-
-    // 데이터 베이스
     [SerializeField] List<RunningItem> runningItems; // 피격시 사용되는 아이템 리스트
 
     private void Awake()
     {
         //spawnPoint = sceneController.GetPlayerPos();// 플레이어 초기 생성 위치.
         gridPoint = mapGrid.position; // 맵 타일 초기 위치.
-
+        runningItems = new List<RunningItem>();
+        foreach(var item in FindObjectsOfType<MonoBehaviour>())
+        {
+            if(item is RunningItem)
+            {
+                runningItems.Add(item as RunningItem);
+            }
+        }
     }
     void Update()
     {
@@ -71,6 +76,7 @@ public class PlatformManager : MonoBehaviour
         sceneController.ResetPlayer();// 플레이어 상태 초기화
         mapGrid.position = gridPoint; // 맵 타일 위치 초기화
         points.ForEach(p => p.PointAnimReset());// 코인 애니메이션 초기화
+        runningItems.ForEach(item => item.ResetItemAnim());// 아이템 애니메이션 초기화
     }
     public void StopGame()
     {
