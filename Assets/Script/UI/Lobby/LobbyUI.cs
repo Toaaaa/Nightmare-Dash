@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class LobbyUI : BaseUI
 {
+
     [SerializeField] private Button lobbyButton; // ✅ 로비 이동 버튼 추가
 
     private void Start()
