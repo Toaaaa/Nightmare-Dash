@@ -67,6 +67,7 @@ public class GameSceneController : SceneBase
     {
         if (current == 0)
         {
+            DataManager.Instance.Coin.Add((long)score);
             IsFinishGame = true;
         }
     }
