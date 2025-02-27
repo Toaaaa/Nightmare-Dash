@@ -10,8 +10,8 @@ public class CurrencyUI : MonoBehaviour
 
     private void Start()
     {
-        playerCoin = new Coin();
-        playerDiamond = new Diamond();
+        playerCoin = DataManager.Instance.Coin;
+        playerDiamond = DataManager.Instance.Diamond;
 
         // UI 업데이트 이벤트 등록
         playerCoin.OnChangedCoinAmountEvent += UpdateCoinUI;
