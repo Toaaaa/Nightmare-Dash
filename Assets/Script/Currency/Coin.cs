@@ -45,7 +45,7 @@ public class Coin
     //교환할수있는지 판단
     public bool IsExchange()
     {
-        return Current != 0 && Current % exchangePrice == 0;
+        return Current >= exchangePrice;
     }
 
     //교환 가능한 다이아몬드 반환

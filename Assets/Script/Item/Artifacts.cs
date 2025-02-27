@@ -62,16 +62,8 @@ public class Artifacts : MonoBehaviour
         // ✅ 이미지 이름 기준으로 정렬 (Artifacts_1, Artifacts_2 순서대로)
         Array.Sort(ArtifactImages, (a, b) => a.name.CompareTo(b.name));
 
-        Debug.Log($"📂 로드된 유물 이미지 개수: {ArtifactImages.Length}");
-
         // ✅ 유물 데이터 초기화
         InitializeArtifacts();
-
-        // ✅ 유물 출력 (디버깅용)
-        foreach (var artifact in ArtifactsList)
-        {
-            Debug.Log($"Artifact ID: {artifact.Id}, Name: {artifact.Name}, Rarity: {artifact.Rarity}, Obtained: {artifact.IsObtained}, Image: {artifact.ArtifactImage?.name}");
-        }
     }
 
     // ✅ 유물 데이터 초기화 메서드
@@ -102,12 +94,9 @@ public class Artifacts : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"⚠️ ArtifactsList[{i}] ({ArtifactsList[i].Name})에 대한 이미지 ({expectedImageName})를 찾을 수 없습니다.");
                 ArtifactsList[i].ArtifactImage = null;
             }
         }
-
-        Debug.Log($"✅ 유물 데이터 초기화 완료! 총 유물 개수: {ArtifactsList.Count}");
     }
 
     // ✅ 랜덤으로 유물 하나를 뽑는 메서드
