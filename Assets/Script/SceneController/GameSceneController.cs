@@ -41,6 +41,7 @@ public class GameSceneController : SceneBase
     public Hp GameHp { get; set; } = new();
 
     public InGameUIController uiController;
+    public InGameAchievement inGameAchievement;
     [SerializeField] Player player;
 
     private void Update()
@@ -51,9 +52,8 @@ public class GameSceneController : SceneBase
     protected override void OnStart(object data)
     {
         base.OnStart(data);
-
         GameHp.OnChangedHpAmountEvent += FinishGame;
-
+        inGameAchievement.SetGameStart();// 인게임 업적 체킹 시작.
         GameHp.SetHp(100);
         uiController.Initialize();
     }
