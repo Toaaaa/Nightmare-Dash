@@ -9,6 +9,7 @@ TagManager:
   - UnderGround
   - Hill
   - TutorialZone
+  - RunningItem
   layers:
   - Default
   - TransparentFX

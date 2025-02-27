@@ -43,14 +43,18 @@ public class GameSceneController : SceneBase
     public InGameUIController uiController;
     [SerializeField] Player player;
 
+    private void Update()
+    {
+        GameHp.UpdateHp(player.GetCurrentHp());
+    }
+
     protected override void OnStart(object data)
     {
         base.OnStart(data);
 
-        //체력 설정
-        GameHp.SetHp(100);
         GameHp.OnChangedHpAmountEvent += FinishGame;
 
+        GameHp.SetHp(100);
         uiController.Initialize();
     }
 
@@ -63,6 +67,7 @@ public class GameSceneController : SceneBase
     {
         if (current == 0)
         {
+            DataManager.Instance.Coin.Add((long)score);
             IsFinishGame = true;
         }
     }

@@ -50,6 +50,10 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            currentHp = 10;
+        }
         CheckIsDead();
         AdjustGravity();
         if (!isDead)
@@ -271,10 +275,6 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Hill"))
         {
             isOnSlope = true;
-        }
-        if(collision.TryGetComponent<RunningItem>(out var item))
-        {
-            item.ApplyItemEffect(this);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
