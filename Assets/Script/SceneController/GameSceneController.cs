@@ -43,6 +43,11 @@ public class GameSceneController : SceneBase
     public InGameUIController uiController;
     [SerializeField] Player player;
 
+    private void Update()
+    {
+        GameHp.SetHp(player.GetCurrentHp());
+    }
+
     protected override void OnStart(object data)
     {
         base.OnStart(data);
