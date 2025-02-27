@@ -45,17 +45,16 @@ public class GameSceneController : SceneBase
 
     private void Update()
     {
-        GameHp.SetHp(player.GetCurrentHp());
+        GameHp.UpdateHp(player.GetCurrentHp());
     }
 
     protected override void OnStart(object data)
     {
         base.OnStart(data);
 
-        //체력 설정
-        GameHp.SetHp(100);
         GameHp.OnChangedHpAmountEvent += FinishGame;
 
+        GameHp.SetHp(100);
         uiController.Initialize();
     }
 
