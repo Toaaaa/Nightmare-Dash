@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 147214285479252444, guid: dce1edb0c29eb834087554f8ab7ec6d5, type: 3}
       propertyPath: m_Name
-      value: Slot
+      value: Slot Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1708891020691705932, guid: dce1edb0c29eb834087554f8ab7ec6d5, type: 3}
       propertyPath: m_Pivot.x
@@ -91,6 +91,14 @@ PrefabInstance:
     - target: {fileID: 1708891020691705932, guid: dce1edb0c29eb834087554f8ab7ec6d5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2685509515663911134, guid: dce1edb0c29eb834087554f8ab7ec6d5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915015275878528508, guid: dce1edb0c29eb834087554f8ab7ec6d5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

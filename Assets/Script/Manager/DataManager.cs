@@ -26,6 +26,21 @@ public class DataManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+
+        PetManager = FindObjectOfType<Pet>(); // 🎯 PetManager를 자동으로 찾음
+            if (PetManager == null)
+            {
+                return;
+            }
+        ArtifactManager = FindObjectOfType<Artifacts>(); // 🎯 ArtifactManager도 자동 할당
+            if (ArtifactManager == null)
+            {
+                return ;
+            }
+
+        InitializePetData();
+        InitializeArtifactData();
     }
 
     public void InitializePetData()
@@ -33,6 +48,7 @@ public class DataManager : MonoBehaviour
         if (PetManager == null || PetManager.Pets == null)
         {
             Debug.LogError("🚨 PetManager 또는 PetManager.Pets가 null입니다! 펫 데이터를 올바르게 설정하세요.");
+            PetManager = FindObjectOfType<Pet>();
             return;
         }
 
