@@ -121,9 +121,10 @@ public class Player : MonoBehaviour
         coyoteTimeCounter = coyoteTime;
         //Hp바 초기화
         GameSceneController gc = SceneBase.Current as GameSceneController;
-        gc.uiController.hpBar.GetDmg(0);// 추락시 hp바 0으로 갱신
+        gc.uiController.hpBar.UpdateHpBar(100);
         //애니메이션 리셋
         animator.SetBool("isSliding", false);
+        animator.SetTrigger("SetAlive");
         animator.ResetTrigger("Jump");
         animator.ResetTrigger("DoubleJump");
         animator.SetBool("isFirstEnter", false);
@@ -178,7 +179,11 @@ public class Player : MonoBehaviour
 
     void CheckIsDead()
     {
-        isDead =  currentHp <= 0 ? true : false;
+        if(!isDead && currentHp <= 0) // 체력이 0이 되는 순간.
+        {
+            isDead = true;
+            animator.SetTrigger("Die");
+        }
     }
     void AdjustGravity()
     {

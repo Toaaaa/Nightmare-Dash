@@ -21184,7 +21184,7 @@ MonoBehaviour:
   sceneController: {fileID: 1026337353}
   speed: 7
   isGameStart: 0
-  spawnPoint: {x: 0, y: 0}
+  spawnPoint: {x: -5.5, y: -1.87}
   player: {fileID: 394776107}
   mapGrid: {fileID: 4164133810485595321}
   points: []
