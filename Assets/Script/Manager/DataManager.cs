@@ -4,7 +4,8 @@ using UnityEngine;
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance { get; private set; }
-    // 펫 데이터 관리용 Dictionary
+
+    // ✅ 펫 & 유물 데이터 관리용 Dictionary
     private Dictionary<int, PetData> petDictionary = new Dictionary<int, PetData>();
     private Dictionary<int, ArtifactData> artifactDictionary = new Dictionary<int, ArtifactData>();
 
@@ -12,7 +13,6 @@ public class DataManager : MonoBehaviour
     public Artifacts ArtifactManager { get; set; }
 
     public Coin Coin = new();
-
     public Diamond Diamond = new();
 
     private void Awake()
@@ -27,17 +27,23 @@ public class DataManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        // ✅ PetManager 강제 찾기
+        PetManager = FindObjectOfType<Pet>();
+        if (PetManager == null)
+        {
+            Debug.LogError("🚨 PetManager를 찾을 수 없습니다! Pet 오브젝트가 Hierarchy에 존재하는지 확인하세요.");
+        }
+        else
+        {
+            Debug.Log($"✅ PetManager가 정상적으로 할당됨: {PetManager.name}");
+        }
 
-        PetManager = FindObjectOfType<Pet>(); // 🎯 PetManager를 자동으로 찾음
-            if (PetManager == null)
-            {
-                return;
-            }
-        ArtifactManager = FindObjectOfType<Artifacts>(); // 🎯 ArtifactManager도 자동 할당
-            if (ArtifactManager == null)
-            {
-                return ;
-            }
+        // ✅ ArtifactManager 강제 찾기
+        ArtifactManager = FindObjectOfType<Artifacts>();
+        if (ArtifactManager == null)
+        {
+            Debug.LogError("🚨 ArtifactManager를 찾을 수 없습니다!");
+        }
 
         InitializePetData();
         InitializeArtifactData();
@@ -45,11 +51,22 @@ public class DataManager : MonoBehaviour
 
     public void InitializePetData()
     {
-        if (PetManager == null || PetManager.Pets == null)
+        if (PetManager == null)
         {
-            Debug.LogError("🚨 PetManager 또는 PetManager.Pets가 null입니다! 펫 데이터를 올바르게 설정하세요.");
+            Debug.LogError("🚨 PetManager가 null입니다! PetManager를 찾을 수 없습니다.");
             PetManager = FindObjectOfType<Pet>();
-            return;
+
+            if (PetManager == null)
+            {
+                Debug.LogError("🚨 Pet 오브젝트가 씬에 없습니다! Hierarchy에 추가하세요.");
+                return;
+            }
+        }
+
+        if (PetManager.Pets == null)
+        {
+            Debug.LogWarning("⚠️ PetManager.Pets 리스트가 null이어서 강제 초기화합니다.");
+            PetManager.Pets = new List<PetData>();
         }
 
         foreach (var pet in PetManager.Pets)
@@ -75,7 +92,7 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        artifactDictionary.Clear(); // ✅ 기존 데이터를 클리어하여 중복 로드 방지
+        artifactDictionary.Clear(); // ✅ 기존 데이터 클리어
 
         foreach (var artifact in ArtifactManager.ArtifactsList)
         {
@@ -93,6 +110,7 @@ public class DataManager : MonoBehaviour
         Debug.Log($"✅ 유물 데이터 초기화 완료! 총 {artifactDictionary.Count}개의 유물 로드됨.");
     }
 
+    // ✅ 유물 획득 처리
     public void SetArtifactObtained(int artifactId, bool obtained)
     {
         if (artifactDictionary.Count == 0)
@@ -104,7 +122,7 @@ public class DataManager : MonoBehaviour
         if (artifactDictionary.TryGetValue(artifactId, out ArtifactData artifact))
         {
             artifact.IsObtained = obtained;
-            Debug.Log($"✅ Artifact with ID {artifactId} obtained status: {obtained}");
+            Debug.Log($"🎁 플레이어가 '{artifact.Name}' 유물을 획득했습니다!");
 
             ArtifactData artifactInList = ArtifactManager.ArtifactsList.Find(a => a.Id == artifactId);
             if (artifactInList != null)
@@ -112,7 +130,7 @@ public class DataManager : MonoBehaviour
                 artifactInList.IsObtained = obtained;
             }
 
-            if (obtained && !GameManager.instance.playerData.OwnedArtifacts.Exists(a => a.Id == artifactId))
+            if (obtained && GameManager.instance != null && !GameManager.instance.playerData.OwnedArtifacts.Exists(a => a.Id == artifactId))
             {
                 GameManager.instance.playerData.OwnedArtifacts.Add(artifact);
                 GameManager.instance.SavePlayerData();
@@ -121,6 +139,58 @@ public class DataManager : MonoBehaviour
         else
         {
             Debug.LogError($"🚨 Artifact ID {artifactId} not found");
+        }
+    }
+
+    // ✅ 펫 획득 처리
+    public void SetPetObtained(int petId, bool obtained)
+    {
+        if (PetManager == null)
+        {
+            Debug.LogError("🚨 PetManager가 null입니다! PetManager를 찾을 수 없습니다.");
+            return;
+        }
+
+        if (PetManager.Pets == null)
+        {
+            Debug.LogError("🚨 PetManager.Pets가 null입니다! PetManager의 Start()에서 Pets 리스트가 초기화되었는지 확인하세요.");
+            return;
+        }
+
+        if (petDictionary.Count == 0)
+        {
+            Debug.LogWarning("⚠️ petDictionary가 비어 있습니다. 다시 초기화합니다.");
+            InitializePetData();
+        }
+
+        if (!petDictionary.TryGetValue(petId, out PetData pet))
+        {
+            Debug.LogError($"🚨 Pet ID {petId} not found in petDictionary");
+            return;
+        }
+
+        pet.IsObtained = obtained;
+        Debug.Log($"🎁 플레이어가 '{pet.PetName}' 펫을 획득했습니다!");
+
+        PetData petInList = PetManager.Pets.Find(p => p.Id == petId);
+        if (petInList != null)
+        {
+            petInList.IsObtained = obtained;
+        }
+
+        // ✅ 중복 방지 후 플레이어 데이터에 추가
+        if (obtained && GameManager.instance != null)
+        {
+            if (!GameManager.instance.playerData.OwnedPets.Exists(p => p.Id == petId))
+            {
+                GameManager.instance.playerData.OwnedPets.Add(pet);
+                Debug.Log($"✅ '{pet.PetName}' 펫이 PlayerData에 추가됨!");
+                GameManager.instance.SavePlayerData(); // ✅ 데이터 저장
+            }
+            else
+            {
+                Debug.Log($"⚠️ '{pet.PetName}' 펫은 이미 보유 중입니다.");
+            }
         }
     }
 

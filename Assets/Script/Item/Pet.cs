@@ -8,79 +8,80 @@ public class PetData
     public int Id { get; set; }
     public string PetName { get; set; }
     public string PetDescription { get; set; }
-    public bool IsObtained { get; set; } // 펫을 얻었는지 여부
+    public bool IsObtained { get; set; }
+    public Sprite PetImage { get; set; } // ✅ 펫 이미지 추가
 }
 
 public class Pet : MonoBehaviour
 {
-    // 펫 데이터 리스트
-    public List<PetData> Pets = new List<PetData>();
+    public List<PetData> Pets = new List<PetData>(); // ✅ Pets 리스트 초기화
+    public Sprite[] PetImages;  // ✅ 펫 이미지를 저장할 배열
+
+    void Awake()
+    {
+        if (FindObjectsOfType<Pet>().Length > 1)
+        {
+            Destroy(gameObject); // ✅ 중복 방지
+            return;
+        }
+
+        DontDestroyOnLoad(gameObject); // ✅ 씬 변경 시 유지
+
+        if (Pets == null)
+        {
+            Pets = new List<PetData>();
+            Debug.LogWarning("⚠️ Pets 리스트가 null이어서 초기화됨.");
+        }
+    }
 
     void Start()
     {
-        // 펫 데이터 초기화
-        InitializePets();
+        // ✅ Resources에서 펫 이미지 불러오기
+        PetImages = Resources.LoadAll<Sprite>("pet");
 
-        // 펫 출력 (디버깅용)
-        foreach (var pet in Pets)
+        if (PetImages == null || PetImages.Length == 0)
         {
-            Debug.Log($"Pet ID: {pet.Id}, Name: {pet.PetName}, Description: {pet.PetDescription}, Obtained: {pet.IsObtained}");
+            Debug.LogError("🚨 펫 이미지가 로드되지 않았습니다! Resources/Pets/ 폴더를 확인하세요.");
+            return;
         }
+
+        // ✅ 이미지 이름 기준으로 정렬 (Pets_1, Pets_2 순서대로)
+        Array.Sort(PetImages, (a, b) => a.name.CompareTo(b.name));
+
+        Debug.Log($"📂 로드된 펫 이미지 개수: {PetImages.Length}");
+
+        // ✅ 펫 데이터 초기화
+        InitializePets();
     }
 
-    // 펫 데이터 초기화 메서드
     void InitializePets()
     {
-        Pets.Add(new PetData
+        if (Pets == null)
         {
-            Id = 1,
-            PetName = "부끄러운 고양이",
-            PetDescription = "조용하고 부끄러움을 타는 고양이입니다.",
-            IsObtained = false // 펫을 얻지 않은 상태로 초기화
-        });
+            Pets = new List<PetData>();
+            Debug.LogWarning("⚠️ Pets 리스트가 null이어서 다시 초기화됨.");
+        }
 
-        Pets.Add(new PetData
-        {
-            Id = 2,
-            PetName = "용감한 개",
-            PetDescription = "모든 상황에서 용감하고 충성스러운 개입니다.",
-            IsObtained = false // 펫을 얻지 않은 상태로 초기화
-        });
+        Pets.Clear(); // ✅ 기존 데이터 제거 후 새로 추가
 
-        Pets.Add(new PetData
-        {
-            Id = 3,
-            PetName = "귀여운 토끼",
-            PetDescription = "활발하고 사랑스러운 토끼입니다.",
-            IsObtained = false // 펫을 얻지 않은 상태로 초기화
-        });
+        Pets.Add(new PetData { Id = 1, PetName = "보라 개구리 1", PetDescription = "작은 보라 개구리", IsObtained = false, PetImage = GetPetImage(0) });
+        Pets.Add(new PetData { Id = 2, PetName = "보라 개구리 2", PetDescription = "큰 보라 개구리", IsObtained = false, PetImage = GetPetImage(1) });
+        Pets.Add(new PetData { Id = 3, PetName = "파란 개구리 1", PetDescription = "작은 파란 개구리", IsObtained = false, PetImage = GetPetImage(2) });
+        Pets.Add(new PetData { Id = 4, PetName = "파란 개구리 2", PetDescription = "큰 파란 개구리", IsObtained = false, PetImage = GetPetImage(3) });
+        Pets.Add(new PetData { Id = 5, PetName = "녹색 개구리 1", PetDescription = "작은 녹색 개구리", IsObtained = false, PetImage = GetPetImage(4) });
+        Pets.Add(new PetData { Id = 6, PetName = "녹색 개구리 2", PetDescription = "큰 녹색 개구리", IsObtained = false, PetImage = GetPetImage(5) });
+
+        Debug.Log($"✅ PetManager 초기화 완료! 총 {Pets.Count}개의 펫이 로드됨.");
     }
 
-    // 랜덤으로 펫 하나를 뽑는 메서드
-    public PetData GetRandomPet()
+    // ✅ 펫 이미지 가져오기 (배열 크기를 넘어가면 null 반환)
+    private Sprite GetPetImage(int index)
     {
-        if (Pets.Count > 0)
+        if (PetImages != null && index < PetImages.Length)
         {
-            int randomIndex = UnityEngine.Random.Range(0, Pets.Count);
-            return Pets[randomIndex];
+            return PetImages[index];
         }
+        Debug.LogWarning($"⚠️ PetImages[{index}]를 찾을 수 없습니다. null로 설정됨.");
         return null;
-    }
-
-    // ID로 펫을 찾는 메서드
-    public PetData GetPetById(int Id)
-    {
-        return Pets.Find(pet => pet.Id == Id);
-    }
-
-    // 펫을 얻었을 때 호출되는 메서드
-    public void ObtainPet(int petId)
-    {
-        PetData pet = Pets.Find(p => p.Id == petId);
-        if (pet != null)
-        {
-            pet.IsObtained = true; // 펫을 얻었다고 표시
-            Debug.Log($"Obtained: {pet.PetName}");
-        }
     }
 }
