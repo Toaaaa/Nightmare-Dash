@@ -16,7 +16,7 @@ public class GhostManager : MonoBehaviour
     [SerializeField]
     private AudioSource audioSource;
 
-    private IEnumerator showGhostCoroutine; //귀신 출현 코루틴
+    private Coroutine showGhostCoroutine; //귀신 출현 코루틴
 
     public float ShowGhostCoolTime = 60.0f; // 귀신 출현 쿨타임
     public float GhostImageAlpha = 0.85f;   // 귀신 이미지 투명도
@@ -27,20 +27,23 @@ public class GhostManager : MonoBehaviour
     private void Start()
     {
         SceneManager.sceneLoaded += ShowGhost;
-        showGhostCoroutine = IShowGhost();
-        StartCoroutine(showGhostCoroutine);
+        showGhostCoroutine = StartCoroutine(IShowGhost());
     }
 
     private void ShowGhost(Scene scene, LoadSceneMode mode)
     {
         //도중에 귀신 안나오게 씬 로드하면 코루틴 일단 정지
-        StopCoroutine(showGhostCoroutine);
+        if (showGhostCoroutine != null)
+        {
+            StopCoroutine(showGhostCoroutine);
+            showGhostCoroutine = null;
+        }
         //튜토리얼이나 게임 씬에서는 귀신 출현 안하게
-        if (SceneBase.Current.name == "Tutorial" && SceneBase.Current.name == "Game")
+        if (scene.name == "Tutorial" && scene.name == "Game")
         {
             return;
         }
-        StartCoroutine(showGhostCoroutine);
+        showGhostCoroutine = StartCoroutine(IShowGhost());
     }
 
     //귀신 출현

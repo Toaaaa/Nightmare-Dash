@@ -27,6 +27,11 @@ public class Hp
         MaxHp = max;
     }
 
+    public void UpdateHp(float hp)
+    {
+        Current = hp;
+    }
+
     //체력 증가
     public void InCrease(float hp)
     {

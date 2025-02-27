@@ -31,7 +31,7 @@ public class PopupInGameResult : MonoBehaviour,IPopup
 
     private void SetScoreText()
     {
-        scoreText.text = $"{sceneController.Score}";
+        scoreText.text = $"{sceneController.Score:N0}";
     }
 
     private void Restart()
