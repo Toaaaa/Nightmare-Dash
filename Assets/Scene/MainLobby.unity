@@ -326,6 +326,11 @@ MonoBehaviour:
   minDelay: 15
   maxDelay: 30
   flashDuration: 1
+--- !u!1 &30198253 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5372399708496788048, guid: 65b6a68cebebdd6408d2359da8985dd0, type: 3}
+  m_PrefabInstance: {fileID: 803958659}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &32085948
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1269,6 +1274,8 @@ MonoBehaviour:
   petSlotContainer: {fileID: 138945660}
   relicSlotContainer: {fileID: 50091017}
   slotPrefab: {fileID: 2080880750}
+  petslotPrefab: {fileID: 794161825}
+  relicslotPrefab: {fileID: 30198253}
   descriptionText: {fileID: 1649735580}
 --- !u!1 &575589957 stripped
 GameObject:
@@ -1806,6 +1813,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 785327516}
   m_CullTransparentMesh: 1
+--- !u!1 &794161825 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5372399708496788048, guid: 65b6a68cebebdd6408d2359da8985dd0, type: 3}
+  m_PrefabInstance: {fileID: 4541744}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &794967052
 PrefabInstance:
   m_ObjectHideFlags: 0

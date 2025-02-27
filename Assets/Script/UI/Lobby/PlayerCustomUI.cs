@@ -28,6 +28,9 @@ public class PlayerCustomUI : BaseUI
     [SerializeField] private Transform petSlotContainer;  // 펫 슬롯 리스트
     [SerializeField] private Transform relicSlotContainer; // 유물 슬롯 리스트
     [SerializeField] private GameObject slotPrefab;
+    [SerializeField] private GameObject petslotPrefab;
+    [SerializeField] private GameObject relicslotPrefab;
+
 
     [Header("Description")]
     [SerializeField] private TMP_Text descriptionText;
@@ -40,6 +43,7 @@ public class PlayerCustomUI : BaseUI
         // 업적이 달성될 때 UI 업데이트 이벤트 연결
         AchievementManager.Instance.OnAchievementUnlocked += UpdateAchievementUI;
         UpdateAchievementUI();
+        
     }
     private void Start()
     {
@@ -53,6 +57,10 @@ public class PlayerCustomUI : BaseUI
         // 기본 패널 설정
         ShowPanel(achievementPanel, achievementTab);
         
+
+        
+        LoadPetSlots();
+
     }
     public void UpdateAchievementUI(string achievementName = null)
     {
@@ -110,10 +118,10 @@ public class PlayerCustomUI : BaseUI
     public void LoadPetSlots()
     {
         foreach (Transform child in petSlotContainer) Destroy(child.gameObject);
-
-        foreach (var pet in DataManager.Instance.PetManager.Pets)
+        List<PetData> pets = DataManager.Instance.PetManager.Pets;
+        foreach (var pet in pets)
         {
-            GameObject newSlot = Instantiate(slotPrefab, petSlotContainer);
+            GameObject newSlot = Instantiate(petslotPrefab, petSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
             Image slotImage = newSlot.GetComponent<Image>();
 
@@ -129,10 +137,10 @@ public class PlayerCustomUI : BaseUI
     public void LoadArtifactSlots()
     {
         foreach (Transform child in relicSlotContainer) Destroy(child.gameObject);
-
-        foreach (var artifact in DataManager.Instance.ArtifactManager.ArtifactsList)
+        List<ArtifactData> artifacts = DataManager.Instance.ArtifactManager.ArtifactsList;//s 로 복수표시
+        foreach (var artifact in artifacts)
         {
-            GameObject newSlot = Instantiate(slotPrefab, relicSlotContainer);
+            GameObject newSlot = Instantiate(relicslotPrefab, relicSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
             Image slotImage = newSlot.GetComponent<Image>();
 
