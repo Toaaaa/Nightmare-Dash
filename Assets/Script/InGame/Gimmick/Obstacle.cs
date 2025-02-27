@@ -8,7 +8,7 @@ public class Obstacle : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))// 플레이어의 하위 오브젝트, 피격판정 콜라이더에 Player 태그를 부여
         {
-            collision.GetComponentInParent<Player>().GetDmg(15);
+            collision.GetComponentInParent<Player>().GetDmg(20);
         }
     }
 }
