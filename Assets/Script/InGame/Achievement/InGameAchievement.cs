@@ -32,7 +32,7 @@ public class InGameAchievement : MonoBehaviour
     {
         if (time >= 30 && !Hit30Sec)
         {
-            //AchievementManager.Instance.UnlockAchievement("30초 동안 피격 없이 달리기");
+            AchievementManager.Instance.UnlockAchievement("30초 동안 피격 없이 달리기");
         }
     }
 
