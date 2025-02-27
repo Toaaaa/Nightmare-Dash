@@ -40,13 +40,29 @@ public class PlayerCustomUI : BaseUI
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        // 업적이 달성될 때 UI 업데이트 이벤트 연결
-        AchievementManager.Instance.OnAchievementUnlocked += UpdateAchievementUI;
-        UpdateAchievementUI();
         
     }
     private void Start()
     {
+        // AchievementManager가 존재하는지 확인 후 이벤트 등록
+        if (AchievementManager.Instance != null)
+        {
+            AchievementManager.Instance.OnAchievementUnlocked += UpdateAchievementUI;
+            UpdateAchievementUI();
+            
+        }
+        else
+        {
+            Debug.LogError("AchievementManager.Instance가 null입니다. 씬 로딩 순서를 확인하세요.");
+        }
+
+        // 버튼 이벤트 설정
+        customizeButton.onClick.AddListener(OpenCustomizeUI);
+        achievementTab.onClick.AddListener(() => ShowPanel(achievementPanel, achievementTab));
+        petTab.onClick.AddListener(() => ShowPanel(petPanel, petTab));
+        relicTab.onClick.AddListener(() => ShowPanel(relicPanel, relicTab));
+        closeButton.onClick.AddListener(CloseUI);
+
         // 버튼 이벤트 설정
         customizeButton.onClick.AddListener(OpenCustomizeUI);
         achievementTab.onClick.AddListener(() => ShowPanel(achievementPanel, achievementTab));
@@ -56,11 +72,8 @@ public class PlayerCustomUI : BaseUI
 
         // 기본 패널 설정
         ShowPanel(achievementPanel, achievementTab);
-        
 
         LoadArtifactSlots();
-        
-
     }
     public void UpdateAchievementUI(string achievementName = null)
     {
@@ -106,12 +119,16 @@ public class PlayerCustomUI : BaseUI
         relicPanel.SetActive(false);
         activePanel.SetActive(true);
 
+        
+
         // 선택된 탭 스타일 변경
         if (currentTab != null)
             currentTab.GetComponent<Image>().color = Color.gray; // 기본 색상
 
         activeTab.GetComponent<Image>().color = Color.white; // 활성화된 색상
         currentTab = activeTab;
+
+
     }
 
     // 펫 슬롯 로드
@@ -128,32 +145,41 @@ public class PlayerCustomUI : BaseUI
 
             slotText.text = pet.PetName;
             slotText.color = pet.IsObtained ? Color.white : Color.gray; // 획득 여부에 따른 색상 변경
-            slotImage.color = pet.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
+            slotImage.color = pet.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f); slotImage.enabled = true;
 
             newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(pet.PetName));
         }
     }
 
-    // 유물 슬롯 로드
+    // 유물 슬롯 로드 (플레이어 보유 유물만 표시)
     public void LoadArtifactSlots()
     {
-        if (DataManager.Instance == null)
+        // GameManager.instance 또는 playerData가 null인지 확인
+        if (GameManager.instance == null || GameManager.instance.playerData == null)
         {
-            Debug.LogError("DataManager.Instance가 null입니다. 싱글톤이 올바르게 초기화되었는지 확인하세요.");
+            Debug.LogError("GameManager.instance 또는 GameManager.instance.playerData가 null입니다.");
             return;
         }
+
+        // 기존 슬롯 삭제
         foreach (Transform child in relicSlotContainer) Destroy(child.gameObject);
-        List<ArtifactData> artifacts = DataManager.Instance.ArtifactManager.ArtifactsList;//s 로 복수표시
-        foreach (var artifact in artifacts)
+        // 플레이어가 보유한 유물 리스트 가져오기
+        List<ArtifactData> ownedArtifacts = GameManager.instance.playerData.OwnedArtifacts;
+        Debug.Log($"OwnedArtifacts 개수: {ownedArtifacts.Count}");
+        // 유물 슬롯 생성
+        foreach (var artifact in ownedArtifacts)
         {
             GameObject newSlot = Instantiate(relicslotPrefab, relicSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
             Image slotImage = newSlot.GetComponent<Image>();
 
+            // UI 설정
             slotText.text = artifact.Name;
-            slotText.color = artifact.IsObtained ? Color.white : Color.gray;
-            slotImage.color = artifact.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
+            
+            slotText.color = Color.white;  // 플레이어가 보유한 유물이므로 항상 흰색
+            slotImage.color = new Color(1, 1, 1, 1f); // 불투명
 
+            // 설명 표시 이벤트 추가
             newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(artifact.Name));
         }
     }
