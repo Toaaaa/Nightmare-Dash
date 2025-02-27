@@ -54,7 +54,10 @@ public class Coin
         if (IsExchange())
         {
             long exchangedDiamond = Current / exchangePrice; //교환된 다이아
+            Current %= exchangePrice;
             Use(exchangedDiamond * exchangePrice); // 코인사용
+            long currentdiamond = exchangedDiamond * exchangePrice;
+            DataManager.Instance.Diamond.Add(exchangedDiamond);
             return exchangedDiamond;
         }
         return 0;
