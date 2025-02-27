@@ -179,7 +179,7 @@ public class PlayerCustomUI : BaseUI
             if (slotText != null)
                 slotText.text = artifact.Name;
             slotText.color = artifact.IsObtained ? Color.black : Color.gray; // 획득 여부에 따른 색상 변경
-            Image slotImage = newSlot.transform.Find("Icon").GetComponent<Image>();
+            Image slotImage = newSlot.transform.Find("Icon").GetComponent<Image>();//이름이 Icon인 오브젝트의 Image 컴포넌트
             Image slotbackgroundimg = newSlot.GetComponent<Image>();
             if (slotImage != null)
             {
