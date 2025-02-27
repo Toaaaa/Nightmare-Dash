@@ -30,7 +30,8 @@ public class PlayerCustomUI : BaseUI
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private GameObject petslotPrefab;
     [SerializeField] private GameObject relicslotPrefab;
-
+    [Header("Pets")]
+    [SerializeField] private GameObject currentPet;
 
     [Header("Description")]
     [SerializeField] private TMP_Text descriptionText;
@@ -169,7 +170,8 @@ public class PlayerCustomUI : BaseUI
 
             Button slotButton = newSlot.GetComponent<Button>();
             if (slotButton != null)
-                slotButton.onClick.AddListener(() => ShowDescription(pets.PetDescription, pets.PetImage)); slotButton.enabled = true;
+                slotButton.onClick.AddListener(() => ShowDescription(pets.PetDescription, pets.PetImage,true)); slotButton.enabled = true;
+            slotButton.onClick.AddListener(() => EquipPet(pets));
 
             // 설명 표시 이벤트 추가
             newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(pets.PetDescription,pets.PetImage));
@@ -221,23 +223,89 @@ public class PlayerCustomUI : BaseUI
             newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(artifact.Name,artifact.ArtifactImage));
         }
     }
-    private void ShowDescription(string itemName, Sprite itemSprite)
+    private void ShowDescription(string itemName, Sprite itemSprite, bool isPet = false)
     {
         if (string.IsNullOrEmpty(itemName))
             descriptionText.text = "설명을 여기에 표시";
         else descriptionText.text = itemName;
-        descriptionText.DOFade(0, 0);  // 투명하게 초기화
-        descriptionText.DOFade(1, 0.3f); // 점점 나타나는 효과
 
         if (descriptionImg != null)
         {
             descriptionImg.sprite = itemSprite;
             descriptionImg.color = new Color(1, 1, 1, 1); // 투명도를 초기화 (이미지 표시)
         }
+        if (isPet)
+        {
+            SpawnPet(itemSprite);
+        }
 
-        descriptionImg.DOFade(0, 0);
-        descriptionImg.DOFade(1, 0.3f);
     }
+    public void SpawnPet(Sprite petSprite)
+    {
+        if (currentPet != null)
+        {
+            Destroy(currentPet); // 기존 펫 삭제
+        }
+
+        // 플레이어 오브젝트 찾기
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogError("플레이어 오브젝트를 찾을 수 없습니다!");
+            return;
+        }
+
+        // 새 펫 오브젝트 생성
+        currentPet = new GameObject("Pet");
+        currentPet.transform.SetParent(player.transform); // 플레이어의 하위 오브젝트로 설정
+        currentPet.transform.localPosition = new Vector3(-1, -2, 0); // 플레이어 기준 오른쪽에 배치
+
+        // 스프라이트 렌더러 추가 및 설정
+        SpriteRenderer petRenderer = currentPet.AddComponent<SpriteRenderer>();
+        petRenderer.sprite = petSprite;
+        petRenderer.sortingOrder = 5; // 플레이어보다 앞에 렌더링되도록 설정
+        currentPet.transform.localScale = new Vector3(4f, 4f, 1f); // 원하는 크기로 조정
+        Debug.Log("펫이 생성되었습니다: " + petSprite.name);
+    }
+
+    private void EquipPet(PetData pet)
+    {
+        // 플레이어 데이터에 펫 정보 저장
+        GameManager.instance.playerData.EquipPet(pet);
+
+        // 데이터 저장 (파일, PlayerPrefs 등)
+        GameManager.instance.SavePlayerData();
+
+        //펫을 플레이어 하위 오브젝트로 소환
+        SpawnPet(pet.PetImage);
+
+        Debug.Log($"펫 장착됨: {pet.PetName}");
+    }
+
+
+    public void LoadEquippedPet()
+    {
+        Debug.Log("작동중");
+        string savedPetID = GameManager.instance.playerData.equippedPetID;
+
+        if (!string.IsNullOrEmpty(savedPetID))
+        {
+            // 저장된 펫 ID로 PetData 검색
+            PetData equippedPet = GameManager.instance.playerData.OwnedPets.Find(p => p.Id.ToString() == savedPetID);
+
+            if (equippedPet != null)
+            {
+                SpawnPet(equippedPet.PetImage); // 펫 생성
+                Debug.Log($"저장된 펫 로드됨: {equippedPet.PetName}");
+            }
+            else
+            {
+                Debug.LogWarning("저장된 펫을 찾을 수 없습니다!");
+            }
+        }
+    }
+
+
 
 
     private void CloseUI()
