@@ -34,7 +34,7 @@ public class PlayerCustomUI : BaseUI
 
     [Header("Description")]
     [SerializeField] private TMP_Text descriptionText;
-    [SerializeField] private Image previewimg;
+    [SerializeField] private Image descriptionImg;
 
     public static PlayerCustomUI Instance { get; private set; }
     private void Awake()
@@ -93,7 +93,7 @@ public class PlayerCustomUI : BaseUI
                 
             Button slotButton = newSlot.GetComponent<Button>();
             if (slotButton != null) 
-                slotButton.onClick.AddListener(() => ShowDescription(achievement.Description)); slotButton.enabled = true;
+                slotButton.onClick.AddListener(() => ShowDescription(achievement.Description,null)); slotButton.enabled = true;
 
 
             Image slotImage = newSlot.GetComponent<Image>();
@@ -133,30 +133,46 @@ public class PlayerCustomUI : BaseUI
     // 펫 슬롯 로드
     public void LoadPetSlots()
     {
-
-        foreach (Transform child in petSlotContainer) Destroy(child.gameObject);
-        List<PetData> pets = DataManager.Instance.PetManager.Pets;
-        foreach (var pet in pets)
+        // GameManager.instance 또는 playerData가 null인지 확인
+        if (GameManager.instance == null || GameManager.instance.playerData == null)
         {
+            Debug.LogError("GameManager.instance 또는 GameManager.instance.playerData가 null입니다.");
+            return;
+        }
+
+        // 기존 슬롯 삭제
+        foreach (Transform child in petSlotContainer) Destroy(child.gameObject);
+
+        // 플레이어가 보유한 유물 리스트 가져오기
+        List<PetData> ownedPets = GameManager.instance.playerData.OwnedPets;
+        Debug.Log($"OwnedArtifacts 개수: {ownedPets.Count}");
+        // 유물 슬롯 생성
+        foreach (var pets in ownedPets)
+        {
+            Debug.Log("슬롯 생성");
             GameObject newSlot = Instantiate(petslotPrefab, petSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
             if (slotText != null)
-                slotText.text = pet.PetName;
-            slotText.color = pet.IsObtained ? Color.white : Color.gray; // 획득 여부에 따른 색상 변경
-            Image slotImage = newSlot.GetComponent<Image>();
+                slotText.text = pets.PetName;
+            slotText.color = pets.IsObtained ? Color.black : Color.gray; // 획득 여부에 따른 색상 변경
+            Image slotImage = newSlot.transform.Find("Icon").GetComponent<Image>();//이름이 Icon인 오브젝트의 Image 컴포넌트
+            Image slotbackgroundimg = newSlot.GetComponent<Image>();
             if (slotImage != null)
             {
-                slotImage.color = Color.white;
-                slotImage.enabled = true;
-                slotImage.color = pet.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
+                slotImage.sprite = pets.PetImage;
 
+                slotbackgroundimg.color = Color.white;
+                slotbackgroundimg.enabled = true;
+                slotImage.enabled = true;
+                slotbackgroundimg.color = pets.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
             }
+
             Button slotButton = newSlot.GetComponent<Button>();
             if (slotButton != null)
-                slotButton.onClick.AddListener(() => ShowDescription(pet.PetName)); slotButton.enabled = true;
+                slotButton.onClick.AddListener(() => ShowDescription(pets.PetDescription, pets.PetImage)); slotButton.enabled = true;
 
             // 설명 표시 이벤트 추가
-            newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(pet.PetName));
+            newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(pets.PetDescription,pets.PetImage));
         }
     }
 
@@ -199,13 +215,13 @@ public class PlayerCustomUI : BaseUI
             
             Button slotButton = newSlot.GetComponent<Button>();
             if (slotButton != null)
-                slotButton.onClick.AddListener(() => ShowDescription(artifact.Name)); slotButton.enabled = true;
+                slotButton.onClick.AddListener(() => ShowDescription(artifact.Name,artifact.ArtifactImage)); slotButton.enabled = true;
 
             // 설명 표시 이벤트 추가
-            newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(artifact.Name));
+            newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(artifact.Name,artifact.ArtifactImage));
         }
     }
-    private void ShowDescription(string itemName)
+    private void ShowDescription(string itemName, Sprite itemSprite)
     {
         if (string.IsNullOrEmpty(itemName))
             descriptionText.text = "설명을 여기에 표시";
@@ -213,7 +229,16 @@ public class PlayerCustomUI : BaseUI
         descriptionText.DOFade(0, 0);  // 투명하게 초기화
         descriptionText.DOFade(1, 0.3f); // 점점 나타나는 효과
 
+        if (descriptionImg != null)
+        {
+            descriptionImg.sprite = itemSprite;
+            descriptionImg.color = new Color(1, 1, 1, 1); // 투명도를 초기화 (이미지 표시)
+        }
+
+        descriptionImg.DOFade(0, 0);
+        descriptionImg.DOFade(1, 0.3f);
     }
+
 
     private void CloseUI()
     {

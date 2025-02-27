@@ -2748,6 +2748,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Pets: []
+  PetImages: []
 --- !u!114 &1035343020
 MonoBehaviour:
   m_ObjectHideFlags: 0
