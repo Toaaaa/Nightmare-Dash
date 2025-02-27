@@ -171,6 +171,18 @@ public class Player : MonoBehaviour
     }
     public void GetDmg(int dmg)
     {
+        // 피격시 깜빡임
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        Color originalColor = spriteRenderer.color;
+
+        // 빨간색 → 원래 색 두 번 깜빡이기
+        DOTween.Sequence()
+            .Append(spriteRenderer.DOColor(Color.red, 0.1f))
+            .Append(spriteRenderer.DOColor(originalColor, 0.1f))
+            .Append(spriteRenderer.DOColor(Color.red, 0.1f))
+            .Append(spriteRenderer.DOColor(originalColor, 0.1f));
+
+        // 연산 적용
         currentHp -= dmg;
         float hppercent = currentHp / maxHp;
         GameSceneController gc = SceneBase.Current as GameSceneController;
