@@ -29,6 +29,25 @@ public class PlayerData : ScriptableObject
     public long Diamond;
     public long Coin;
 
+    [Header("펫 정보")]
+    // ✅ 현재 장착한 펫 정보 저장
+    public string equippedPetID; // 펫 ID를 저장
+
+    // ✅ 저장할 때 사용할 메서드
+    public void EquipPet(PetData pet)
+    {
+        if (pet == null)
+        {
+            return;
+        }
+        equippedPetID = pet.Id.ToString();  // ✅ 선택한 펫의 ID 저장
+        
+        // ✅ 데이터를 저장 (파일, PlayerPrefs 등)
+        GameManager.instance.SavePlayerData();
+    }
+
+
+
     // ✅ 총 능력치 반환 (기본 + 추가)
     public float GetTotalHp() => ori_MaxHp + add_MaxHp;
     public float GetTotalScoreValue() => ori_score + add_score;
