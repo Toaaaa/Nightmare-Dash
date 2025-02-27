@@ -58,8 +58,8 @@ public class PlayerCustomUI : BaseUI
         ShowPanel(achievementPanel, achievementTab);
         
 
+        LoadArtifactSlots();
         
-        LoadPetSlots();
 
     }
     public void UpdateAchievementUI(string achievementName = null)
@@ -117,6 +117,7 @@ public class PlayerCustomUI : BaseUI
     // 펫 슬롯 로드
     public void LoadPetSlots()
     {
+
         foreach (Transform child in petSlotContainer) Destroy(child.gameObject);
         List<PetData> pets = DataManager.Instance.PetManager.Pets;
         foreach (var pet in pets)
@@ -136,6 +137,11 @@ public class PlayerCustomUI : BaseUI
     // 유물 슬롯 로드
     public void LoadArtifactSlots()
     {
+        if (DataManager.Instance == null)
+        {
+            Debug.LogError("DataManager.Instance가 null입니다. 싱글톤이 올바르게 초기화되었는지 확인하세요.");
+            return;
+        }
         foreach (Transform child in relicSlotContainer) Destroy(child.gameObject);
         List<ArtifactData> artifacts = DataManager.Instance.ArtifactManager.ArtifactsList;//s 로 복수표시
         foreach (var artifact in artifacts)
