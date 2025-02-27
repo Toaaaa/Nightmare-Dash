@@ -179,15 +179,18 @@ public class PlayerCustomUI : BaseUI
             if (slotText != null)
                 slotText.text = artifact.Name;
             slotText.color = artifact.IsObtained ? Color.black : Color.gray; // 획득 여부에 따른 색상 변경
-            Image slotImage = newSlot.GetComponent<Image>();
+            Image slotImage = newSlot.transform.Find("Icon").GetComponent<Image>();
+            Image slotbackgroundimg = newSlot.GetComponent<Image>();
             if (slotImage != null)
             {
-                slotImage.color = Color.white;
+                slotImage.sprite = artifact.ArtifactImage;
+
+                slotbackgroundimg.color = Color.white;
+                slotbackgroundimg.enabled = true;
                 slotImage.enabled = true;
-                slotImage.color = artifact.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
+                slotbackgroundimg.color = artifact.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
             }
-            Sprite slotSprite = newSlot.GetComponent<Sprite>();
-                slotImage.sprite = slotSprite;
+            
             Button slotButton = newSlot.GetComponent<Button>();
             if (slotButton != null)
                 slotButton.onClick.AddListener(() => ShowDescription(artifact.Name)); slotButton.enabled = true;
