@@ -15,6 +15,7 @@ public class PlayerHitBox : MonoBehaviour
     {
         if (collision.TryGetComponent<RunningItem>(out var item))
         {
+            player.playerItemSound.PlayCoinSound();
             item.ApplyItemEffect(player);
         }
     }
