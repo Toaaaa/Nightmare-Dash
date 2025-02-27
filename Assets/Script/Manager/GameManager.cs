@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public PlayerData playerData; // ✅ PlayerData를 참조
+    private DataManager dataManager; // ✅ DataManager 인스턴스 저장
 
     private void Awake()
     {
@@ -16,6 +17,13 @@ public class GameManager : MonoBehaviour
 
             // ✅ Resources에서 PlayerData 자동 로드
             LoadPlayerData();
+
+            // ✅ DataManager 인스턴스 저장
+            dataManager = FindObjectOfType<DataManager>();
+            if (dataManager == null)
+            {
+                Debug.LogError("🚨 DataManager를 찾을 수 없습니다!");
+            }
         }
         else
         {
@@ -50,6 +58,19 @@ public class GameManager : MonoBehaviour
                 playerData.LoadPlayerData(artifactManager);
                 Debug.Log("✅ 플레이어 데이터 불러오기 완료!");
             }
+        }
+    }
+
+    // ✅ DataManager를 통해 SetArtifactObtained 호출하는 메서드 추가
+    public void SetArtifactObtained(int artifactId, bool obtained)
+    {
+        if (dataManager != null)
+        {
+            dataManager.SetArtifactObtained(artifactId, obtained);
+        }
+        else
+        {
+            Debug.LogError("🚨 DataManager 인스턴스가 설정되지 않았습니다!");
         }
     }
 

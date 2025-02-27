@@ -25,7 +25,12 @@ public class PlayerCustomUI : BaseUI
 
     [Header("Slots")]
     [SerializeField] private Transform slotContainer;
+    [SerializeField] private Transform petSlotContainer;  // 펫 슬롯 리스트
+    [SerializeField] private Transform relicSlotContainer; // 유물 슬롯 리스트
     [SerializeField] private GameObject slotPrefab;
+    [SerializeField] private GameObject petslotPrefab;
+    [SerializeField] private GameObject relicslotPrefab;
+
 
     [Header("Description")]
     [SerializeField] private TMP_Text descriptionText;
@@ -38,6 +43,7 @@ public class PlayerCustomUI : BaseUI
         // 업적이 달성될 때 UI 업데이트 이벤트 연결
         AchievementManager.Instance.OnAchievementUnlocked += UpdateAchievementUI;
         UpdateAchievementUI();
+        
     }
     private void Start()
     {
@@ -51,6 +57,10 @@ public class PlayerCustomUI : BaseUI
         // 기본 패널 설정
         ShowPanel(achievementPanel, achievementTab);
         
+
+        
+        LoadPetSlots();
+
     }
     public void UpdateAchievementUI(string achievementName = null)
     {
@@ -104,22 +114,43 @@ public class PlayerCustomUI : BaseUI
         currentTab = activeTab;
     }
 
-    public void LoadItems(List<string> items)
+    // 펫 슬롯 로드
+    public void LoadPetSlots()
     {
-        foreach (Transform child in slotContainer) Destroy(child.gameObject);
-
-        foreach (var item in items)
+        foreach (Transform child in petSlotContainer) Destroy(child.gameObject);
+        List<PetData> pets = DataManager.Instance.PetManager.Pets;
+        foreach (var pet in pets)
         {
-            GameObject newSlot = Instantiate(slotPrefab, slotContainer);
-            newSlot.GetComponentInChildren<TMP_Text>().text = item;
+            GameObject newSlot = Instantiate(petslotPrefab, petSlotContainer);
+            TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
+            Image slotImage = newSlot.GetComponent<Image>();
 
-            // 버튼 클릭 애니메이션 추가
-            Button slotButton = newSlot.GetComponent<Button>();
-            slotButton.onClick.AddListener(() => ShowDescription(item));
-            slotButton.onClick.AddListener(() => slotButton.transform.DOScale(1.1f, 0.1f).OnComplete(() => slotButton.transform.DOScale(1f, 0.1f)));
+            slotText.text = pet.PetName;
+            slotText.color = pet.IsObtained ? Color.white : Color.gray; // 획득 여부에 따른 색상 변경
+            slotImage.color = pet.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
+
+            newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(pet.PetName));
         }
     }
 
+    // 유물 슬롯 로드
+    public void LoadArtifactSlots()
+    {
+        foreach (Transform child in relicSlotContainer) Destroy(child.gameObject);
+        List<ArtifactData> artifacts = DataManager.Instance.ArtifactManager.ArtifactsList;//s 로 복수표시
+        foreach (var artifact in artifacts)
+        {
+            GameObject newSlot = Instantiate(relicslotPrefab, relicSlotContainer);
+            TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
+            Image slotImage = newSlot.GetComponent<Image>();
+
+            slotText.text = artifact.Name;
+            slotText.color = artifact.IsObtained ? Color.white : Color.gray;
+            slotImage.color = artifact.IsObtained ? new Color(1, 1, 1, 1f) : new Color(1, 1, 1, 0.5f);
+
+            newSlot.GetComponent<Button>().onClick.AddListener(() => ShowDescription(artifact.Name));
+        }
+    }
     private void ShowDescription(string itemName)
     {
         descriptionText.text = $"{itemName} 설명을 여기에 표시";
