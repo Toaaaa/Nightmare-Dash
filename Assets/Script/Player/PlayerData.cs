@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerData", menuName = "ScriptableObjects/PlayerData", order = 1)]
@@ -133,10 +134,10 @@ public class PlayerData : ScriptableObject
     {
         PlayerPrefs.SetString("Coin", Coin.ToString());
         PlayerPrefs.SetString("Diamond", Diamond.ToString());
-        List<int> artifactIds = OwnedArtifacts.ConvertAll(a => a.Id);
-        List<int> petIds = OwnedPets.ConvertAll(p => p.Id); // ✅ 펫도 저장
+        List<ArtifactData> artifactIds = OwnedArtifacts;
+        List<PetData> petIds = OwnedPets; // ✅ 펫도 저장
 
-        string json = JsonUtility.ToJson(new PlayerSaveData(artifactIds, petIds));
+        string json = JsonConvert.SerializeObject(new PlayerSaveData(artifactIds, petIds));
         PlayerPrefs.SetString("PlayerData", json);
         PlayerPrefs.Save();
     }
@@ -149,29 +150,8 @@ public class PlayerData : ScriptableObject
             string json = PlayerPrefs.GetString("PlayerData");
             PlayerSaveData saveData = JsonUtility.FromJson<PlayerSaveData>(json);
 
-            OwnedArtifacts = new List<ArtifactData>();
-            OwnedPets = new List<PetData>();
-
-            foreach (int id in saveData.ArtifactIds)
-            {
-                ArtifactData artifact = artifactManager.ArtifactsList.Find(a => a.Id == id);
-                if (artifact != null)
-                {
-                    artifact.IsObtained = true;
-                    OwnedArtifacts.Add(artifact);
-                    ApplyArtifactEffect(artifact);
-                }
-            }
-
-            foreach (int id in saveData.PetIds)
-            {
-                PetData pet = petManager.Pets.Find(p => p.Id == id);
-                if (pet != null)
-                {
-                    pet.IsObtained = true;
-                    OwnedPets.Add(pet);
-                }
-            }
+            OwnedArtifacts = saveData.ArtifactIds;
+            OwnedPets = saveData.PetIds;
         }
 
         if (PlayerPrefs.HasKey("Coin"))
@@ -198,10 +178,10 @@ public class PlayerData : ScriptableObject
 [System.Serializable]
 public class PlayerSaveData
 {
-    public List<int> ArtifactIds;
-    public List<int> PetIds;
+    public List<ArtifactData> ArtifactIds;
+    public List<PetData> PetIds;
 
-    public PlayerSaveData(List<int> artifactIds, List<int> petIds)
+    public PlayerSaveData(List<ArtifactData> artifactIds, List<PetData> petIds)
     {
         ArtifactIds = artifactIds;
         PetIds = petIds;

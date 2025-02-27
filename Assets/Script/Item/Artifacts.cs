@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,7 @@ public class ArtifactData
     public ArtifactRarity Rarity { get; set; }  // 문자열 대신 열거형 사용
     public Effect Effect { get; set; }
     public bool IsObtained { get; set; }     // 유물을 얻었는지 여부
+    [JsonIgnore]
     public Sprite ArtifactImage { get; set; }  // ✅ 유물 이미지 추가
     public string GetEffectDescription()
     {

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class PetData
     public string PetName { get; set; }
     public string PetDescription { get; set; }
     public bool IsObtained { get; set; }
+    public bool IsEquiped { get; set; }
+    [JsonIgnore]
     public Sprite PetImage { get; set; } // ✅ 펫 이미지 추가
 }
 
