@@ -45,7 +45,7 @@ public class PlatformManager : MonoBehaviour
             StopGame();
             // 게임 오버 연출
         }
-
+#if UNITY_EDITOR
         // 테스트 코드
         if(Input.GetKeyDown(KeyCode.F1))
         {
@@ -59,6 +59,7 @@ public class PlatformManager : MonoBehaviour
         {
             ResetGame();
         }
+#endif
     }
 
     public void StartGame()
