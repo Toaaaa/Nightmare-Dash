@@ -12,8 +12,17 @@ public class DataManager : MonoBehaviour
     public Pet PetManager { get; set; }
     public Artifacts ArtifactManager { get; set; }
 
+    public Coin Coin = new();
+
+    public Diamond Diamond = new();
+
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
         // ✅ ArtifactManager를 강제로 찾고 할당
         if (ArtifactManager == null)
         {
