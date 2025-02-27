@@ -38,7 +38,7 @@ public class InGameUIController : MonoBehaviour
 
     private void UpdateScoreText(int score)
     {
-        scoreText.text = $"Score : {score}";
+        scoreText.text = $"Score : {score:N0}";
     }
 
     //결과창 표시
