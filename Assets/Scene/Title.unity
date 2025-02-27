@@ -534,6 +534,7 @@ MonoBehaviour:
   audioSource: {fileID: 1007959826}
   titleAndLobbyBGM: {fileID: 8300000, guid: 3b67ce85f1a61254ea25fcb3d83ed391, type: 3}
   gameBGM: {fileID: 8300000, guid: d0f2a48e7c813294795ad7b81fbaceb2, type: 3}
+  gachaBGM: {fileID: 8300000, guid: 044bf52a9d9036b4f8a9c1dec179e0e7, type: 3}
 --- !u!82 &1007959826
 AudioSource:
   m_ObjectHideFlags: 0
