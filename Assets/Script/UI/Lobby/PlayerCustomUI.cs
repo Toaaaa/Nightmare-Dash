@@ -207,7 +207,8 @@ public class PlayerCustomUI : BaseUI
     }
     private void ShowDescription(string itemName)
     {
-        descriptionText.text = $"{itemName} 설명을 여기에 표시";
+        if(descriptionText.text == null)
+        descriptionText.text = $"{itemName} dk설명을 여기에 표시";
         descriptionText.DOFade(0, 0);  // 투명하게 초기화
         descriptionText.DOFade(1, 0.3f); // 점점 나타나는 효과
 
