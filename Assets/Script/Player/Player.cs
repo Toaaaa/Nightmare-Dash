@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 {
     Animator animator;
     Rigidbody2D rb;
+    public PlayerItemSound playerItemSound;
 
     [Header("Player Setting")]
     [SerializeField] float jumpForce = 7f; // 점프 힘
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        playerItemSound = GetComponentInChildren<PlayerItemSound>();
         //플레이어 데이터 초기화
         maxHp = playerData.GetTotalHp();
         invincibleTime = playerData.GetTotalInvincibleTime();
@@ -203,6 +205,7 @@ public class Player : MonoBehaviour
     }
     public float GetScoreValue()
     {
+        playerItemSound.PlayCoinSound();// 코인 획득시 사운드 재생
         return scoreValue;
     }// 플레이어가 코인을 획득할시 얻는 점수의 배율.
     public void SetHpMax()
