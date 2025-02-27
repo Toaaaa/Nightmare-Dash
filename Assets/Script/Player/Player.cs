@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
 
     // 이동 및 게임 플레이 관련 변수
     int jumpCount = 0;
-    float slopeSpeed = 1.13f; // 경사면 속도
+    float slopeSpeed = 1.2f; // 경사면 속도
     bool isOnSlope = false;// 경사면 위에 있는지
     bool isOnGround = false;// 지면 위에 있는지
     bool isDead = false;
