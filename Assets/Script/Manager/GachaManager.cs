@@ -1,11 +1,10 @@
 using System.Collections;
-using DG.Tweening.Core.Easing;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GachaManager : MonoBehaviour
 {
-    public Button DrawOneBtn, DrawTenBtn, ExitBtn;
+    public Button DrawOneBtn, DrawFiveBtn, ExitBtn;
     public Image GachaFadeBlack;
     public float fadeDuration = 1.0f;
     private float maxAlpha = 0.5f;
@@ -13,7 +12,11 @@ public class GachaManager : MonoBehaviour
     [SerializeField]
     private CardUI[] cards; // ✅ 여러 장의 카드 UI 배열
 
-    void Start()
+    private Diamond diamond; // 유료 재화
+
+    private readonly int gachaPrice = 100; // 가챠 1회 가격
+
+    private void Start()
     {
         if (cards == null || cards.Length == 0)
         {
@@ -30,14 +33,20 @@ public class GachaManager : MonoBehaviour
             }
         }
 
+        diamond = DataManager.Instance.Diamond;
+
+        DrawOneBtn.interactable = diamond.IsCanUse(gachaPrice);
+        DrawFiveBtn.interactable = diamond.IsCanUse(gachaPrice * 5);
+
         DrawOneBtn.onClick.AddListener(() => DrawOneBtnClick(1));
-        DrawTenBtn.onClick.AddListener(() => DrawOneBtnClick(5));
+        DrawFiveBtn.onClick.AddListener(() => DrawOneBtnClick(5));
         ExitBtn.onClick.AddListener(HideCardAndFadeBlack);
         ExitBtn.gameObject.SetActive(false);
     }
 
     public void DrawOneBtnClick(int num)
     {
+        diamond.Use(gachaPrice * num);
         StartCoroutine(FadeInEffect(num));
     }
 
@@ -134,7 +143,7 @@ public class GachaManager : MonoBehaviour
         GachaFadeBlack.gameObject.SetActive(false);
         ResetCardState();
         DrawOneBtn.interactable = true;
-        DrawTenBtn.interactable = true;
+        DrawFiveBtn.interactable = true;
         ExitBtn.gameObject.SetActive(false);
     }
 
@@ -142,7 +151,7 @@ public class GachaManager : MonoBehaviour
     {
         HideCardAndFadeBlack();
         DrawOneBtn.interactable = false;
-        DrawTenBtn.interactable = false;
+        DrawFiveBtn.interactable = false;
         StartCoroutine(FadeInEffect(1));
     }
 
@@ -157,6 +166,26 @@ public class GachaManager : MonoBehaviour
         }
     }
 
+    // ✅ DataManager가 로드될 때까지 기다리는 코루틴 추가
+    private IEnumerator WaitForDataManagerInitialization(int artifactId)
+    {
+        while (FindObjectOfType<DataManager>() == null)
+        {
+            Debug.Log("⏳ DataManager가 아직 초기화되지 않았습니다. 대기 중...");
+            yield return null;
+        }
+
+        DataManager dataManager = FindObjectOfType<DataManager>();
+        if (dataManager != null)
+        {
+            dataManager.SetArtifactObtained(artifactId, true);
+        }
+        else
+        {
+            Debug.LogError("🚨 DataManager를 찾을 수 없습니다!");
+        }
+    }
+
     // ✅ 가챠에서 뽑힌 유물을 플레이어가 획득하도록 적용
     public void OnGachaResult(ArtifactData artifact)
     {
@@ -166,8 +195,18 @@ public class GachaManager : MonoBehaviour
             return;
         }
 
+        if (GameManager.instance == null || GameManager.instance.playerData == null)
+        {
+            Debug.LogError("🚨 GameManager 또는 PlayerData가 null입니다! GameManager가 정상적으로 로드되었는지 확인하세요.");
+            return;
+        }
+
         // ✅ 플레이어에게 유물 추가
         GameManager.instance.playerData.AddArtifact(artifact);
+
+        // ✅ DataManager가 초기화될 때까지 기다린 후 실행
+        StartCoroutine(WaitForDataManagerInitialization(artifact.Id));
+
         Debug.Log($"🎁 플레이어가 '{artifact.Name}' 유물을 획득했습니다!");
     }
 }

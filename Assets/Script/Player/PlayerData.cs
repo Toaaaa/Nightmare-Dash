@@ -101,6 +101,7 @@ public class PlayerData : ScriptableObject
                 ArtifactData artifact = artifactManager.ArtifactsList.Find(a => a.Id == id);
                 if (artifact != null)
                 {
+                    artifact.IsObtained = true;  // ✅ 유물 획득 상태 업데이트
                     OwnedArtifacts.Add(artifact);
                     ApplyArtifactEffect(artifact);
                 }
@@ -108,6 +109,7 @@ public class PlayerData : ScriptableObject
             Debug.Log($"✅ 플레이어 유물 불러오기 완료! 보유 유물 개수: {OwnedArtifacts.Count}");
         }
     }
+
 }
 
 // ✅ 유물 ID 저장을 위한 데이터 구조

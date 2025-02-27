@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
 
     // 이동 및 게임 플레이 관련 변수
     int jumpCount = 0;
-    float slopeSpeed = 1.13f; // 경사면 속도
+    float slopeSpeed = 1.2f; // 경사면 속도
     bool isOnSlope = false;// 경사면 위에 있는지
     bool isOnGround = false;// 지면 위에 있는지
     bool isDead = false;
@@ -121,9 +121,10 @@ public class Player : MonoBehaviour
         coyoteTimeCounter = coyoteTime;
         //Hp바 초기화
         GameSceneController gc = SceneBase.Current as GameSceneController;
-        gc.uiController.hpBar.GetDmg(0);// 추락시 hp바 0으로 갱신
+        gc.uiController.hpBar.UpdateHpBar(100);
         //애니메이션 리셋
         animator.SetBool("isSliding", false);
+        animator.SetTrigger("SetAlive");
         animator.ResetTrigger("Jump");
         animator.ResetTrigger("DoubleJump");
         animator.SetBool("isFirstEnter", false);
@@ -170,6 +171,18 @@ public class Player : MonoBehaviour
     }
     public void GetDmg(int dmg)
     {
+        // 피격시 깜빡임
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        Color originalColor = spriteRenderer.color;
+
+        // 빨간색 → 원래 색 두 번 깜빡이기
+        DOTween.Sequence()
+            .Append(spriteRenderer.DOColor(Color.red, 0.1f))
+            .Append(spriteRenderer.DOColor(originalColor, 0.1f))
+            .Append(spriteRenderer.DOColor(Color.red, 0.1f))
+            .Append(spriteRenderer.DOColor(originalColor, 0.1f));
+
+        // 연산 적용
         currentHp -= dmg;
         float hppercent = currentHp / maxHp;
         GameSceneController gc = SceneBase.Current as GameSceneController;
@@ -178,7 +191,11 @@ public class Player : MonoBehaviour
 
     void CheckIsDead()
     {
-        isDead =  currentHp <= 0 ? true : false;
+        if(!isDead && currentHp <= 0) // 체력이 0이 되는 순간.
+        {
+            isDead = true;
+            animator.SetTrigger("Die");
+        }
     }
     void AdjustGravity()
     {
