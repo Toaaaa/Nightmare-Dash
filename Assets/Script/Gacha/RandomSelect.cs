@@ -14,14 +14,12 @@ public class RandomSelect : MonoBehaviour
 
         if (artifactManager == null)
         {
-            Debug.LogError("🚨 Artifacts Manager를 찾을 수 없습니다! 'Artifacts' 스크립트가 있는지 확인하세요.");
             return;
         }
 
         // ✅ ArtifactsList가 비어 있으면 다시 가져오기 시도
         if (artifactManager.ArtifactsList.Count == 0)
         {
-            Debug.LogWarning("⚠️ ArtifactsList가 비어 있습니다. 1초 후 다시 시도합니다.");
             StartCoroutine(WaitAndInitializeDeck(1f, artifactManager));
             return;
         }
@@ -36,7 +34,6 @@ public class RandomSelect : MonoBehaviour
 
         if (artifactManager.ArtifactsList.Count == 0)
         {
-            Debug.LogError("🚨 ArtifactsList가 여전히 비어 있습니다. 덱을 생성할 수 없습니다.");
             yield break;
         }
 
@@ -50,7 +47,6 @@ public class RandomSelect : MonoBehaviour
         {
             if (artifact == null)
             {
-                Debug.LogError("🚨 artifact가 null입니다! ArtifactsList를 확인하세요.");
                 continue;
             }
 
@@ -66,17 +62,11 @@ public class RandomSelect : MonoBehaviour
 
             deck.Add(card);
             total += card.weight;
-
-            Debug.Log($"✅ 카드 추가됨: {card.cardName}, 효과: {card.cardEffect}, 가중치: {card.weight}");
         }
 
         if (deck.Count == 0 || total == 0)
         {
-            Debug.LogError("🚨 덱이 비어 있거나 가중치 합이 0입니다. 유물 데이터가 정상적으로 로드되었는지 확인하세요.");
-        }
-        else
-        {
-            Debug.Log($"✅ 덱 초기화 완료! 총 카드 개수: {deck.Count}, 가중치 총합: {total}");
+            return;
         }
     }
 
@@ -98,7 +88,6 @@ public class RandomSelect : MonoBehaviour
     {
         if (deck == null || deck.Count == 0 || total == 0)
         {
-            Debug.LogError("🚨 덱에 카드가 없거나 가중치가 0입니다. Artifacts.cs를 확인하세요.");
             return null;
         }
 
@@ -112,28 +101,24 @@ public class RandomSelect : MonoBehaviour
             {
                 if (card == null)
                 {
-                    Debug.LogError("🚨 선택된 카드가 null입니다. 덱을 확인하세요.");
                     return null;
                 }
 
                 Card selectedCard = new Card(card);
-                Debug.Log($"🎲 랜덤 카드 선택: {selectedCard.cardName} (등급: {selectedCard.cardType})");
 
                 // ✅ 카드 유물 정보 확인
                 if (selectedCard.artifact == null)
                 {
-                    Debug.LogWarning($"⚠️ 카드 '{selectedCard.cardName}'에 연결된 유물이 없습니다.");
+                    // 경고 없이 유물 없음 처리
                 }
                 else if (selectedCard.artifact.ArtifactImage == null)
                 {
-                    Debug.LogWarning($"⚠️ 카드 '{selectedCard.cardName}'에 연결된 유물 '{selectedCard.artifact.Name}'의 이미지가 없습니다.");
+                    // 경고 없이 유물 이미지 없음 처리
                 }
 
                 return selectedCard;
             }
         }
-
-        Debug.LogError("🚨 가중치를 기반으로 카드 선택에 실패했습니다.");
         return null;
     }
 }

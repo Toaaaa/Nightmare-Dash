@@ -44,6 +44,8 @@ public class GameSceneController : SceneBase
     public InGameAchievement inGameAchievement;
     [SerializeField] Player player;
 
+   
+
     private void Update()
     {
         GameHp.UpdateHp(player.GetCurrentHp());
@@ -56,6 +58,13 @@ public class GameSceneController : SceneBase
         inGameAchievement.SetGameStart();// 인게임 업적 체킹 시작.
         GameHp.SetHp(100);
         uiController.Initialize();
+
+        var petData = data as PetData;
+
+        if(petData != null)
+        {
+            player.SetPetImage((data as PetData).PetImage);
+        }
     }
 
     private void OnDestroy()

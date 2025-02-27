@@ -15,15 +15,10 @@ public class LobbyUI : BaseUI
         {
             lobbyButton.onClick.AddListener(OnLobbyClick);
         }
-        else
-        {
-            Debug.LogError("🚨 Lobby 버튼이 할당되지 않았습니다! Unity Inspector에서 확인하세요.");
-        }
     }
 
     private void OnLobbyClick()
     {
-        Debug.Log("🏠 로비로 이동!");
         SceneManager.LoadScene("MainLobby"); // ✅ MainLobby 씬으로 이동
     }
 

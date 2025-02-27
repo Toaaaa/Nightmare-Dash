@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GachaManager : MonoBehaviour
+public class PetGachaManager : MonoBehaviour
 {
     public Button DrawOneBtn, DrawFiveBtn, ExitBtn;
     public Image GachaFadeBlack;
@@ -10,7 +10,7 @@ public class GachaManager : MonoBehaviour
     private float maxAlpha = 0.5f;
 
     [SerializeField]
-    private CardUI[] cards; // 여러 장의 카드 UI 배열
+    private PetCardUI[] petCards; // ✅ 여러 장의 펫 카드 UI 배열
 
     private Diamond diamond; // 유료 재화
 
@@ -18,14 +18,14 @@ public class GachaManager : MonoBehaviour
 
     private void Start()
     {
-        if (cards == null || cards.Length == 0)
+        if (petCards == null || petCards.Length == 0)
         {
             return;
         }
 
-        foreach (var card in cards)
+        foreach (var petCard in petCards)
         {
-            if (card == null)
+            if (petCard == null)
             {
                 return;
             }
@@ -62,16 +62,16 @@ public class GachaManager : MonoBehaviour
             yield return null;
         }
 
-        StartCoroutine(ShowCardSlowly(num));
+        StartCoroutine(ShowPetCardSlowly(num));
     }
 
-    private IEnumerator ShowCardSlowly(int gachaCount)
+    private IEnumerator ShowPetCardSlowly(int gachaCount)
     {
         for (int i = 0; i < gachaCount; i++)
         {
-            if (i < cards.Length)
+            if (i < petCards.Length)
             {
-                SpawnRandomCard(cards[i]);  // 여러 장의 카드 UI 활용
+                SpawnRandomPet(petCards[i]);  // ✅ 여러 장의 펫 카드 UI 활용
             }
             yield return new WaitForSeconds(0.1f);
         }
@@ -79,34 +79,34 @@ public class GachaManager : MonoBehaviour
         ExitBtn.gameObject.SetActive(true);
     }
 
-    // 기존 카드 오브젝트를 활용하여 카드 UI 업데이트
-    public void SpawnRandomCard(CardUI cardUI)
+    // ✅ 기존 카드 오브젝트를 활용하여 펫 카드 UI 업데이트
+    public void SpawnRandomPet(PetCardUI petCardUI)
     {
-        if (cardUI == null)
+        if (petCardUI == null)
         {
             return;
         }
 
-        cardUI.gameObject.SetActive(true);
+        petCardUI.gameObject.SetActive(true);
 
-        RandomSelect randomSelect = FindObjectOfType<RandomSelect>();
-        if (randomSelect == null)
+        PetSelect petSelect = FindObjectOfType<PetSelect>();
+        if (petSelect == null)
         {
             return;
         }
 
-        Card selectedCard = randomSelect.RandomCard();
-        if (selectedCard == null)
+        PetData selectedPet = petSelect.GetRandomPet();
+        if (selectedPet == null)
         {
             return;
         }
 
-        cardUI.SetCardUI(selectedCard);
+        petCardUI.SetPetUI(selectedPet);
 
-        // 뽑은 유물을 플레이어 데이터에 추가
-        if (selectedCard.artifact != null)
+        // ✅ 뽑은 펫을 플레이어 데이터에 추가
+        if (selectedPet != null)
         {
-            OnGachaResult(selectedCard.artifact);
+            OnGachaResult(selectedPet);
         }
     }
 
@@ -129,34 +129,19 @@ public class GachaManager : MonoBehaviour
 
     private void ResetCardState()
     {
-        foreach (var card in cards)
+        foreach (var petCard in petCards)
         {
-            if (card != null)
+            if (petCard != null)
             {
-                card.gameObject.SetActive(false);
+                petCard.gameObject.SetActive(false);
             }
         }
     }
 
-    // DataManager가 로드될 때까지 기다리는 코루틴 추가
-    private IEnumerator WaitForDataManagerInitialization(int artifactId)
+    // ✅ 가챠에서 뽑힌 펫을 플레이어가 획득하도록 적용
+    public void OnGachaResult(PetData pet)
     {
-        while (FindObjectOfType<DataManager>() == null)
-        {
-            yield return null;
-        }
-
-        DataManager dataManager = FindObjectOfType<DataManager>();
-        if (dataManager != null)
-        {
-            dataManager.SetArtifactObtained(artifactId, true);
-        }
-    }
-
-    // 가챠에서 뽑힌 유물을 플레이어가 획득하도록 적용
-    public void OnGachaResult(ArtifactData artifact)
-    {
-        if (artifact == null)
+        if (pet == null)
         {
             return;
         }
@@ -166,10 +151,7 @@ public class GachaManager : MonoBehaviour
             return;
         }
 
-        // 플레이어에게 유물 추가
-        GameManager.instance.playerData.AddArtifact(artifact);
-
-        // DataManager가 초기화될 때까지 기다린 후 실행
-        StartCoroutine(WaitForDataManagerInitialization(artifact.Id));
+        // ✅ 플레이어에게 펫 추가
+        GameManager.instance.playerData.AddPet(pet);
     }
 }
