@@ -9,6 +9,7 @@ public class Card
     public string cardType;
     public int weight;
     public ArtifactData artifact;
+    public PetData pet;
 
     public Card() { }
 
@@ -20,5 +21,6 @@ public class Card
         this.cardType = card.cardType;
         this.weight = card.weight;
         this.artifact = card.artifact;
+        this.pet = card.pet;
     }
 }

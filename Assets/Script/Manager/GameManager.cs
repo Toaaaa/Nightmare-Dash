@@ -48,14 +48,19 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("✅ PlayerData 로드 성공!");
             Artifacts artifactManager = FindObjectOfType<Artifacts>();
+            Pet petManager = FindObjectOfType<Pet>(); // ✅ 펫 데이터 로드 추가
 
             if (artifactManager == null)
             {
                 Debug.LogError("🚨 Artifacts Manager를 찾을 수 없습니다!");
             }
+            else if (petManager == null)
+            {
+                Debug.LogError("🚨 Pet Manager를 찾을 수 없습니다!");
+            }
             else
             {
-                playerData.LoadPlayerData(artifactManager);
+                playerData.LoadPlayerData(artifactManager, petManager);
                 Debug.Log("✅ 플레이어 데이터 불러오기 완료!");
             }
         }
@@ -67,6 +72,19 @@ public class GameManager : MonoBehaviour
         if (dataManager != null)
         {
             dataManager.SetArtifactObtained(artifactId, obtained);
+        }
+        else
+        {
+            Debug.LogError("🚨 DataManager 인스턴스가 설정되지 않았습니다!");
+        }
+    }
+
+    // ✅ DataManager를 통해 SetPetObtained 호출하는 메서드 추가
+    public void SetPetObtained(int petId, bool obtained)
+    {
+        if (dataManager != null)
+        {
+            dataManager.SetPetObtained(petId, obtained);
         }
         else
         {
@@ -87,6 +105,22 @@ public class GameManager : MonoBehaviour
         foreach (var artifact in playerData.OwnedArtifacts)
         {
             Debug.Log($"🔹 유물: {artifact.Name} (효과: {artifact.GetEffectDescription()})");
+        }
+    }
+
+    // ✅ 플레이어가 가진 펫 리스트 출력 (디버깅용)
+    public void PrintPlayerPets()
+    {
+        if (playerData == null)
+        {
+            Debug.LogError("🚨 PlayerData가 없습니다!");
+            return;
+        }
+
+        Debug.Log($"🐾 플레이어가 보유한 펫 개수: {playerData.OwnedPets.Count}");
+        foreach (var pet in playerData.OwnedPets)
+        {
+            Debug.Log($"🐶 펫: {pet.PetName} (설명: {pet.PetDescription})");
         }
     }
 
