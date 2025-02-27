@@ -25,6 +25,7 @@ public class MainLobbySceneController : SceneBase
         {
             playerCustomUI.LoadArtifactSlots();
             playerCustomUI.LoadPetSlots();
+            playerCustomUI.LoadEquippedPet();
         }
         else
         {

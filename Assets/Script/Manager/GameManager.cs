@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
 
             // ✅ Resources에서 PlayerData 자동 로드
             LoadPlayerData();
+            PlayerCustomUI.Instance?.LoadEquippedPet(); // 새로운 씬에서 펫 다시 생성
 
             // ✅ DataManager 인스턴스 저장
             dataManager = FindObjectOfType<DataManager>();
