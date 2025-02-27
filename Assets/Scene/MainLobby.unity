@@ -1353,6 +1353,7 @@ MonoBehaviour:
   petslotPrefab: {fileID: 794161825}
   relicslotPrefab: {fileID: 30198253}
   descriptionText: {fileID: 1649735580}
+  previewimg: {fileID: 35203812}
 --- !u!1 &575589957 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3893189721472606101, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
@@ -2324,6 +2325,7 @@ GameObject:
   - component: {fileID: 1035343016}
   - component: {fileID: 1035343020}
   - component: {fileID: 1035343019}
+  - component: {fileID: 1035343021}
   m_Layer: 0
   m_Name: DataManager
   m_TagString: Untagged
@@ -2396,6 +2398,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ArtifactImages: []
+--- !u!114 &1035343021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035343015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d3ec4a194d599b44a3091ff96976e88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ArtifactImages>k__BackingField: []
 --- !u!224 &1070657053 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5452229457628397254, guid: b3e66e8ea034fde4698390cf7a63d23d, type: 3}

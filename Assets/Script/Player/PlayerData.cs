@@ -24,7 +24,10 @@ public class PlayerData : ScriptableObject
     // ✅ 업적 리스트 추가
     [Header("업적 데이터")]
     public List<string> UnlockedAchievements = new List<string>();
-
+    [Header("보유 재화")]
+    public long Diamond;
+    public long Coin;
+    
     // ✅ 총 능력치 반환 (기본 + 추가)
     public float GetTotalHp() => ori_MaxHp + add_MaxHp;
     public float GetTotalScoreValue() => ori_score + add_score;
@@ -101,6 +104,8 @@ public class PlayerData : ScriptableObject
     // ✅ 유물 데이터 저장
     public void SavePlayerData()
     {
+        PlayerPrefs.SetString("Coin", Coin.ToString());
+        PlayerPrefs.SetString("Diamond", Diamond.ToString());
         List<int> artifactIds = OwnedArtifacts.ConvertAll(a => a.Id);
         string json = JsonUtility.ToJson(new ArtifactSaveData(artifactIds));
         PlayerPrefs.SetString("PlayerArtifacts", json);
@@ -127,6 +132,24 @@ public class PlayerData : ScriptableObject
                 }
             }
             Debug.Log($"✅ 플레이어 유물 불러오기 완료! 보유 유물 개수: {OwnedArtifacts.Count}");
+        }
+
+        if (PlayerPrefs.HasKey("Coin"))
+        {
+            long.TryParse(PlayerPrefs.GetString("Coin"), out Coin);
+        }
+        else
+        {
+            Coin = 0;
+        }
+
+        if (PlayerPrefs.HasKey("Diamond"))
+        {
+            long.TryParse(PlayerPrefs.GetString("Diamond"), out Diamond);
+        }
+        else
+        {
+            Diamond = 0;
         }
     }
 

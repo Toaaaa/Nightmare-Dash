@@ -8,6 +8,7 @@ public class MainLobbySceneController : SceneBase
     {
         base.OnStart(data);
 
+        
         // 씬 전환 후 플레이어 데이터 로드
         if (GameManager.instance != null)
         {
