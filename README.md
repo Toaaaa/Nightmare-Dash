@@ -9,6 +9,7 @@
 - 프로젝트 이름: NightmareDash
 - 프로젝트 설명: 유니티 입문 개발 팀 프로젝트
 - 게임 설명 : 공포 2D 런게임
+- 「MOMIZizm MUSiC（もみじば）｜フリーBGM 」
 <br/>
 
 # 2. Team Members (팀원 및 팀 소개)
