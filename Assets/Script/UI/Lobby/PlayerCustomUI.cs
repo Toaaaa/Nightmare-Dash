@@ -42,9 +42,7 @@ public class PlayerCustomUI : BaseUI
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        GameManager.instance.LoadPlayerData();
-
-
+        //GameManager.instance.LoadPlayerData();
     }
     private void Start()
     {
@@ -194,7 +192,6 @@ public class PlayerCustomUI : BaseUI
         // 유물 슬롯 생성
         foreach (var artifact in ownedArtifacts)
         {
-            Debug.Log("슬롯 생성");
             GameObject newSlot = Instantiate(relicslotPrefab, relicSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
             if (slotText != null)
