@@ -5475,6 +5475,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 242237509}
     m_Modifications:
+    - target: {fileID: 2226060188284153302, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2226060188284153302, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2226060188284153302, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2226060188284153302, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3261552193625661522, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 75
@@ -5586,6 +5602,22 @@ PrefabInstance:
     - target: {fileID: 7607979458335320642, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 170
+      objectReference: {fileID: 0}
+    - target: {fileID: 8925783025070119367, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8925783025070119367, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8925783025070119367, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8925783025070119367, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 9177094027531478118, guid: ccf0589c43d247c49a12d07b29ca9ed1, type: 3}
       propertyPath: m_Type
