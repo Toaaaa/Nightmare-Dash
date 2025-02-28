@@ -107,6 +107,11 @@ public class GhostManager : MonoBehaviour
         ghostImage.color = color;
         ghostImage.gameObject.SetActive(false);
     }
+
+    public void EncountGhosst()
+    {
+        AchievementManager.Instance.UnlockAchievement("공포 속으로");
+    }
 }
 
 
