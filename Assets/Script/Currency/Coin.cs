@@ -36,6 +36,11 @@ public class Coin
         }
     }
 
+    public void Set(long amount)
+    {
+        Current = amount;
+    }
+
     //코인을 사용할수있는지 판단
     public bool IsCanUse(long amount)
     {

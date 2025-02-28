@@ -42,9 +42,7 @@ public class PlayerCustomUI : BaseUI
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        GameManager.instance.LoadPlayerData();
-
-
+        //GameManager.instance.LoadPlayerData();
     }
     private void Start()
     {
@@ -146,11 +144,9 @@ public class PlayerCustomUI : BaseUI
 
         // 플레이어가 보유한 유물 리스트 가져오기
         List<PetData> ownedPets = GameManager.instance.playerData.OwnedPets;
-        Debug.Log($"OwnedArtifacts 개수: {ownedPets.Count}");
         // 유물 슬롯 생성
         foreach (var pets in ownedPets)
         {
-            Debug.Log("슬롯 생성");
             GameObject newSlot = Instantiate(petslotPrefab, petSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
             if (slotText != null)
@@ -193,11 +189,9 @@ public class PlayerCustomUI : BaseUI
        
         // 플레이어가 보유한 유물 리스트 가져오기
         List<ArtifactData> ownedArtifacts = GameManager.instance.playerData.OwnedArtifacts;
-        Debug.Log($"OwnedArtifacts 개수: {ownedArtifacts.Count}");
         // 유물 슬롯 생성
         foreach (var artifact in ownedArtifacts)
         {
-            Debug.Log("슬롯 생성");
             GameObject newSlot = Instantiate(relicslotPrefab, relicSlotContainer);
             TMP_Text slotText = newSlot.GetComponentInChildren<TMP_Text>();
             if (slotText != null)
@@ -265,7 +259,6 @@ public class PlayerCustomUI : BaseUI
         petRenderer.sprite = petSprite;
         petRenderer.sortingOrder = 5; // 플레이어보다 앞에 렌더링되도록 설정
         currentPet.transform.localScale = new Vector3(4f, 4f, 1f); // 원하는 크기로 조정
-        Debug.Log("펫이 생성되었습니다: " + petSprite.name);
     }
 
     private void EquipPet(PetData pet)
@@ -280,14 +273,11 @@ public class PlayerCustomUI : BaseUI
         SpawnPet(pet.PetImage);
 
         (SceneBase.Current as MainLobbySceneController).EquipPetImage = pet;
-
-        Debug.Log($"펫 장착됨: {pet.PetName}");
     }
 
 
     public void LoadEquippedPet()
     {
-        Debug.Log("작동중");
         string savedPetID = GameManager.instance.playerData.equippedPetID;
 
         if (!string.IsNullOrEmpty(savedPetID))
@@ -298,7 +288,6 @@ public class PlayerCustomUI : BaseUI
             if (equippedPet != null)
             {
                 SpawnPet(equippedPet.PetImage); // 펫 생성
-                Debug.Log($"저장된 펫 로드됨: {equippedPet.PetName}");
             }
             else
             {

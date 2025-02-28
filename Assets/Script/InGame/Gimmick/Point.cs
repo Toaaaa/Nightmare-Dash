@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.GameCenter;
+//using UnityEngine.SocialPlatforms.GameCenter;
 
 public class Point : MonoBehaviour //타일을 달리면서 획득하는 점수
 {
