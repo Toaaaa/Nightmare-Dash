@@ -131,6 +131,8 @@ public class PlayerData : ScriptableObject
     // ✅ 유물 & 펫 데이터 저장
     public void SavePlayerData()
     {
+        Coin = DataManager.Instance.Coin.Current;
+        Diamond = DataManager.Instance.Diamond.Current;
         PlayerPrefs.SetString("Coin", Coin.ToString());
         PlayerPrefs.SetString("Diamond", Diamond.ToString());
         List<int> artifactIds = OwnedArtifacts.ConvertAll(a => a.Id);
@@ -144,6 +146,8 @@ public class PlayerData : ScriptableObject
     // ✅ 유물 & 펫 데이터 불러오기
     public void LoadPlayerData(Artifacts artifactManager, Pet petManager)
     {
+        DataManager.Instance.Coin.Set(Coin);
+        DataManager.Instance.Diamond.Set(Diamond);
         if (PlayerPrefs.HasKey("PlayerData"))
         {
             string json = PlayerPrefs.GetString("PlayerData");
@@ -176,6 +180,7 @@ public class PlayerData : ScriptableObject
 
         if (PlayerPrefs.HasKey("Coin"))
         {
+            Debug.Log("저장된 Coin: " + PlayerPrefs.GetString("Coin"));
             long.TryParse(PlayerPrefs.GetString("Coin"), out Coin);
         }
         else

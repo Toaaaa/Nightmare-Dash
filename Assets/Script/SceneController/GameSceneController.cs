@@ -78,6 +78,7 @@ public class GameSceneController : SceneBase
         {
             GameHp.OnChangedHpAmountEvent -= FinishGame;
             DataManager.Instance.Coin.Add((long)score);
+            GameManager.instance.SavePlayerData();
             IsFinishGame = true;
         }
     }
