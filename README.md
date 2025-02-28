@@ -40,7 +40,7 @@
 ## 5.1 Language
 |  |  |
 |-----------------|-----------------|
-| C#|![image](https://github.com/user-attachments/assets/4f255484-94a2-49dd-8648-2d8c794bcc54)
+| C#  | <img src="https://github.com/user-attachments/assets/4f255484-94a2-49dd-8648-2d8c794bcc54" alt="C#" width="100">
 
 <br/>
 
