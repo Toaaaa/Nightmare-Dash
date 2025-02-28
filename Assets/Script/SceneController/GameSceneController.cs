@@ -74,7 +74,7 @@ public class GameSceneController : SceneBase
 
     private void FinishGame(float current)
     {
-        if (current == 0)
+        if (current <= 0)
         {
             GameHp.OnChangedHpAmountEvent -= FinishGame;
             DataManager.Instance.Coin.Add((long)score);
