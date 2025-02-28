@@ -1,10 +1,7 @@
 <br/>
 <br/>
 
-# 0. Getting Started (시작하기)
-```bash
-$ npm start
-```
+# 0. Bulid (빌드 배포)
 [빌드 링크]
 
 <br/>
@@ -14,8 +11,8 @@ $ npm start
 - 프로젝트 이름: NightmareDash
 - 프로젝트 설명: 유니티 입문 개발 팀 프로젝트
 - 게임 설명 : 공포 2D 런게임
-
-<br/>
+플로우 차트
+플로우 차트 사진 and link
 <br/>
 
 # 2. Team Members (팀원 및 팀 소개)
@@ -25,19 +22,21 @@ $ npm start
 | [GitHub](https://github.com/Toaaaa) | [GitHub](https://github.com/LeeJiyoung0511) | [GitHub](https://github.com/kierwl) | [GitHub](https://github.com/SHC7065) | [GitHub](https://github.com/borigulmi) |
 
 <br/>
-<br/>
 
 # 3. Key Features (주요 기능)
-
 <br/>
+PPT링크
 <br/>
 
 # 4. Tasks & Responsibilities (작업 및 역할 분담)
 |  |  |  |
 |-----------------|-----------------|-----------------|
-| 이지영   | <ul><li>스토리 소개 연출</li><li>튜로리얼 개발</li><li>재화 로직</li></ul>     |
+| 김민준   | <ul><li>플레이어</li><li>맵</li><li>장애물</li></ul>아이템</li></ul>     |
+| 이지영   | <ul><li>스토리 소개 연출</li><li>튜로리얼 개발</li><li>인게임UI</li><li>재화</li></ul>점프스케어</li><li>      |
+| 양원준   | <ul><li>배경</li><li>메인로비</li><li>플레이어 커스터마이징</li></ul>업적</li></ul>공포 연출</li></ul>            |
+| 성현창   | <ul><li>플레이어</li><li>사운드</li><li>시작 화면</li></ul>     |
+| 김아연   | <ul><li>UI디자인</li><li>뽑기</li><li>펫</li></ul>유물</li></ul>     |
 
-<br/>
 <br/>
 
 # 5. Technology Stack (기술 스택)
@@ -57,15 +56,7 @@ $ npm start
 
 <br/>
 
-# 6. Project Structure (프로젝트 구조)
-```plaintext
-
-```
-
-<br/>
-<br/>
-
-# 7. Development Workflow (개발 워크플로우)
+# 6. Development Workflow (개발 워크플로우)
 ## 브랜치 전략 (Branch Strategy)
 우리의 브랜치 전략은 Git Flow를 기반으로 하며, 다음과 같은 브랜치를 사용합니다.
 
@@ -81,9 +72,8 @@ $ npm start
   - 모든 기능 개발은 이 브랜치에서 이루어집니다.
 
 <br/>
-<br/>
 
-# 8. Coding Convention
+# 7. Coding Convention
 
 ## 명명 규칙
 
@@ -106,10 +96,9 @@ if(true){
 // bad
 if(true) return 'hello'
 ```
-
 <br/>
 
-# 9. 커밋 컨벤션
+# 8. 커밋 컨벤션
 ## 기본 구조
 ```
 type : subject
@@ -126,5 +115,4 @@ style : {}위치 공백추가,삭제,단순 변수명 변경
 refactor : 코드 최적화
 fix : 버그수정
 ```
-
 <br/>
