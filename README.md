@@ -1,7 +1,7 @@
 ![image](https://github.com/user-attachments/assets/a23fcf4c-0be7-43c9-8c7c-ba3d3ac58525)
 
 # 0. Bulid (빌드 배포)
-[빌드 링크]
+[빌드 파일]
 
 <br/>
 
@@ -9,8 +9,6 @@
 - 프로젝트 이름: NightmareDash
 - 프로젝트 설명: 유니티 입문 개발 팀 프로젝트
 - 게임 설명 : 공포 2D 런게임
-- 플로우 차트
-플로우 차트 사진 and link
 <br/>
 
 # 2. Team Members (팀원 및 팀 소개)
@@ -23,7 +21,8 @@
 
 # 3. Key Features (주요 기능)
 <br/>
-PPT링크
+[PPT 파일]
+
 <br/>
 
 # 4. Tasks & Responsibilities (작업 및 역할 분담)
@@ -51,7 +50,7 @@ PPT링크
 |-----------------|-----------------|
 | Git    |  <img src="https://github.com/user-attachments/assets/483abc38-ed4d-487c-b43a-3963b33430e6" alt="git" width="100">    |
 | Notion    |  <img src="https://github.com/user-attachments/assets/34141eb9-deca-416a-a83f-ff9543cc2f9a" alt="Notion" width="100">    |
-
+| Discord    |  <img src="https://github.com/user-attachments/assets/34141eb9-deca-416a-a83f-ff9543cc2f9a" alt="Discord" width="100">    |
 <br/>
 
 # 6. Development Workflow (개발 워크플로우)
