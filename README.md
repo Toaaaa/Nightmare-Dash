@@ -40,7 +40,7 @@
 ## 5.1 Language
 |  |  |
 |-----------------|-----------------|
-| C#|<img src="https://github.com/user-attachments/assets/2e122e74-a28b-4ce7-aff6-382959216d31" alt="C#" width="100">| 
+| C#|![C# Logo](https://example.com/csharp-logo.png)| 
 
 
 <br/>
