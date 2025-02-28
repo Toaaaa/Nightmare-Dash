@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - BackGround
+  - Ground
+  - UnderGround
+  - Hill
+  - TutorialZone
+  - RunningItem
   layers:
   - Default
   - TransparentFX
@@ -11,7 +17,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Slope
   - 
   - 
   - 
@@ -40,4 +46,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2780467635
+    locked: 0
+  - name: Foreground
+    uniqueID: 3946999501
+    locked: 0
+  - name: Platform
+    uniqueID: 61193797
+    locked: 0
+  - name: Objects
+    uniqueID: 2022594345
+    locked: 0
+  - name: Enviroment
+    uniqueID: 4114781869
     locked: 0
