@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/a23fcf4c-0be7-43c9-8c7c-ba3d3ac58525)
+
 <br/>
 <br/>
 
@@ -11,7 +13,7 @@
 - 프로젝트 이름: NightmareDash
 - 프로젝트 설명: 유니티 입문 개발 팀 프로젝트
 - 게임 설명 : 공포 2D 런게임
-플로우 차트
+- 플로우 차트
 플로우 차트 사진 and link
 <br/>
 
